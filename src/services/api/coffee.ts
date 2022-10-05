@@ -1,4 +1,4 @@
-import { axiosTest } from ".";
+import { axiosTest } from "@services/api/index";
 
 export const getHotCoffees = () =>
   axiosTest.get<GetHotCoffeesResponseType>("/coffee/hot");
