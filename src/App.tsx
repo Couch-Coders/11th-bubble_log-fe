@@ -7,10 +7,12 @@ import Mypage from "@pages/Mypage";
 import Logs from "@pages/Logs";
 import Write from "@pages/Write";
 import LogDetail from "@pages/LogDetail";
+import { Provider } from "react-redux";
+import { store } from "./stores";
 
 function App() {
   return (
-    <div className="App">
+    <Provider store={store}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -21,7 +23,7 @@ function App() {
           <Route path="/mypage" element={<Mypage />} />
         </Routes>
       </BrowserRouter>
-    </div>
+    </Provider>
   );
 }
 
