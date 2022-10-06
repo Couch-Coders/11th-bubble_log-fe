@@ -4,7 +4,7 @@ import {
   useDispatch as useTypedDispatch,
   useSelector as useTypedSelector
 } from 'react-redux'
-import coffeeSlice from '@stores/coffeeSlice'
+import coffeeSlice from '@stores/slices/coffee'
 
 export const store = configureStore({
   reducer: {

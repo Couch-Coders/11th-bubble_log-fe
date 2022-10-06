@@ -3,40 +3,26 @@ import {
   createAsyncThunk,
   SerializedError
 } from '@reduxjs/toolkit'
-import { getHotCoffees, getHotCoffeesWithError } from '@services/api/coffee'
+import { getHotCoffees, getHotCoffeesWithError } from '@apis/coffee'
 
 export const fetchHotCoffees = createAsyncThunk<GetHotCoffeesResponseType>(
-  '/coffee/hot/fetchStatus',
-  async (_, thunkAPI) => {
-    try {
-      const response = await getHotCoffees()
-      return response.data
-    } catch (error: any) {
-      return thunkAPI.rejectWithValue(error.response.status)
-    }
-  }
+  'coffee/hot/fetchStatus',
+  getHotCoffees
 )
 
 export const fetchHotCoffeesWithError =
   createAsyncThunk<GetHotCoffeesResponseType>(
-    '/coffee/hot/fetchStatusWithError',
-    async (_, thunkAPI) => {
-      try {
-        const response = await getHotCoffeesWithError()
-        return response.data
-      } catch (error: any) {
-        return thunkAPI.rejectWithValue(error.response.status)
-      }
-    }
+    'coffee/hot/fetchStatusWithError',
+    getHotCoffeesWithError
   )
 
-interface coffeeState {
+interface CoffeeState {
   data: GetHotCoffeesResponseType
   isLoading: boolean
-  error: null | SerializedError
+  error: SerializedError | null
 }
 
-const initialState: coffeeState = {
+const initialState: CoffeeState = {
   data: [],
   isLoading: false,
   error: null
@@ -45,9 +31,7 @@ const initialState: coffeeState = {
 export const coffeeSlice = createSlice({
   name: 'coffee',
   initialState,
-  reducers: {
-    // standard reducer logic
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchHotCoffees.pending, (state) => {

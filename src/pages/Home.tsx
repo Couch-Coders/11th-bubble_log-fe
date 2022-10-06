@@ -1,6 +1,9 @@
 import React from 'react'
 import { useDispatch, useSelector } from '@stores/index'
-import { fetchHotCoffees, fetchHotCoffeesWithError } from '@stores/coffeeSlice'
+import {
+  fetchHotCoffees,
+  fetchHotCoffeesWithError
+} from '@stores/slices/coffee'
 
 const Home: React.FC = () => {
   const dispatch = useDispatch()
@@ -17,12 +20,24 @@ const Home: React.FC = () => {
   return (
     <>
       {isLoading && <p>loading...</p>}
-      {(error != null) && <p>error</p>}
+      {error != null && <p>error</p>}
       {data.map((coffee) => (
         <p key={coffee.id}>{coffee.title}</p>
       ))}
-      <button onClick={() => { void onClickFetchButton() }}>Fetch</button>
-      <button onClick={() => { void onClickFetchButtonWithError() }}>Fetch With Error</button>
+      <button
+        onClick={() => {
+          void onClickFetchButton()
+        }}
+      >
+        Fetch
+      </button>
+      <button
+        onClick={() => {
+          void onClickFetchButtonWithError()
+        }}
+      >
+        Fetch With Error
+      </button>
     </>
   )
 }
