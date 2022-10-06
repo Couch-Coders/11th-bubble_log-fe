@@ -1,20 +1,20 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore } from '@reduxjs/toolkit'
 import {
   TypedUseSelectorHook,
   useDispatch as useTypedDispatch,
-  useSelector as useTypedSelector,
-} from "react-redux";
-import coffeeSlice from "@stores/coffeeSlice";
+  useSelector as useTypedSelector
+} from 'react-redux'
+import coffeeSlice from '@stores/coffeeSlice'
 
 export const store = configureStore({
   reducer: {
-    coffee: coffeeSlice.reducer,
+    coffee: coffeeSlice.reducer
   },
-  devTools: process.env.NODE_ENV !== "production",
-});
+  devTools: process.env.NODE_ENV !== 'production'
+})
 
-type RootState = ReturnType<typeof store.getState>;
-type AppDispatch = typeof store.dispatch;
+type RootState = ReturnType<typeof store.getState>
+type AppDispatch = typeof store.dispatch
 
-export const useDispatch: () => AppDispatch = useTypedDispatch;
-export const useSelector: TypedUseSelectorHook<RootState> = useTypedSelector;
+export const useDispatch: () => AppDispatch = useTypedDispatch
+export const useSelector: TypedUseSelectorHook<RootState> = useTypedSelector

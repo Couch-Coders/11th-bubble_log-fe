@@ -4,9 +4,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
- /*백그라운드 위치 확인하는 용도*/
-  background-color: gainsboro;
  }
 
 code {
