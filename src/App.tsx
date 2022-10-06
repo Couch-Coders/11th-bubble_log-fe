@@ -8,11 +8,13 @@ import Mypage from '@pages/Mypage'
 import Logs from '@pages/Logs'
 import Write from '@pages/Write'
 import LogDetail from '@pages/LogDetail'
+import GlobalStyle from '@styles/globalStyle'
 
 const App: React.FC = () => {
   return (
     <Provider store={store}>
       <BrowserRouter>
+        <GlobalStyle />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/logs" element={<Logs />} />
