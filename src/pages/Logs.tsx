@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react'
 
-const Logs = () => {
-  return <div>Logs</div>;
-};
+const Logs: React.FC = () => {
+  return <div>Logs</div>
+}
 
-export default Logs;
+export default Logs
