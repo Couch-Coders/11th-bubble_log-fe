@@ -1,38 +1,26 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import { GoogleLogin } from 'react-google-login'
+import { useEffect } from 'react'
 
-const googleLogin = async (response): React.FC => {
-  // login 로직 구현
-  const option = {
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    method: 'post',
-    data: {
-      accessToken: response.accessToken
-    },
-    url: this.serverHost + '/auth/googleLogin'
+const Login: React.FC() {
+  function handleCallbackRespose(response) {
+    
   }
-
-  try {
-    return await axios(option)
-  } catch (e) {
-    throw e
-  }
+  useEffect(() => {
+    /*global google login*/
+    google.accounts.id.initialize({
+      client_id: "677203748371-63qvtsvhev9rtfvk6js9qobipa1ugfnp.apps.googleusercontent.com",
+      callback: handleCallbackRespose
+    })
+    google.accounts.id.renderButton(
+      document.getElementById("signinDiv"),
+      {theme:"outline", size:"large"}
+    )
+},[])
+  return <div>
+    <div id="signinDiv"></div>
+  </div>
 }
 
-const onFailure = (response) => {
-  console.log(response)
-}
 
-ReactDOM.render(
-  <GoogleLogin
-    clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
-    buttonText="Login"
-    onSuccess={googleLogin}
-    onFailure={responseGoogle}
-    cookiePolicy={'single_host_origin'}
-  />,
-  document.getElementById('googleButton')
-)
+
+export default Login

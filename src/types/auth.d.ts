@@ -1,0 +1,6 @@
+interface LoginResponse {
+  id: string
+  username: string
+  email: string
+  profileImage: string
+}
