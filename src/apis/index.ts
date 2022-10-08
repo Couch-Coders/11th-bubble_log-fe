@@ -1,5 +1,5 @@
 import axiosInstance from 'axios'
 
 export const axios = axiosInstance.create({
-  baseURL: 'url'
+  baseURL: 'https://umqzvoxbkl.us09.qoddiapp.com'
 })
