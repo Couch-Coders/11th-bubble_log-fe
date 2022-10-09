@@ -11,6 +11,10 @@ import LogDetail from '@pages/LogDetail'
 import GlobalStyle from '@styles/globalStyle'
 import Body from '@styles/body'
 import NavBar from '@components/NavBar'
+import { initializeApp } from 'firebase/app'
+import { config } from './config/config'
+
+initializeApp(config.firebaseConfig)
 
 const App: React.FC = () => {
   return (
