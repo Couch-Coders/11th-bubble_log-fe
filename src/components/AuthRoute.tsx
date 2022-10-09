@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 interface Props {
@@ -15,7 +15,7 @@ const AuthRoute: React.FunctionComponent<Props> = ({ children }) => {
   }, [auth])
 
   const AuthCheck = onAuthStateChanged(auth, (user) => {
-    if (user) {
+    if (user != null) {
       setLoading(false)
     } else {
       console.log('unauthorized')
