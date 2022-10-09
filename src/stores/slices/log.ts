@@ -22,7 +22,7 @@ const initialState: LogState = {
   error: null
 }
 
-export const LogSlice = createSlice({
+export const logSlice = createSlice({
   name: 'log',
   initialState,
   reducers: {},
@@ -43,6 +43,6 @@ export const LogSlice = createSlice({
   }
 })
 
-export const logActions = { ...LogSlice.actions }
+export const logActions = { ...logSlice.actions }
 
-export default LogSlice
+export default logSlice

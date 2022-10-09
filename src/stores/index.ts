@@ -4,11 +4,11 @@ import {
   useDispatch as useTypedDispatch,
   useSelector as useTypedSelector
 } from 'react-redux'
-import coffeeSlice from '@stores/coffeeSlice'
+import logSlice from './slices/log'
 
 export const store = configureStore({
   reducer: {
-    coffee: coffeeSlice.reducer
+    log: logSlice.reducer
   },
   devTools: process.env.NODE_ENV !== 'production'
 })
