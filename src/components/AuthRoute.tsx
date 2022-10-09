@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 interface Props {
@@ -23,7 +23,14 @@ const AuthRoute: React.FunctionComponent<Props> = ({ children }) => {
     return () => unsubscribe()
   }, [auth])
 
-  if (loading) return <div>logding</div>
-  return <div>{children}</div>
-}
+
+  const AuthCheck = onAuthStateChanged(auth, (user) => {
+    if (user != null) {
+      setLoading(false)
+    } else {
+      console.log('unauthorized')
+      navigate('/login')
+    }
+  })
+
 export default AuthRoute
