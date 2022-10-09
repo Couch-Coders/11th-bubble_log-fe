@@ -20,6 +20,23 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module'
   },
-  plugins: ['react', 'preferred-import'],
-  rules: {}
+  plugins: ['react', 'import', 'preferred-import'],
+  rules: {
+    'import/order': [
+      'error',
+      {
+        'newlines-between': 'always',
+        alphabetize: { order: 'asc', caseInsensitive: true },
+        groups: ['builtin', 'external', 'internal', 'unknown', ['parent', 'sibling', 'index']],
+        pathGroups: [
+          {
+            pattern: '@{apis,components,pages,services,styles,utils}/**',
+            group: 'external',
+            position: 'after'
+          }
+        ],
+        pathGroupsExcludedImportTypes: ['builtin']
+      }
+    ]
+  }
 }
