@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+
 const Home: React.FC = (props) => {
   const auth = getAuth()
   const navigate = useNavigate()
