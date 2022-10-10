@@ -4,6 +4,7 @@ const Body = styled.div`
   background-color: gray;
   width: 420px;
   display: flex;
+
   height: 100%;
 `
 

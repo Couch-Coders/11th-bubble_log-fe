@@ -4,6 +4,7 @@ import React from 'react'
 import { Provider } from 'react-redux'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
+// import AuthRoute from '@components/AuthRoute'
 import NavBar from '@components/NavBar'
 import Edit from '@pages/Edit'
 import Home from '@pages/Home'
@@ -14,28 +15,32 @@ import Write from '@pages/Write'
 import Body from '@styles/body'
 import GlobalStyle from '@styles/globalStyle'
 
-import { config } from './config/config'
+// import { app } from './config/config'
 
-initializeApp(config.firebaseConfig)
+// initializeApp(app)
 
 const App: React.FC = () => {
   return (
-    <Provider store={store}>
-      <BrowserRouter>
-        <Body>
-          <GlobalStyle />
-          <NavBar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/logs" element={<Logs />} />
-            <Route path="/write" element={<Write />} />
-            <Route path="/log/:id" element={<LogDetail />} />
-            <Route path="/log/:id/edit" element={<Edit />} />
-            <Route path="/mypage" element={<Mypage />} />
-          </Routes>
-        </Body>
-      </BrowserRouter>
-    </Provider>
+    <div>
+      <Body>
+        <Provider store={store}>
+          <BrowserRouter>
+            <GlobalStyle />
+            <NavBar />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              {/* <AuthRoute> */}
+              <Route path="/logs" element={<Logs />} />
+              <Route path="/write" element={<Write />} />
+              <Route path="/log/:id" element={<LogDetail />} />
+              <Route path="/log/:id/edit" element={<Edit />} />
+              <Route path="/mypage" element={<Mypage />} />
+              {/* </AuthRoute> */}
+            </Routes>
+          </BrowserRouter>
+        </Provider>
+      </Body>
+    </div>
   )
 }
 
