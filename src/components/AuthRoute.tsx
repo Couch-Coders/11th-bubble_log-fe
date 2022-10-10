@@ -11,17 +11,18 @@ const AuthRoute: React.FunctionComponent<Props> = ({ children }) => {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    AuthCheck()
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user != null) {
+        setLoading(false)
+      } else {
+        console.log('unauthorized')
+        navigate('/login')
+      }
+    })
+
+    return () => unsubscribe()
   }, [auth])
 
-  const AuthCheck = onAuthStateChanged(auth, (user) => {
-    if (user != null) {
-      setLoading(false)
-    } else {
-      console.log('unauthorized')
-      navigate('/login')
-    }
-  })
   if (loading) return <div>logding</div>
   return <div>{children}</div>
 }
