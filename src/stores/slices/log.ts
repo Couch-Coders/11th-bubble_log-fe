@@ -1,7 +1,8 @@
 import {
   createSlice,
   createAsyncThunk,
-  SerializedError
+  SerializedError,
+  PayloadAction
 } from '@reduxjs/toolkit'
 
 import { getLogsAPI } from '@apis/log'
@@ -15,18 +16,35 @@ interface LogState {
   data: LogWithId[]
   isLoading: boolean
   error: SerializedError | null
+  query: GetLogsQuery
 }
 
 const initialState: LogState = {
   data: [],
   isLoading: false,
-  error: null
+  error: null,
+  query: {
+    date: '',
+    type: '',
+    location: '',
+    depth: '',
+    temperature: '',
+    favorite: '',
+    keyword: '',
+    page: '',
+    size: '',
+    orderBy: ''
+  }
 }
 
 export const logSlice = createSlice({
   name: 'log',
   initialState,
-  reducers: {},
+  reducers: {
+    setQueryKeyword: (state, action: PayloadAction<string>) => {
+      state.query.keyword = action.payload
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchLogs.pending, (state) => {

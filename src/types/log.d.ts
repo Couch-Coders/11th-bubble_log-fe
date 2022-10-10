@@ -58,11 +58,14 @@ interface GetLogsResponse {
 }
 
 interface GetLogsQuery {
-  date?: string
-  type?: string
-  location?: string
-  depth?: string
-  temperature?: string
-  favorite?: string
-  keyword?: string
+  date: string
+  type: string
+  location: string
+  depth: string
+  temperature: string
+  favorite: string
+  keyword: string
+  page: string
+  size: string
+  orderBy: string
 }
