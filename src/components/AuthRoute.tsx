@@ -16,7 +16,7 @@ const AuthRoute: React.FunctionComponent<Props> = ({ children }) => {
         setLoading(false)
       } else {
         console.log('unauthorized')
-        navigate('/login')
+        navigate('/')
       }
     })
 
