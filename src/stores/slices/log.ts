@@ -3,6 +3,7 @@ import {
   createAsyncThunk,
   SerializedError
 } from '@reduxjs/toolkit'
+
 import { getLogsAPI } from '@apis/log'
 
 export const fetchLogs = createAsyncThunk<GetLogsResponse, GetLogsQuery>(

@@ -4,6 +4,7 @@ import {
   useDispatch as useTypedDispatch,
   useSelector as useTypedSelector
 } from 'react-redux'
+
 import logSlice from './slices/log'
 
 export const store = configureStore({
