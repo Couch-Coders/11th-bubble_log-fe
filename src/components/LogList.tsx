@@ -2,6 +2,7 @@ import { SerializedError } from '@reduxjs/toolkit'
 import { useDispatch, useSelector } from '@stores/index'
 import { fetchLogs } from '@stores/slices/log'
 import React, { useEffect } from 'react'
+import { Link } from 'react-router-dom'
 
 interface ReturnType {
   data: LogWithId[]
@@ -29,11 +30,12 @@ const LogList: React.FC = () => {
     <>
       {isLoading && <p>loading...</p>}
       {error !== null && <p>error</p>}
+
       {data.map((log) => (
-        <div key={log.id}>
+        <Link to={`/log/${log.id}`} key={log.id}>
           <p>{log.location}</p>
           <p>{log.date.toString()}</p>
-        </div>
+        </Link>
       ))}
     </>
   )
