@@ -43,6 +43,18 @@ export const logSlice = createSlice({
   reducers: {
     setQueryKeyword: (state, action: PayloadAction<string>) => {
       state.query.keyword = action.payload
+    },
+    setQueryType: (state, action: PayloadAction<string>) => {
+      state.query.type = action.payload
+    },
+    setQueryLocation: (state, action: PayloadAction<string>) => {
+      state.query.location = action.payload
+    },
+    setQueryTemperature: (state, action: PayloadAction<string>) => {
+      state.query.temperature = action.payload
+    },
+    setQueryDepth: (state, action: PayloadAction<string>) => {
+      state.query.depth = action.payload
     }
   },
   extraReducers: (builder) => {
