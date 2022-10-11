@@ -12,7 +12,7 @@ const Home: React.FC = (props) => {
     signInWithPopup(auth, new GoogleAuthProvider())
       .then((response) => {
         console.log(response)
-        navigate('/')
+        navigate('/logs')
       })
       .catch((error) => {
         console.log(error)

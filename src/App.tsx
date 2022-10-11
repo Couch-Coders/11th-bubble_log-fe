@@ -20,22 +20,24 @@ initializeApp(config.firebaseConfig)
 
 const App: React.FC = () => {
   return (
-    <Provider store={store}>
-      <BrowserRouter>
-        <Body>
-          <GlobalStyle />
-          <NavBar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/logs" element={<Logs />} />
-            <Route path="/write" element={<Write />} />
-            <Route path="/log/:id" element={<LogDetail />} />
-            <Route path="/log/:id/edit" element={<Edit />} />
-            <Route path="/mypage" element={<Mypage />} />
-          </Routes>
-        </Body>
-      </BrowserRouter>
-    </Provider>
+    <div>
+      <Body>
+        <Provider store={store}>
+          <BrowserRouter>
+            <GlobalStyle />
+            <NavBar />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/logs" element={<Logs />} />
+              <Route path="/write" element={<Write />} />
+              <Route path="/log/:id" element={<LogDetail />} />
+              <Route path="/log/:id/edit" element={<Edit />} />
+              <Route path="/mypage" element={<Mypage />} />
+            </Routes>
+          </BrowserRouter>
+        </Provider>
+      </Body>
+    </div>
   )
 }
 
