@@ -25,12 +25,14 @@ const initialState: LogState = {
   isLoading: false,
   error: null,
   query: {
-    date: '',
-    type: '',
+    startDate: '',
+    endDate: '',
+    diveType: '',
     location: '',
-    depth: '',
-    temperature: '',
-    favorite: '',
+    minDepth: '',
+    maxDepth: '',
+    minTemperature: '',
+    maxTemperature: '',
     keyword: '',
     page: '',
     size: '',
@@ -46,16 +48,28 @@ export const logSlice = createSlice({
       state.query.keyword = action.payload
     },
     setQueryType: (state, action: PayloadAction<string>) => {
-      state.query.type = action.payload
+      state.query.diveType = action.payload
     },
     setQueryLocation: (state, action: PayloadAction<string>) => {
       state.query.location = action.payload
     },
     setQueryTemperature: (state, action: PayloadAction<string>) => {
-      state.query.temperature = action.payload
+      const temperatureString = action.payload
+
+      const minTemperature = temperatureString.split('-')[0]
+      const maxTemperature = temperatureString.split('-')[1]
+
+      state.query.minTemperature = minTemperature
+      state.query.maxTemperature = maxTemperature
     },
     setQueryDepth: (state, action: PayloadAction<string>) => {
-      state.query.depth = action.payload
+      const depthString = action.payload
+
+      const minDepth = depthString.split('-')[0]
+      const maxDepth = depthString.split('-')[1]
+
+      state.query.minDepth = minDepth
+      state.query.maxDepth = maxDepth
     }
   },
   extraReducers: (builder) => {

@@ -58,12 +58,14 @@ export interface GetLogsResponse {
 }
 
 export interface GetLogsQuery {
-  date: string
-  type: string
+  startDate: string
+  endDate: string
+  diveType: string
   location: string
-  depth: string
-  temperature: string
-  favorite: string
+  minTemperature: string
+  maxTemperature: string
+  minDepth: string
+  maxDepth: string
   keyword: string
   page: string
   size: string
