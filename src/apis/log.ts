@@ -1,3 +1,5 @@
+import { CreateLogBody, CreateLogResponse, GetLogDetailResponse, GetLogsQuery, GetLogsResponse, UpdateLogBody, UpdateLogResponse } from 'types/log'
+
 import { axios } from '@apis/index'
 
 export const createLogAPI = async (body: CreateLogBody): Promise<any> => {
@@ -19,11 +21,15 @@ export const deleteLogAPI = async (id: number): Promise<any> => {
 }
 
 export const getLogsAPI = async (query: GetLogsQuery): Promise<any> => {
-  const queryObject = {
-    ...query
-  }
-  const queryString = new URLSearchParams(queryObject).toString()
-  const response = await axios.get<GetLogsResponse>(`/logs?${queryString}`)
+  const filteredQueryEntries = Object.entries(query).filter((entry) => entry[1] !== '')
+
+  const queryObject = Object.fromEntries(filteredQueryEntries)
+
+  const queryOptions = new URLSearchParams(queryObject).toString()
+
+  const queryString = queryOptions !== '' ? `?${queryOptions}` : ''
+
+  const response = await axios.get<GetLogsResponse>(`/logs${queryString}`)
   return response.data
 }
 

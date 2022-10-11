@@ -1,7 +1,11 @@
 import React from 'react'
 
+import ReturnToListButton from '@components/ReturnToListButton'
+
 const LogDetail: React.FC = () => {
-  return <div>LogDetail</div>
+  return <main>
+    <ReturnToListButton />
+  </main>
 }
 
 export default LogDetail
