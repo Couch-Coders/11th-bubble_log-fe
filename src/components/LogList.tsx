@@ -17,7 +17,11 @@ const useLogList = (): ReturnType => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    void dispatch(fetchLogs(query))
+    const promise = dispatch(fetchLogs(query))
+
+    return () => {
+      promise.abort()
+    }
   }, [query])
 
   return { data, isLoading, error }
