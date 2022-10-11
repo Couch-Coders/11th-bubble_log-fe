@@ -4,6 +4,7 @@ import {
   SerializedError,
   PayloadAction
 } from '@reduxjs/toolkit'
+import { GetLogsQuery, GetLogsResponse, LogWithId } from 'types/log'
 
 import { getLogsAPI } from '@apis/log'
 

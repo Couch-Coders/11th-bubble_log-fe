@@ -1,3 +1,5 @@
+import { CreateLogBody, CreateLogResponse, GetLogDetailResponse, GetLogsQuery, GetLogsResponse, UpdateLogBody, UpdateLogResponse } from 'types/log'
+
 import { axios } from '@apis/index'
 
 export const createLogAPI = async (body: CreateLogBody): Promise<any> => {

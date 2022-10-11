@@ -1,4 +1,4 @@
-interface Log {
+export interface Log {
   userId: number
   date: Date
   diveType: string
@@ -16,19 +16,19 @@ interface Log {
   longitude: number
 }
 
-interface LogWithId extends Log {
+export interface LogWithId extends Log {
   id: number
 }
 
-type CreateLogBody = Log
+export type CreateLogBody = Log
 
-type CreateLogResponse = LogWithId
+export type CreateLogResponse = LogWithId
 
-type UpdateLogBody = Log
+export type UpdateLogBody = Log
 
-type UpdateLogResponse = LogWithId
+export type UpdateLogResponse = LogWithId
 
-type GetLogDetailResponse = LogWithId
+export type GetLogDetailResponse = LogWithId
 
 interface Sort {
   sorted: boolean
@@ -36,7 +36,7 @@ interface Sort {
   empty: boolean
 }
 
-interface GetLogsResponse {
+export interface GetLogsResponse {
   contents: LogWithId[]
   pageable: {
     sort: Sort
@@ -57,7 +57,7 @@ interface GetLogsResponse {
   empty: boolean
 }
 
-interface GetLogsQuery {
+export interface GetLogsQuery {
   date: string
   type: string
   location: string

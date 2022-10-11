@@ -1,3 +1,5 @@
+import { LoginResponse } from 'types/auth'
+
 import { axios } from '@apis/index'
 
 export const loginAPI = async (token: string): Promise<any> => {
