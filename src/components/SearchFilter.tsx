@@ -41,14 +41,14 @@ const getSearchFilterType = (type: SearchFilterType): getSearchFilterReturnType 
   }
 }
 
-interface ReturnType {
+interface useSearchFilterReturnType {
   selectValue: string
   options: typeof DIVE_TYPE | typeof DIVE_LOCATION | typeof DIVE_TEMPERATURE | typeof DIVE_DEPTH
   onChangeFilter: (event: React.ChangeEvent<HTMLSelectElement>) => void
 
 }
 
-const useSearchFilter = (type: SearchFilterType): ReturnType => {
+const useSearchFilter = (type: SearchFilterType): useSearchFilterReturnType => {
   const [selectValue, setSelectValue] = useState('')
 
   const { filterAction, options } = getSearchFilterType(type)
