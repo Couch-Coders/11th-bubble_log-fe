@@ -1,5 +1,5 @@
 import { store } from '@stores/index'
-import { initializeApp } from 'firebase/app'
+// import { initializeApp } from 'firebase/app'
 import React from 'react'
 import { Provider } from 'react-redux'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'

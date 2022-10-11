@@ -1,53 +1,49 @@
-import { storage } from 'config/config'
-import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage'
-import React, { useState } from 'react'
-import { blob } from 'stream/consumers'
+import { ref, uploadBytes, listAll, getDownloadURL } from 'firebase/storage'
+import React, { useState, useEffect } from 'react'
+import { v4 } from 'uuid'
 
-function ImageUpload(): any {
-  const [imgUrl, setImgUrl] = useState(null)
-  const [progresspercent, setProgresspercent] = useState(0)
+import { storage } from '../config/config'
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const file = event.target[0]?.files[0] as HTMLInputElement
-    if (!file) return
-    const storageRef = ref(storage, `files/${file.name}`)
-    const uploadTask = uploadBytesResumable(storageRef, file)
-
-    uploadTask.on(
-      'state_changed',
-      (snapshot) => {
-        const progress = Math.round(
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        )
-        setProgresspercent(progress)
-      },
-      (error) => {
-        alert(error)
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL: any) => {
-          setImgUrl(downloadURL)
-        })
-      }
-    )
+const ImageUpload: React.FC = () => {
+  const [imageUpload, setImageUpload] = useState<File>()
+  const [imageList, setImageList] = useState<string[]>([])
+  const imageListRef = ref(storage, 'images/')
+  const uuid: string = v4()
+  const UploadImage = (): void => {
+    if (imageUpload == null) return
+    const imageRef = ref(storage, `image/${imageUpload.name}${uuid}`)
+    void uploadBytes(imageRef, imageUpload).then(snapshot => {
+      void getDownloadURL(snapshot.ref).then(url => {
+        alert('image uploaded')
+        setImageList(prev => [...prev, url])
+      })
+    })
   }
+  useEffect(() => {
+    void listAll(imageListRef).then(response => {
+      console.log(response)
+      response.items.forEach(item => {
+        void getDownloadURL(item).then(url => {
+          setImageList(prev => [...prev, url])
+        })
+      })
+    })
+  }, [])
 
   return (
     <div className="ImageUpload">
-      <form onSubmit={handleSubmit} className="form">
-        <input type="file" />
-        <button type="submit">Upload</button>
-      </form>
-      {!imgUrl && (
-        <div className="outerbar">
-          <div className="innerbar" style={{ width: `${progresspercent}%` }}>
-            {progresspercent}%
-          </div>
-        </div>
-      )}
-      {imgUrl && <img src={imgUrl} alt="uploaded file" height={200} />}
+      <input
+        type="file"
+        onChange={event => {
+          if (event.target.files !== null) setImageUpload(event.target.files[0])
+        }}
+      />
+      <button onClick={UploadImage}>Upload Image</button>
+      {imageList.map((url, idx) => {
+        return <img src={url} key={idx} />
+      })}
     </div>
   )
 }
+
 export default ImageUpload

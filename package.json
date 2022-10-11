@@ -21,6 +21,7 @@
     "styled-components": "^5.3.6",
     "styled-reset": "^4.4.2",
     "typescript": "^4.8.4",
+    "uuid": "^9.0.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -48,6 +49,7 @@
   },
   "devDependencies": {
     "@types/styled-components": "^5.1.26",
+    "@types/uuid": "^8.3.4",
     "craco": "^0.0.3",
     "craco-alias": "^3.0.1",
     "eslint-config-standard-with-typescript": "^23.0.0",
