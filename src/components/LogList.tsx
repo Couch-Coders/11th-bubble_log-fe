@@ -12,8 +12,7 @@ interface ReturnType {
 }
 
 const useLogList = (): ReturnType => {
-  const { data, isLoading, error } = useSelector(state => state.log)
-  const query = useSelector(state => state.log.query)
+  const { data, isLoading, error, query } = useSelector(state => state.log)
 
   const dispatch = useDispatch()
 
