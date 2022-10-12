@@ -1,4 +1,4 @@
-import { CreateLogBody, CreateLogResponse, GetLogDetailResponse, GetLogsQuery, GetLogsResponse, UpdateLogBody, UpdateLogResponse } from 'types/log'
+import { CreateLogBody, CreateLogImagesBody, CreateLogImagesResponse, CreateLogResponse, GetLogDetailResponse, GetLogsQuery, GetLogsResponse, ToggleLogFavoriteRepsonse, UpdateLogBody, UpdateLogResponse } from 'types/log'
 
 import { axios } from '@apis/index'
 import { createQueryString } from '@utils/createQueryString'
@@ -10,14 +10,14 @@ export const createLogAPI = async (body: CreateLogBody): Promise<any> => {
 
 export const updateLogAPI = async (
   body: UpdateLogBody,
-  id: number
+  logId: number
 ): Promise<any> => {
-  const response = await axios.patch<UpdateLogResponse>(`/logs/${id}`, body)
+  const response = await axios.patch<UpdateLogResponse>(`/logs/${logId}`, body)
   return response.data
 }
 
-export const deleteLogAPI = async (id: number): Promise<any> => {
-  const response = await axios.delete(`/logs/${id}`)
+export const deleteLogAPI = async (logId: number): Promise<any> => {
+  const response = await axios.delete(`/logs/${logId}`)
   return response.data
 }
 
@@ -27,7 +27,27 @@ export const getLogsAPI = async (query: GetLogsQuery): Promise<any> => {
   return response.data
 }
 
-export const getLogDetailAPI = async (id: number): Promise<any> => {
-  const response = await axios.get<GetLogDetailResponse>(`/logs/${id}`)
+export const getLogDetailAPI = async (logId: number): Promise<any> => {
+  const response = await axios.get<GetLogDetailResponse>(`/logs/${logId}`)
+  return response.data
+}
+
+export const toggleLogFavoriteAPI = async (logId: number): Promise<any> => {
+  const response = await axios.put<ToggleLogFavoriteRepsonse>(`/logs/${logId}/favorite`)
+  return response.data
+}
+
+export const createLogImagesAPI = async (body: CreateLogImagesBody, logId: number): Promise<any> => {
+  const response = await axios.post<CreateLogImagesResponse>(`/logs/${logId}/images`, body)
+  return response.data
+}
+
+export const getLogImageAPI = async (logId: number, imageName: string): Promise<any> => {
+  const response = await axios.get(`/logs/${logId}/images/${imageName}`)
+  return response.data
+}
+
+export const deleteLogImageAPI = async (logId: number, imageName: string): Promise<any> => {
+  const response = await axios.delete(`/logs/${logId}/images/${imageName}`)
   return response.data
 }

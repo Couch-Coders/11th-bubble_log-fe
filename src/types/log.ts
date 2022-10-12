@@ -1,19 +1,25 @@
 export interface Log {
-  userId: number
-  date: Date
+  date: string
   diveType: string
-  enterTime: Date
-  leaveTime: Date
+  enterTime: string
+  leaveTime: string
   sight: number
   maxDepth: number
   temperature: number
-  maxOxygen: number
   minOxygen: number
+  maxOxygen: number
   location: string
   content: string
   images: string[]
   latitude: number
   longitude: number
+}
+
+export interface User {
+  id: string
+  username: string
+  email: string
+  profileImage: string
 }
 
 export interface LogWithId extends Log {
@@ -22,13 +28,22 @@ export interface LogWithId extends Log {
 
 export type CreateLogBody = Log
 
-export type CreateLogResponse = LogWithId
+export interface CreateLogResponse extends LogWithId {
+  user: User
+  isFavorite: boolean
+}
 
 export type UpdateLogBody = Log
 
-export type UpdateLogResponse = LogWithId
+export interface UpdateLogResponse extends LogWithId {
+  user: User
+  isFavorite: boolean
+}
 
-export type GetLogDetailResponse = LogWithId
+export interface GetLogDetailResponse extends LogWithId {
+  user: User
+  isFavorite: boolean
+}
 
 interface Sort {
   sorted: boolean
@@ -70,4 +85,18 @@ export interface GetLogsQuery {
   page: string
   size: string
   orderBy: string
+}
+
+export interface ToggleLogFavoriteRepsonse extends LogWithId {
+  user: User
+  isFavorite: boolean
+}
+
+export interface CreateLogImagesBody {
+  formData: FormData
+}
+
+export interface CreateLogImagesResponse extends LogWithId {
+  user: User
+  isFavorite: boolean
 }
