@@ -1,21 +1,22 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit';
+import logSlice from '@stores/slices/log';
+import userSlice from '@stores/slices/user';
 import {
   TypedUseSelectorHook,
   useDispatch as useTypedDispatch,
-  useSelector as useTypedSelector
-} from 'react-redux'
-
-import logSlice from './slices/log'
+  useSelector as useTypedSelector,
+} from 'react-redux';
 
 export const store = configureStore({
   reducer: {
-    log: logSlice.reducer
+    log: logSlice.reducer,
+    user: userSlice.reducer,
   },
-  devTools: process.env.NODE_ENV !== 'production'
-})
+  devTools: process.env.NODE_ENV !== 'production',
+});
 
-type RootState = ReturnType<typeof store.getState>
-type AppDispatch = typeof store.dispatch
+type RootState = ReturnType<typeof store.getState>;
+type AppDispatch = typeof store.dispatch;
 
-export const useDispatch: () => AppDispatch = useTypedDispatch
-export const useSelector: TypedUseSelectorHook<RootState> = useTypedSelector
+export const useDispatch: () => AppDispatch = useTypedDispatch;
+export const useSelector: TypedUseSelectorHook<RootState> = useTypedSelector;

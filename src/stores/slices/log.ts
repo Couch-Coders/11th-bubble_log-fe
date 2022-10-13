@@ -2,22 +2,22 @@ import {
   createSlice,
   createAsyncThunk,
   SerializedError,
-  PayloadAction
-} from '@reduxjs/toolkit'
-import { GetLogsQuery, GetLogsResponse, LogWithId } from 'types/log'
+  PayloadAction,
+} from '@reduxjs/toolkit';
+import { GetLogsQuery, GetLogsResponse, LogWithId } from 'types/log';
 
-import { getLogsAPI } from '@apis/log'
+import { getLogsAPI } from '@apis/log';
 
 export const fetchLogs = createAsyncThunk<GetLogsResponse, GetLogsQuery>(
-  'log/fetchStatus',
-  async (query: GetLogsQuery) => await getLogsAPI(query)
-)
+  'log/get/fetchStatus',
+  async (query: GetLogsQuery) => await getLogsAPI(query),
+);
 
 interface LogState {
-  data: LogWithId[]
-  isLoading: boolean
-  error: SerializedError | null
-  query: GetLogsQuery
+  data: LogWithId[];
+  isLoading: boolean;
+  error: SerializedError | null;
+  query: GetLogsQuery;
 }
 
 const initialState: LogState = {
@@ -36,59 +36,59 @@ const initialState: LogState = {
     keyword: '',
     page: '',
     size: '',
-    orderBy: ''
-  }
-}
+    orderBy: '',
+  },
+};
 
 export const logSlice = createSlice({
   name: 'log',
   initialState,
   reducers: {
     setQueryKeyword: (state, action: PayloadAction<string>) => {
-      state.query.keyword = action.payload
+      state.query.keyword = action.payload;
     },
     setQueryType: (state, action: PayloadAction<string>) => {
-      state.query.diveType = action.payload
+      state.query.diveType = action.payload;
     },
     setQueryLocation: (state, action: PayloadAction<string>) => {
-      state.query.location = action.payload
+      state.query.location = action.payload;
     },
     setQueryTemperature: (state, action: PayloadAction<string>) => {
-      const temperatureString = action.payload
+      const temperatureString = action.payload;
 
-      const minTemperature = temperatureString.split('-')[0]
-      const maxTemperature = temperatureString.split('-')[1]
+      const minTemperature = temperatureString.split('-')[0];
+      const maxTemperature = temperatureString.split('-')[1];
 
-      state.query.minTemperature = minTemperature
-      state.query.maxTemperature = maxTemperature
+      state.query.minTemperature = minTemperature;
+      state.query.maxTemperature = maxTemperature;
     },
     setQueryDepth: (state, action: PayloadAction<string>) => {
-      const depthString = action.payload
+      const depthString = action.payload;
 
-      const minDepth = depthString.split('-')[0]
-      const maxDepth = depthString.split('-')[1]
+      const minDepth = depthString.split('-')[0];
+      const maxDepth = depthString.split('-')[1];
 
-      state.query.minDepth = minDepth
-      state.query.maxDepth = maxDepth
-    }
+      state.query.minDepth = minDepth;
+      state.query.maxDepth = maxDepth;
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchLogs.pending, (state) => {
-        state.isLoading = true
+        state.isLoading = true;
       })
       .addCase(fetchLogs.fulfilled, (state, action) => {
-        state.isLoading = false
-        state.data = action.payload.contents
-        state.error = null
+        state.isLoading = false;
+        state.data = action.payload.contents;
+        state.error = null;
       })
       .addCase(fetchLogs.rejected, (state, action) => {
-        state.isLoading = false
-        state.error = action.error
-      })
-  }
-})
+        state.isLoading = false;
+        state.error = action.error;
+      });
+  },
+});
 
-export const logActions = { ...logSlice.actions }
+export const logActions = { ...logSlice.actions };
 
-export default logSlice
+export default logSlice;

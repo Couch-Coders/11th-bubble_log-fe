@@ -2,12 +2,18 @@ import useAuth from '@hooks/useAuth';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const MyPage: React.FC = () => {
+import ReturnToListButton from '@components/ReturnToListButton';
+
+const LogDetailPage: React.FC = () => {
   const navigate = useNavigate();
   const { isLoggedIn } = useAuth();
   if (!isLoggedIn) navigate('/');
 
-  return <div>MyPage</div>;
+  return (
+    <main>
+      <ReturnToListButton />
+    </main>
+  );
 };
 
-export default MyPage;
+export default LogDetailPage;

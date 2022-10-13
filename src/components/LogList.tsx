@@ -1,31 +1,34 @@
-import { SerializedError } from '@reduxjs/toolkit'
-import { useDispatch, useSelector } from '@stores/index'
-import { fetchLogs } from '@stores/slices/log'
-import React, { useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { LogWithId } from 'types/log'
+import { SerializedError } from '@reduxjs/toolkit';
+import { useDispatch, useSelector } from '@stores/index';
+import { fetchLogs } from '@stores/slices/log';
+import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { LogWithId } from 'types/log';
 
 interface ReturnType {
-  data: LogWithId[]
-  isLoading: boolean
-  error: SerializedError | null
+  data: LogWithId[];
+  isLoading: boolean;
+  error: SerializedError | null;
 }
 
 const useLogList = (): ReturnType => {
-  const { data, isLoading, error } = useSelector(state => state.log)
-  const query = useSelector(state => state.log.query)
+  const { data, isLoading, error, query } = useSelector((state) => state.log);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    void dispatch(fetchLogs(query))
-  }, [query])
+    const promise = dispatch(fetchLogs(query));
 
-  return { data, isLoading, error }
-}
+    return () => {
+      promise.abort();
+    };
+  }, [query]);
+
+  return { data, isLoading, error };
+};
 
 const LogList: React.FC = () => {
-  const { data, isLoading, error } = useLogList()
+  const { data, isLoading, error } = useLogList();
 
   return (
     <>
@@ -39,7 +42,7 @@ const LogList: React.FC = () => {
         </Link>
       ))}
     </>
-  )
-}
+  );
+};
 
-export default LogList
+export default LogList;
