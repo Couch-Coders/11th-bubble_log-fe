@@ -1,37 +1,24 @@
-import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import useAuth from '@hooks/useAuth'
+import React from 'react'
 
-const Home: React.FC = (props) => {
-  const auth = getAuth()
-  const navigate = useNavigate()
-  const [authing, setAuthing] = useState(false)
-  const signInWithGoogle = async (): Promise<void> => {
-    setAuthing(true)
+const Home: React.FC = () => {
+  const { isLoggedIn, login, logOut } = useAuth()
 
-    signInWithPopup(auth, new GoogleAuthProvider())
-      .then((response) => {
-        console.log(response)
-        navigate('/logs')
-      })
-      .catch((error) => {
-        console.log(error)
-        setAuthing(false)
-      })
+  const onClickLoginButton = (): void => {
+    void login()
   }
-  return (
-    <div>
-      Home
-      <button
-        onClick={() => {
-          void signInWithGoogle()
-        }}
-        disabled={authing}
-      >
-        Sign in google
-      </button>
-    </div>
-  )
+
+  const onClickLogOutButton = (): void => {
+    void logOut()
+  }
+
+  return <main>
+    {isLoggedIn
+      ? <button type='button' onClick={onClickLogOutButton}>로그아웃</button>
+      : <button type='button' onClick={onClickLoginButton}>로그인</button>
+
+}
+  </main>
 }
 
 export default Home

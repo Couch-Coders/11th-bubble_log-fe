@@ -1,20 +1,13 @@
-import { getAuth, signOut } from 'firebase/auth'
+import useAuth from '@hooks/useAuth'
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
-const Mypage: React.FC = (props) => {
-  const auth = getAuth()
-  return (
-    <div>
-      Mypage
-      <button
-        onClick={() => {
-          void signOut(auth)
-        }}
-      >
-        signout
-      </button>
-    </div>
-  )
+const Mypage: React.FC = () => {
+  const navigate = useNavigate()
+  const { isLoggedIn } = useAuth()
+  if (!isLoggedIn) navigate('/')
+
+  return <div>MyPage</div>
 }
 
 export default Mypage

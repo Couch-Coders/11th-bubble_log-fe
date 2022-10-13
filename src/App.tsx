@@ -1,6 +1,6 @@
 import { store } from '@stores/index'
-import { initializeApp } from 'firebase/app'
-import React from 'react'
+import { userActions } from '@stores/slices/user'
+import React, { useEffect } from 'react'
 import { Provider } from 'react-redux'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
@@ -11,14 +11,24 @@ import LogDetail from '@pages/LogDetail'
 import Logs from '@pages/Logs'
 import Mypage from '@pages/Mypage'
 import Write from '@pages/Write'
+import { FirebaseService } from '@services/firebase'
 import Body from '@styles/body'
 import GlobalStyle from '@styles/globalStyle'
 
-import { config } from './config/config'
-
-initializeApp(config.firebaseConfig)
-
 const App: React.FC = () => {
+  // load user here
+  const token = false
+  if (token) store.dispatch(userActions.setUserLoggedIn(true))
+
+  const { auth } = FirebaseService
+
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      console.log('@user', user)
+      if (user !== null) store.dispatch(userActions.setUserLoggedIn(true))
+    })
+  }, [])
+
   return (
     <div>
       <Body>
