@@ -4,7 +4,6 @@ import React, { useEffect } from 'react'
 import { Provider } from 'react-redux'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
-import NavBar from '@components/NavBar'
 import Edit from '@pages/Edit'
 import Home from '@pages/Home'
 import LogDetail from '@pages/LogDetail'
@@ -12,7 +11,6 @@ import Logs from '@pages/Logs'
 import Mypage from '@pages/Mypage'
 import Write from '@pages/Write'
 import { FirebaseService } from '@services/firebase'
-import Body from '@styles/body'
 import GlobalStyle from '@styles/globalStyle'
 
 const App: React.FC = () => {
@@ -30,12 +28,9 @@ const App: React.FC = () => {
   }, [])
 
   return (
-    <div>
-      <Body>
         <Provider store={store}>
           <BrowserRouter>
             <GlobalStyle />
-            <NavBar />
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/logs" element={<Logs />} />
@@ -46,8 +41,6 @@ const App: React.FC = () => {
             </Routes>
           </BrowserRouter>
         </Provider>
-      </Body>
-    </div>
   )
 }
 
