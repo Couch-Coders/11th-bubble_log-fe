@@ -1,24 +1,30 @@
-import useAuth from '@hooks/useAuth'
-import React from 'react'
+import useAuth from '@hooks/useAuth';
+import React from 'react';
 
 const HomePage: React.FC = () => {
-  const { isLoggedIn, login, logOut } = useAuth()
+  const { isLoggedIn, login, logOut } = useAuth();
 
   const onClickLoginButton = (): void => {
-    void login()
-  }
+    void login();
+  };
 
   const onClickLogOutButton = (): void => {
-    void logOut()
-  }
+    void logOut();
+  };
 
-  return <main>
-    {isLoggedIn
-      ? <button type='button' onClick={onClickLogOutButton}>로그아웃</button>
-      : <button type='button' onClick={onClickLoginButton}>로그인</button>
+  return (
+    <main>
+      {isLoggedIn ? (
+        <button type="button" onClick={onClickLogOutButton}>
+          로그아웃
+        </button>
+      ) : (
+        <button type="button" onClick={onClickLoginButton}>
+          로그인
+        </button>
+      )}
+    </main>
+  );
+};
 
-}
-  </main>
-}
-
-export default HomePage
+export default HomePage;

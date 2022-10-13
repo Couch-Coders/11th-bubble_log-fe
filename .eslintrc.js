@@ -1,24 +1,28 @@
 module.exports = {
   env: {
     browser: true,
-    es2021: true
+    es2021: true,
   },
-  extends: ['plugin:react/recommended', 'standard-with-typescript'],
+  extends: [
+    'plugin:react/recommended',
+    'standard-with-typescript',
+    'plugin:prettier/recommended',
+  ],
   overrides: [
     {
       files: ['src/**/*.{ts,tsx}'],
       parser: '@typescript-eslint/parser',
       parserOptions: {
-        project: ['./tsconfig.json']
+        project: ['./tsconfig.json'],
       },
       rules: {
-        'preferred-import/ts-imports': 'error'
-      }
-    }
+        'preferred-import/ts-imports': 'error',
+      },
+    },
   ],
   parserOptions: {
     ecmaVersion: 'latest',
-    sourceType: 'module'
+    sourceType: 'module',
   },
   plugins: ['react', 'import', 'preferred-import'],
   rules: {
@@ -27,16 +31,22 @@ module.exports = {
       {
         'newlines-between': 'always',
         alphabetize: { order: 'asc', caseInsensitive: true },
-        groups: ['builtin', 'external', 'internal', 'unknown', ['parent', 'sibling', 'index']],
+        groups: [
+          'builtin',
+          'external',
+          'internal',
+          'unknown',
+          ['parent', 'sibling', 'index'],
+        ],
         pathGroups: [
           {
             pattern: '@{apis,components,pages,services,styles,utils}/**',
             group: 'external',
-            position: 'after'
-          }
+            position: 'after',
+          },
         ],
-        pathGroupsExcludedImportTypes: ['builtin']
-      }
-    ]
-  }
-}
+        pathGroupsExcludedImportTypes: ['builtin'],
+      },
+    ],
+  },
+};

@@ -1,9 +1,11 @@
-import qs from 'qs'
+import qs from 'qs';
 
 export const createQueryString = (query: object): string => {
-  const filteredQueryObject = Object.fromEntries(Object.entries(query).filter((entry) => entry[1] !== ''))
+  const filteredQueryObject = Object.fromEntries(
+    Object.entries(query).filter((entry) => entry[1] !== ''),
+  );
 
-  const queryString = qs.stringify(filteredQueryObject)
+  const queryString = qs.stringify(filteredQueryObject);
 
-  return queryString === '' ? '' : `?${queryString}`
-}
+  return queryString === '' ? '' : `?${queryString}`;
+};

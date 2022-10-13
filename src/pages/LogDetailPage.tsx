@@ -1,17 +1,19 @@
-import useAuth from '@hooks/useAuth'
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import useAuth from '@hooks/useAuth';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import ReturnToListButton from '@components/ReturnToListButton'
+import ReturnToListButton from '@components/ReturnToListButton';
 
 const LogDetailPage: React.FC = () => {
-  const navigate = useNavigate()
-  const { isLoggedIn } = useAuth()
-  if (!isLoggedIn) navigate('/')
+  const navigate = useNavigate();
+  const { isLoggedIn } = useAuth();
+  if (!isLoggedIn) navigate('/');
 
-  return <main>
-    <ReturnToListButton />
-  </main>
-}
+  return (
+    <main>
+      <ReturnToListButton />
+    </main>
+  );
+};
 
-export default LogDetailPage
+export default LogDetailPage;
