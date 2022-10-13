@@ -3,11 +3,15 @@ import { LoginResponse } from 'types/auth';
 import { axios } from '@apis/index';
 
 export const loginAPI = async (token: string): Promise<any> => {
-  const response = await axios.post<LoginResponse>('/auth/login', {
-    headers: {
-      Authorization: `Bearer ${token}`,
+  const response = await axios.post<LoginResponse>(
+    '/auth/login',
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     },
-  });
+  );
   return response.data;
 };
 

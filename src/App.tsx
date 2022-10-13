@@ -1,5 +1,6 @@
 import { store } from '@stores/index';
 import { userActions } from '@stores/slices/user';
+import { User } from 'firebase/auth';
 import React, { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -16,14 +17,21 @@ import GlobalStyle from '@styles/globalStyle';
 const App: React.FC = () => {
   // load user here
   const token = false;
-  if (token) store.dispatch(userActions.setUserLoggedIn(true));
+  if (token) store.dispatch(userActions.setIsLoggedIn(true));
 
   const { auth } = FirebaseService;
 
+  const onAuthStateChanged = async (user: User | null): Promise<void> => {
+    console.log('@user', user);
+    if (user !== null) {
+      store.dispatch(userActions.setIsLoggedIn(true));
+      // how do I use useAuth here?
+    }
+  };
+
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
-      console.log('@user', user);
-      if (user !== null) store.dispatch(userActions.setUserLoggedIn(true));
+      void onAuthStateChanged(user);
     });
   }, []);
 

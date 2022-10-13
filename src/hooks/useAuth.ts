@@ -21,7 +21,6 @@ const useAuth = (): ReturnType => {
   const login = async (): Promise<void> => {
     const token = await signInWithGoogle();
     await dispatch(fetchUser(token));
-    dispatch(userActions.setUserLoggedIn(true));
   };
 
   const logOut = async (): Promise<void> => {
@@ -30,7 +29,7 @@ const useAuth = (): ReturnType => {
     navigate('/', {
       replace: true,
     });
-    dispatch(userActions.setUserLoggedIn(false));
+    dispatch(userActions.setIsLoggedIn(false));
   };
 
   return { isLoggedIn, login, logOut };
