@@ -2,7 +2,7 @@ import useAuth from '@hooks/useAuth'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const Mypage: React.FC = () => {
+const MyPage: React.FC = () => {
   const navigate = useNavigate()
   const { isLoggedIn } = useAuth()
   if (!isLoggedIn) navigate('/')
@@ -10,4 +10,4 @@ const Mypage: React.FC = () => {
   return <div>MyPage</div>
 }
 
-export default Mypage
+export default MyPage

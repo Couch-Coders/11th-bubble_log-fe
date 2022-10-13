@@ -4,12 +4,12 @@ import React, { useEffect } from 'react'
 import { Provider } from 'react-redux'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
-import Edit from '@pages/Edit'
-import Home from '@pages/Home'
-import LogDetail from '@pages/LogDetail'
-import Logs from '@pages/Logs'
-import Mypage from '@pages/Mypage'
-import Write from '@pages/Write'
+import EditPage from '@pages/EditPage'
+import HomePage from '@pages/HomePage'
+import LogDetailPage from '@pages/LogDetailPage'
+import LogsPage from '@pages/LogsPage'
+import MyPage from '@pages/MyPage'
+import WritePage from '@pages/WritePage'
 import { FirebaseService } from '@services/firebase'
 import GlobalStyle from '@styles/globalStyle'
 
@@ -32,12 +32,12 @@ const App: React.FC = () => {
           <BrowserRouter>
             <GlobalStyle />
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/logs" element={<Logs />} />
-              <Route path="/write" element={<Write />} />
-              <Route path="/log/:id" element={<LogDetail />} />
-              <Route path="/log/:id/edit" element={<Edit />} />
-              <Route path="/mypage" element={<Mypage />} />
+              <Route path="/" element={<HomePage />} />
+              <Route path="/logs" element={<LogsPage />} />
+              <Route path="/write" element={<WritePage />} />
+              <Route path="/log/:id" element={<LogDetailPage />} />
+              <Route path="/log/:id/edit" element={<EditPage />} />
+              <Route path="/mypage" element={<MyPage />} />
             </Routes>
           </BrowserRouter>
         </Provider>

@@ -2,7 +2,7 @@ import useAuth from '@hooks/useAuth'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const Edit: React.FC = () => {
+const EditPage: React.FC = () => {
   const navigate = useNavigate()
   const { isLoggedIn } = useAuth()
   if (!isLoggedIn) navigate('/')
@@ -10,4 +10,4 @@ const Edit: React.FC = () => {
   return <div>Edit</div>
 }
 
-export default Edit
+export default EditPage

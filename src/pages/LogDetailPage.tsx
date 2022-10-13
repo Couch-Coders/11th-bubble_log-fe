@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 import ReturnToListButton from '@components/ReturnToListButton'
 
-const LogDetail: React.FC = () => {
+const LogDetailPage: React.FC = () => {
   const navigate = useNavigate()
   const { isLoggedIn } = useAuth()
   if (!isLoggedIn) navigate('/')
@@ -14,4 +14,4 @@ const LogDetail: React.FC = () => {
   </main>
 }
 
-export default LogDetail
+export default LogDetailPage

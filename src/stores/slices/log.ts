@@ -9,7 +9,7 @@ import { GetLogsQuery, GetLogsResponse, LogWithId } from 'types/log'
 import { getLogsAPI } from '@apis/log'
 
 export const fetchLogs = createAsyncThunk<GetLogsResponse, GetLogsQuery>(
-  'log/fetchStatus',
+  'log/get/fetchStatus',
   async (query: GetLogsQuery) => await getLogsAPI(query)
 )
 

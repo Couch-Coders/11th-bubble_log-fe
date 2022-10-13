@@ -7,7 +7,7 @@ import SearchFilter from '@components/SearchFilter'
 import SearchInput from '@components/SearchInput'
 import WriteLogButton from '@components/WriteLogButton'
 
-const Logs: React.FC = () => {
+const LogsPage: React.FC = () => {
   const navigate = useNavigate()
   const { isLoggedIn } = useAuth()
   if (!isLoggedIn) navigate('/')
@@ -23,4 +23,4 @@ const Logs: React.FC = () => {
   </main>
 }
 
-export default Logs
+export default LogsPage

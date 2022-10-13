@@ -1,7 +1,7 @@
 import useAuth from '@hooks/useAuth'
 import React from 'react'
 
-const Home: React.FC = () => {
+const HomePage: React.FC = () => {
   const { isLoggedIn, login, logOut } = useAuth()
 
   const onClickLoginButton = (): void => {
@@ -21,4 +21,4 @@ const Home: React.FC = () => {
   </main>
 }
 
-export default Home
+export default HomePage
