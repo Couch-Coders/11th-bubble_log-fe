@@ -29,7 +29,11 @@ const initialState: LogState = {
 export const logDetailSlice = createSlice({
   name: 'logDetail',
   initialState,
-  reducers: {},
+  reducers: {
+    setIsFavorite(state, action: PayloadAction<boolean>) {
+      if (state.data !== null) state.data.isFavorite = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchLogDetail.pending, (state) => {

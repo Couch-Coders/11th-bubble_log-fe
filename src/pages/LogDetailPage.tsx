@@ -5,6 +5,7 @@ import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import ReturnToListButton from '@components/ReturnToListButton';
+import ToggleFavoriteButton from '@components/ToggleFavoriteButton';
 
 const LogDetailPage: React.FC = () => {
   const navigate = useNavigate();
@@ -35,6 +36,9 @@ const LogDetailPage: React.FC = () => {
       {isLoading && <p>loading...</p>}
       {error !== null && <p>error</p>}
       {data !== null && <p>{data.content}</p>}
+      {data !== null && (
+        <ToggleFavoriteButton isFavorite={data.isFavorite} logId={logId} />
+      )}
       <ReturnToListButton />
     </main>
   );
