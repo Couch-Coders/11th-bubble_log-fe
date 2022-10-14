@@ -2,6 +2,8 @@ import useAuth from '@hooks/useAuth';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import Button from '@components/common/Button';
+
 const HomePage: React.FC = () => {
   const { isLoggedIn, login } = useAuth();
 
@@ -17,9 +19,7 @@ const HomePage: React.FC = () => {
 
   return (
     <main>
-      <button type="button" onClick={onClickLoginButton}>
-        로그인
-      </button>
+      <Button onClick={onClickLoginButton}>로그인</Button>
     </main>
   );
 };
