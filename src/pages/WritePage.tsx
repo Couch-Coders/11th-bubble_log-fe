@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
+import { useNavigate } from 'react-router-dom';
 
 import { createLogAPI } from '@apis/log';
 import KakaoMap from '@components/KakaoMap';
 import { DIVE_TYPE } from '@utils/constants';
+
 import 'react-datepicker/dist/react-datepicker.css';
 
 const WritePage: React.FC = () => {
@@ -23,6 +25,8 @@ const WritePage: React.FC = () => {
     lat: 33.55635,
     lng: 126.795841,
   });
+
+  const navigate = useNavigate();
 
   const onChangeDatePicker = (date: Date): void => {
     setDate(date);
@@ -84,6 +88,10 @@ const WritePage: React.FC = () => {
     setContent(event.target.value);
   };
 
+  const onClickCancelButton = (): void => {
+    navigate(-1);
+  };
+
   const onSubmit = async (
     event: React.FormEvent<HTMLFormElement>,
   ): Promise<any> => {
@@ -111,6 +119,7 @@ const WritePage: React.FC = () => {
     try {
       const response = await createLogAPI(body);
       console.log(response);
+      navigate('/logs');
     } catch (error) {
       console.log(error);
     }
@@ -172,6 +181,7 @@ const WritePage: React.FC = () => {
       <label>노트</label>
       <textarea value={content} onChange={onChangeDescription} />
       <KakaoMap position={position} setPosition={setPosition} />
+      <button onClick={onClickCancelButton}>돌아가기</button>
     </main>
   );
 };

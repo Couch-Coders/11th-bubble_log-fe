@@ -5,6 +5,7 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit';
 import { LoginResponse } from 'types/auth';
+import { User } from 'types/log';
 
 import { loginAPI } from '@apis/auth';
 
@@ -14,12 +15,19 @@ export const fetchUser = createAsyncThunk<LoginResponse, string>(
 );
 
 interface UserState {
+  data: User;
   isLoggedIn: boolean;
   isLoading: boolean;
   error: SerializedError | null;
 }
 
 const initialState: UserState = {
+  data: {
+    id: '',
+    name: '',
+    email: '',
+    profileImage: '',
+  },
   isLoggedIn: false,
   isLoading: false,
   error: null,
@@ -29,7 +37,7 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUserLoggedIn(state, action: PayloadAction<boolean>) {
+    setIsLoggedIn(state, action: PayloadAction<boolean>) {
       state.isLoggedIn = action.payload;
     },
   },
@@ -38,11 +46,15 @@ export const userSlice = createSlice({
       .addCase(fetchUser.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(fetchUser.fulfilled, (state) => {
-        state.isLoading = false;
-        state.isLoggedIn = true;
-        state.error = null;
-      })
+      .addCase(
+        fetchUser.fulfilled,
+        (state, action: PayloadAction<LoginResponse>) => {
+          state.data = action.payload;
+          state.isLoading = false;
+          state.isLoggedIn = true;
+          state.error = null;
+        },
+      )
       .addCase(fetchUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error;

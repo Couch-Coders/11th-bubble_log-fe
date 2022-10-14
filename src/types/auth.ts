@@ -1,6 +1,6 @@
 export interface LoginResponse {
   id: string;
-  username: string;
+  name: string;
   email: string;
   profileImage: string;
 }
