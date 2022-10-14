@@ -50,6 +50,7 @@ const EditPage: React.FC = () => {
           lat: 33.55635,
           lng: 126.795841,
         };
+  const initialLocation = data !== null ? data.location : '';
 
   const [isLoading, setIsLoading] = useState(false);
   const [date, setDate] = useState(initialDate);
@@ -64,6 +65,7 @@ const EditPage: React.FC = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [content, setContent] = useState(initialContent);
   const [position, setPosition] = useState(initialPosition);
+  const [location, setLocation] = useState(initialLocation);
 
   const onChangeDatePicker = (date: Date): void => {
     setDate(date);
@@ -147,12 +149,14 @@ const EditPage: React.FC = () => {
       temperature: Number(temperature),
       maxOxygen: Number(maxOxygen),
       minOxygen: Number(minOxygen),
-      location: 'location',
+      location,
       content,
       longitude: 1,
       latitude: 1,
       images: [],
     };
+    console.log('@body', body);
+
     try {
       const response = await updateLogAPI(body, logId);
       console.log(response);
@@ -164,6 +168,7 @@ const EditPage: React.FC = () => {
 
   console.log(imageFile);
   console.log(position.lat, position.lng);
+  console.log(setLocation);
 
   return (
     <main>

@@ -1,4 +1,7 @@
-import React from 'react';
+import { useDispatch } from '@stores/index';
+import { fetchUser } from '@stores/slices/user';
+import { User } from 'firebase/auth';
+import React, { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 
 import Header from '@components/Header';
@@ -8,11 +11,29 @@ import LogDetailPage from '@pages/LogDetailPage';
 import LogsPage from '@pages/LogsPage';
 import MyPage from '@pages/MyPage';
 import WritePage from '@pages/WritePage';
+import { FirebaseService } from '@services/firebase';
 import GlobalStyle from '@styles/globalStyle';
 
 const App: React.FC = () => {
   const location = useLocation();
   const isHome = location.pathname === '/';
+
+  const { auth } = FirebaseService;
+
+  const dispatch = useDispatch();
+
+  const onAuthStateChanged = async (user: User | null): Promise<void> => {
+    if (user === null) return;
+    const token = await user.getIdToken();
+    console.log('@token', token);
+    await dispatch(fetchUser(token));
+  };
+
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      void onAuthStateChanged(user);
+    });
+  }, []);
 
   return (
     <>
