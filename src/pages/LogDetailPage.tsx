@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from '@stores/index';
-import { fetchLogDetail } from '@stores/slices/logDetail';
+import { fetchLogDetail, logDetailActions } from '@stores/slices/logDetail';
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -18,7 +18,10 @@ const LogDetailPage: React.FC = () => {
   useEffect(() => {
     const promise = dispatch(fetchLogDetail(logId));
 
-    return () => promise.abort();
+    return () => {
+      promise.abort();
+      dispatch(logDetailActions.clearData());
+    };
   }, [logId]);
 
   return (

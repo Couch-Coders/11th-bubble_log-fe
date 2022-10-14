@@ -71,6 +71,9 @@ export const logSlice = createSlice({
       state.query.minDepth = minDepth;
       state.query.maxDepth = maxDepth;
     },
+    clearData: (state) => {
+      state.data = [];
+    },
   },
   extraReducers: (builder) => {
     builder

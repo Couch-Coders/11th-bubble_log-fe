@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from '@stores/index';
-import { fetchLogs } from '@stores/slices/log';
+import { fetchLogs, logActions } from '@stores/slices/log';
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { LogWithId } from 'types/log';
@@ -19,6 +19,7 @@ const useLogList = (): ReturnType => {
 
     return () => {
       promise.abort();
+      dispatch(logActions.clearData());
     };
   }, [query]);
 
