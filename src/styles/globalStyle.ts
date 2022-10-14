@@ -3,6 +3,11 @@ import reset from 'styled-reset';
 
 const globalStyle = css`
   ${reset}
+
+  *,
+  body {
+    font-family: 'Noto-Sans KR', sans-serif;
+  }
 `;
 
 const GlobalStyle = createGlobalStyle`
