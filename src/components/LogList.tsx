@@ -30,6 +30,8 @@ const useLogList = (): ReturnType => {
 const LogList: React.FC = () => {
   const { data, isLoading, error } = useLogList();
 
+  console.log('@data', data);
+
   return (
     <>
       {isLoading && <p>loading...</p>}

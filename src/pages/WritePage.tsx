@@ -109,7 +109,7 @@ const WritePage: React.FC = () => {
       temperature: Number(temperature),
       maxOxygen: Number(maxOxygen),
       minOxygen: Number(minOxygen),
-      location: '서울시 서초구',
+      location: '서울특별시',
       content,
       longitude: position.lat,
       latitude: position.lng,
