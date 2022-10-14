@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 
 import ReturnToListButton from '@components/ReturnToListButton';
 import ToggleFavoriteButton from '@components/ToggleFavoriteButton';
+import UpdateLogButton from '@components/UpdateLogButton';
 
 const LogDetailPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -31,6 +32,7 @@ const LogDetailPage: React.FC = () => {
       {data !== null && (
         <ToggleFavoriteButton isFavorite={data.isFavorite} logId={logId} />
       )}
+      <UpdateLogButton />
       <ReturnToListButton />
     </main>
   );
