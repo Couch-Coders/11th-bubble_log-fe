@@ -26,7 +26,21 @@ export interface LogWithId extends Log {
   id: number;
 }
 
-export type CreateLogBody = Log;
+export interface CreateLogBody {
+  date: string;
+  diveType: string;
+  enterTime: string;
+  leaveTime: string;
+  sight: number;
+  maxDepth: number;
+  temperature: number;
+  minOxygen: number;
+  maxOxygen: number;
+  location: string;
+  content: string;
+  latitude: number;
+  longitude: number;
+}
 
 export interface CreateLogResponse extends LogWithId {
   user: User;

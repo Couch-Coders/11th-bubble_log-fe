@@ -8,8 +8,8 @@ const Container = styled.input`
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {}
 
-const Input: React.FC<Props> = () => {
-  return <Container />;
+const Input: React.FC<Props> = ({ ...props }) => {
+  return <Container {...props} />;
 };
 
 export default React.memo(Input);
