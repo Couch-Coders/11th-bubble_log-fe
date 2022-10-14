@@ -5,6 +5,7 @@ import { blue } from '@styles/palette';
 
 import Avatar from './common/Avatar';
 import HeaderLogo from './HeaderLogo';
+import LogOutButton from './LogOutButton';
 
 const Base = styled.header`
   display: flex;
@@ -13,13 +14,21 @@ const Base = styled.header`
   padding: 0 1rem;
   background-color: ${blue[100]};
   height: 3.5rem;
+
+  .flex {
+    display: flex;
+    gap: 1rem;
+  }
 `;
 
 const Header: React.FC = () => {
   return (
     <Base>
       <HeaderLogo />
-      <Avatar />
+      <div className="flex">
+        <LogOutButton />
+        <Avatar />
+      </div>
     </Base>
   );
 };

@@ -3,16 +3,12 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const HomePage: React.FC = () => {
-  const { isLoggedIn, login, logOut } = useAuth();
+  const { isLoggedIn, login } = useAuth();
 
   const navigate = useNavigate();
 
   const onClickLoginButton = (): void => {
     void login();
-  };
-
-  const onClickLogOutButton = (): void => {
-    void logOut();
   };
 
   useEffect(() => {
@@ -21,15 +17,9 @@ const HomePage: React.FC = () => {
 
   return (
     <main>
-      {isLoggedIn ? (
-        <button type="button" onClick={onClickLogOutButton}>
-          로그아웃
-        </button>
-      ) : (
-        <button type="button" onClick={onClickLoginButton}>
-          로그인
-        </button>
-      )}
+      <button type="button" onClick={onClickLoginButton}>
+        로그인
+      </button>
     </main>
   );
 };
