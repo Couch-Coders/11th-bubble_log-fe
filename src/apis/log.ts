@@ -76,3 +76,13 @@ export const deleteLogImageAPI = async (
   const response = await axios.delete(`/logs/${logId}/images/${imageName}`);
   return response.data;
 };
+
+export const getDiveTypeAPI = async (): Promise<any> => {
+  const response = await axios.get('/diveTypes');
+  return response.data;
+};
+
+export const getLocationAPI = async (): Promise<any> => {
+  const response = await axios.get('/locations');
+  return response.data;
+};
