@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { blue } from '@styles/palette';
+import { theme } from '@styles/theme';
 
 import Avatar from './common/Avatar';
 import HeaderLogo from './HeaderLogo';
@@ -12,7 +12,7 @@ const Base = styled.header`
   justify-content: space-between;
   align-items: center;
   padding: 0 1rem;
-  background-color: ${blue[100]};
+  background-color: ${theme.primary};
   height: 3.5rem;
 
   .flex {
