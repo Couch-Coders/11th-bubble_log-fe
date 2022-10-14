@@ -3,6 +3,7 @@ import { fetchLogDetail } from '@stores/slices/logDetail';
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
+import Layout from '@components/Layout';
 import ReturnToListButton from '@components/ReturnToListButton';
 import ToggleFavoriteButton from '@components/ToggleFavoriteButton';
 
@@ -22,7 +23,7 @@ const LogDetailPage: React.FC = () => {
   }, [logId]);
 
   return (
-    <main>
+    <Layout>
       {isLoading && <p>loading...</p>}
       {error !== null && <p>error</p>}
       {data !== null && <p>{data.content}</p>}
@@ -30,7 +31,7 @@ const LogDetailPage: React.FC = () => {
         <ToggleFavoriteButton isFavorite={data.isFavorite} logId={logId} />
       )}
       <ReturnToListButton />
-    </main>
+    </Layout>
   );
 };
 

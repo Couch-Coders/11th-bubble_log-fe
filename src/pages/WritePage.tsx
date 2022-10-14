@@ -6,6 +6,7 @@ import { createLogAPI } from '@apis/log';
 import Input from '@components/common/Input';
 import Textarea from '@components/common/Textarea';
 import KakaoMap from '@components/KakaoMap';
+import Layout from '@components/Layout';
 import { DIVE_TYPE } from '@utils/constants';
 
 import 'react-datepicker/dist/react-datepicker.css';
@@ -131,7 +132,7 @@ const WritePage: React.FC = () => {
   console.log(position.lat, position.lng);
 
   return (
-    <main>
+    <Layout>
       {isLoading && 'loading...'}
       <form
         onSubmit={() => {
@@ -184,7 +185,7 @@ const WritePage: React.FC = () => {
       <Textarea value={content} onChange={onChangeDescription} />
       <KakaoMap position={position} setPosition={setPosition} />
       <button onClick={onClickCancelButton}>돌아가기</button>
-    </main>
+    </Layout>
   );
 };
 
