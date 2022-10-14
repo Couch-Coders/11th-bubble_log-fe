@@ -1,6 +1,4 @@
-import { store } from '@stores/index';
-import { userActions } from '@stores/slices/user';
-import { User } from 'firebase/auth';
+import useAuth from '@hooks/useAuth';
 import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 
@@ -10,27 +8,19 @@ import LogDetailPage from '@pages/LogDetailPage';
 import LogsPage from '@pages/LogsPage';
 import MyPage from '@pages/MyPage';
 import WritePage from '@pages/WritePage';
-import { FirebaseService } from '@services/firebase';
 import GlobalStyle from '@styles/globalStyle';
 
 const App: React.FC = () => {
+  const { login } = useAuth();
+
   // load user here
-  const token = false;
-  if (token) store.dispatch(userActions.setIsLoggedIn(true));
-
-  const { auth } = FirebaseService;
-
-  const onAuthStateChanged = async (user: User | null): Promise<void> => {
-    console.log('@user', user);
-    if (user !== null) {
-      store.dispatch(userActions.setIsLoggedIn(true));
-    }
+  const loadUser = async (): Promise<void> => {
+    const token = false;
+    if (token) await login();
   };
 
   useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      void onAuthStateChanged(user);
-    });
+    void loadUser();
   }, []);
 
   return (
