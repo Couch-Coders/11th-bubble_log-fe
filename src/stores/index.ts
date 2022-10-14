@@ -7,10 +7,13 @@ import {
   useSelector as useTypedSelector,
 } from 'react-redux';
 
+import logDetailSlice from './slices/logDetail';
+
 export const store = configureStore({
   reducer: {
     log: logSlice.reducer,
     user: userSlice.reducer,
+    logDetail: logDetailSlice.reducer,
   },
   devTools: process.env.NODE_ENV !== 'production',
 });
