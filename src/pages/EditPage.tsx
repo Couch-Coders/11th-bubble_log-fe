@@ -5,6 +5,7 @@ import DatePicker from 'react-datepicker';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { updateLogAPI } from '@apis/log';
+import Input from '@components/common/Input';
 import KakaoMap from '@components/KakaoMap';
 import { DIVE_TYPE } from '@utils/constants';
 
@@ -181,11 +182,11 @@ const EditPage: React.FC = () => {
           ))}
         </select>
         <label>수온</label>
-        <input value={temperature} onChange={onChangeTemperature} />
+        <Input value={temperature} onChange={onChangeTemperature} />
         <label>최고 깊이</label>
-        <input value={maxDepth} onChange={onChangeMaxDepth} />
+        <Input value={maxDepth} onChange={onChangeMaxDepth} />
         <label>시야</label>
-        <input value={sight} onChange={onChangeSight} />
+        <Input value={sight} onChange={onChangeSight} />
         <label>들어간 시간</label>
         <DatePicker
           selected={enterTime}
@@ -207,12 +208,12 @@ const EditPage: React.FC = () => {
           dateFormat="h:mm aa"
         />
         <label>들어갈 때 탱크량</label>
-        <input value={maxOxygen} onChange={onChangeMaxOxygen} />
+        <Input value={maxOxygen} onChange={onChangeMaxOxygen} />
         <label>나올 때 탱크량</label>
-        <input value={minOxygen} onChange={onChangeMinOxygen} />
+        <Input value={minOxygen} onChange={onChangeMinOxygen} />
         <button>수정하기</button>
       </form>
-      <input type="file" onChange={onChangeImageFile} />
+      <Input type="file" onChange={onChangeImageFile} />
       <label>노트</label>
       <textarea value={content} onChange={onChangeDescription} />
       <KakaoMap position={position} setPosition={setPosition} />
