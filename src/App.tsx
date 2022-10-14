@@ -1,6 +1,7 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 
+import Header from '@components/Header';
 import EditPage from '@pages/EditPage';
 import HomePage from '@pages/HomePage';
 import LogDetailPage from '@pages/LogDetailPage';
@@ -10,9 +11,13 @@ import WritePage from '@pages/WritePage';
 import GlobalStyle from '@styles/globalStyle';
 
 const App: React.FC = () => {
+  const location = useLocation();
+  const isHome = location.pathname === '/';
+
   return (
     <>
       <GlobalStyle />
+      {!isHome && <Header />}
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/logs" element={<LogsPage />} />
