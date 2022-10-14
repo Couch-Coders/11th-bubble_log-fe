@@ -79,7 +79,7 @@ export const logSlice = createSlice({
       })
       .addCase(fetchLogs.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.data = action.payload.contents;
+        state.data = action.payload.content;
         state.error = null;
       })
       .addCase(fetchLogs.rejected, (state, action) => {

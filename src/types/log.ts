@@ -66,7 +66,7 @@ interface Sort {
 }
 
 export interface GetLogsResponse {
-  contents: LogWithId[];
+  content: LogWithId[];
   pageable: {
     sort: Sort;
     offset: number;
