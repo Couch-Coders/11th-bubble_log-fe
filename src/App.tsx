@@ -2,8 +2,7 @@ import { store } from '@stores/index';
 import { userActions } from '@stores/slices/user';
 import { User } from 'firebase/auth';
 import React, { useEffect } from 'react';
-import { Provider } from 'react-redux';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import EditPage from '@pages/EditPage';
 import HomePage from '@pages/HomePage';
@@ -25,7 +24,6 @@ const App: React.FC = () => {
     console.log('@user', user);
     if (user !== null) {
       store.dispatch(userActions.setIsLoggedIn(true));
-      // how do I use useAuth here?
     }
   };
 
@@ -36,19 +34,17 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <Provider store={store}>
-      <BrowserRouter>
-        <GlobalStyle />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/logs" element={<LogsPage />} />
-          <Route path="/write" element={<WritePage />} />
-          <Route path="/log/:id" element={<LogDetailPage />} />
-          <Route path="/log/:id/edit" element={<EditPage />} />
-          <Route path="/mypage" element={<MyPage />} />
-        </Routes>
-      </BrowserRouter>
-    </Provider>
+    <>
+      <GlobalStyle />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/logs" element={<LogsPage />} />
+        <Route path="/write" element={<WritePage />} />
+        <Route path="/log/:id" element={<LogDetailPage />} />
+        <Route path="/log/:id/edit" element={<EditPage />} />
+        <Route path="/mypage" element={<MyPage />} />
+      </Routes>
+    </>
   );
 };
 
