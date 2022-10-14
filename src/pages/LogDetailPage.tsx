@@ -9,7 +9,7 @@ import ToggleFavoriteButton from '@components/ToggleFavoriteButton';
 const LogDetailPage: React.FC = () => {
   const dispatch = useDispatch();
 
-  const { data, isLoading, error } = useSelector((state) => state.logDetail);
+  const { data, isLoading } = useSelector((state) => state.logDetail);
 
   const params = useParams();
 
@@ -24,8 +24,7 @@ const LogDetailPage: React.FC = () => {
   return (
     <main>
       {isLoading && <p>loading...</p>}
-      {error !== null && <p>error</p>}
-      {data !== null && <p>{data.content}</p>}
+      {data !== null && <p>{JSON.stringify(data)}</p>}
       {data !== null && (
         <ToggleFavoriteButton isFavorite={data.isFavorite} logId={logId} />
       )}
