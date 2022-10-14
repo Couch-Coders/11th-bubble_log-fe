@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { updateLogAPI } from '@apis/log';
 import Input from '@components/common/Input';
+import Textarea from '@components/common/Textarea';
 import KakaoMap from '@components/KakaoMap';
 import { DIVE_TYPE } from '@utils/constants';
 
@@ -215,7 +216,7 @@ const EditPage: React.FC = () => {
       </form>
       <Input type="file" onChange={onChangeImageFile} />
       <label>노트</label>
-      <textarea value={content} onChange={onChangeDescription} />
+      <Textarea value={content} onChange={onChangeDescription} />
       <KakaoMap position={position} setPosition={setPosition} />
       <button onClick={onClickCancelButton}>취소하기</button>
     </main>
