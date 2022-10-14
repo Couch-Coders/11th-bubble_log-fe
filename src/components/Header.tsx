@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { blue } from '@styles/palette';
 
 import Avatar from './common/Avatar';
+import HeaderLogo from './HeaderLogo';
 
 const Base = styled.header`
   display: flex;
@@ -17,7 +18,7 @@ const Base = styled.header`
 const Header: React.FC = () => {
   return (
     <Base>
-      <p>BUBBLE</p>
+      <HeaderLogo />
       <Avatar />
     </Base>
   );
