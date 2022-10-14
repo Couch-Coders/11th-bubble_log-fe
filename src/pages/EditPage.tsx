@@ -154,6 +154,7 @@ const EditPage: React.FC = () => {
     try {
       const response = await updateLogAPI(body, logId);
       console.log(response);
+      navigate(`/log/${logId}`);
     } catch (error) {
       console.log(error);
     }

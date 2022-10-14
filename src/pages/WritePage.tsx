@@ -119,6 +119,7 @@ const WritePage: React.FC = () => {
     try {
       const response = await createLogAPI(body);
       console.log(response);
+      navigate('/logs');
     } catch (error) {
       console.log(error);
     }
