@@ -1,4 +1,3 @@
-import useAuth from '@hooks/useAuth';
 import { useDispatch, useSelector } from '@stores/index';
 import { fetchLogDetail } from '@stores/slices/logDetail';
 import React, { useEffect, useState } from 'react';
@@ -11,11 +10,6 @@ import { DIVE_TYPE } from '@utils/constants';
 
 const EditPage: React.FC = () => {
   const navigate = useNavigate();
-  const { isLoggedIn } = useAuth();
-
-  useEffect(() => {
-    if (!isLoggedIn) navigate('/');
-  }, []);
 
   const params = useParams();
   const logId = Number(params.id);

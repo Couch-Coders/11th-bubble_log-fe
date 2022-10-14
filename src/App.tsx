@@ -1,5 +1,4 @@
-import useAuth from '@hooks/useAuth';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 import EditPage from '@pages/EditPage';
@@ -11,18 +10,6 @@ import WritePage from '@pages/WritePage';
 import GlobalStyle from '@styles/globalStyle';
 
 const App: React.FC = () => {
-  const { login } = useAuth();
-
-  // load user here
-  const loadUser = async (): Promise<void> => {
-    const token = false;
-    if (token) await login();
-  };
-
-  useEffect(() => {
-    void loadUser();
-  }, []);
-
   return (
     <>
       <GlobalStyle />

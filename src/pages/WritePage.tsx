@@ -1,5 +1,4 @@
-import useAuth from '@hooks/useAuth';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,13 +9,6 @@ import { DIVE_TYPE } from '@utils/constants';
 import 'react-datepicker/dist/react-datepicker.css';
 
 const WritePage: React.FC = () => {
-  const navigate = useNavigate();
-  const { isLoggedIn } = useAuth();
-
-  useEffect(() => {
-    if (!isLoggedIn) navigate('/');
-  }, []);
-
   const [isLoading, setIsLoading] = useState(false);
   const [date, setDate] = useState(new Date());
   const [diveType, setDiveType] = useState('');
@@ -33,6 +25,8 @@ const WritePage: React.FC = () => {
     lat: 33.55635,
     lng: 126.795841,
   });
+
+  const navigate = useNavigate();
 
   const onChangeDatePicker = (date: Date): void => {
     setDate(date);
