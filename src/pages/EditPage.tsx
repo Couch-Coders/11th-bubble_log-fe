@@ -12,7 +12,10 @@ import { DIVE_TYPE } from '@utils/constants';
 const EditPage: React.FC = () => {
   const navigate = useNavigate();
   const { isLoggedIn } = useAuth();
-  if (!isLoggedIn) navigate('/');
+
+  useEffect(() => {
+    if (!isLoggedIn) navigate('/');
+  }, []);
 
   const params = useParams();
   const logId = Number(params.id);

@@ -1,6 +1,6 @@
 import useAuth from '@hooks/useAuth';
 import { useSelector } from '@stores/index';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { unregisterAPI } from '@apis/auth';
@@ -8,7 +8,10 @@ import { unregisterAPI } from '@apis/auth';
 const MyPage: React.FC = () => {
   const navigate = useNavigate();
   const { isLoggedIn } = useAuth();
-  if (!isLoggedIn) navigate('/');
+
+  useEffect(() => {
+    if (!isLoggedIn) navigate('/');
+  }, []);
 
   const { data } = useSelector((state) => state.user);
 

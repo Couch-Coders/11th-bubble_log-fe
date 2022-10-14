@@ -23,7 +23,10 @@ const LogDetailPage: React.FC = () => {
   const logId = Number(params.id);
 
   const { isLoggedIn } = useAuth();
-  if (!isLoggedIn) navigate('/');
+
+  useEffect(() => {
+    if (!isLoggedIn) navigate('/');
+  }, []);
 
   useEffect(() => {
     const promise = dispatch(fetchLogDetail(logId));
