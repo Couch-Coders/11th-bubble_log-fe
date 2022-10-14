@@ -23,7 +23,7 @@ export const updateLogAPI = async (
   body: UpdateLogBody,
   logId: number,
 ): Promise<any> => {
-  const response = await axios.patch<UpdateLogResponse>(`/logs/${logId}`, body);
+  const response = await axios.put<UpdateLogResponse>(`/logs/${logId}`, body);
   return response.data;
 };
 
