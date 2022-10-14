@@ -35,7 +35,7 @@ const LogList: React.FC = () => {
       {isLoading && <p>loading...</p>}
       {error !== null && <p>error</p>}
 
-      {data.map((log) => (
+      {data?.map((log) => (
         <Link to={`/log/${log.id}`} key={log.id}>
           <p>{log.location}</p>
           <p>{log.date.toString()}</p>
