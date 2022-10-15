@@ -6,7 +6,6 @@ import SearchFilter from '@components/SearchFilter';
 const Container = styled.div`
   display: flex;
   gap: 1rem;
-  padding: 1rem;
 `;
 
 const SearchFilterGroup: React.FC = () => {
