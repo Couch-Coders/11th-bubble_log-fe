@@ -22,7 +22,7 @@ interface Props {
 
 const LogListItem: React.FC<Props> = ({ data }) => {
   return (
-    <Link to={`logs/${String(data.id)}`}>
+    <Link to={`/log/${String(data.id)}`}>
       <Container>
         <div style={{ display: 'flex', gap: '1rem' }}>
           <ToggleFavoriteButton isFavorite={data.isFavorite} logId={data.id} />
