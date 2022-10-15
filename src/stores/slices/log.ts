@@ -4,7 +4,7 @@ import {
   SerializedError,
   PayloadAction,
 } from '@reduxjs/toolkit';
-import { GetLogsQuery, GetLogsResponse, LogWithId } from 'types/log';
+import { GetLogsQuery, GetLogsResponse, LogResponse } from 'types/log';
 
 import { getLogsAPI } from '@apis/log';
 
@@ -14,7 +14,7 @@ export const fetchLogs = createAsyncThunk<GetLogsResponse, GetLogsQuery>(
 );
 
 interface LogState {
-  data: LogWithId[];
+  data: LogResponse[];
   isLoading: boolean;
   error: SerializedError | null;
   query: GetLogsQuery;
