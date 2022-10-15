@@ -95,30 +95,27 @@ const WritePage: React.FC = () => {
     navigate(-1);
   };
 
-  const onSubmit = async (
-    event: React.FormEvent<HTMLFormElement>,
-  ): Promise<any> => {
+  const onClickSubmitButton = async (): Promise<any> => {
+    console.log('submitting...');
+
     setIsLoading(true);
 
-    event.preventDefault();
-    console.log('submit');
-
     const body = {
-      date: JSON.stringify(date),
-      diveType,
-      enterTime: JSON.stringify(enterTime),
-      leaveTime: JSON.stringify(leaveTime),
+      date: date.toISOString().slice(0, -1),
+      diveType: 'FREE',
+      enterTime: enterTime.toISOString().slice(0, -1),
+      leaveTime: leaveTime.toISOString().slice(0, -1),
       sight: Number(sight),
       maxDepth: Number(maxDepth),
       temperature: Number(temperature),
       maxOxygen: Number(maxOxygen),
       minOxygen: Number(minOxygen),
-      location: 'location',
+      location: '서울특별시',
       content,
-      longitude: 1,
-      latitude: 1,
-      images: [],
+      longitude: position.lat,
+      latitude: position.lng,
     };
+    console.log('@body', body);
     try {
       const response = await createLogAPI(body);
       console.log(response);
@@ -129,62 +126,63 @@ const WritePage: React.FC = () => {
   };
 
   console.log(imageFile);
-  console.log(position.lat, position.lng);
+  console.log(diveType);
 
   return (
     <Layout>
       {isLoading && 'loading...'}
-      <form
-        onSubmit={() => {
-          void onSubmit;
+      <DatePicker selected={date} onChange={onChangeDatePicker} />
+      <select onChange={onChangeDiveType} defaultValue="type">
+        <option value="type" disabled>
+          다이브 종류
+        </option>
+        {DIVE_TYPE.map((option, index) => (
+          <option key={index}>{option}</option>
+        ))}
+      </select>
+      <label>수온</label>
+      <Input value={temperature} onChange={onChangeTemperature} />
+      <label>최고 깊이</label>
+      <Input value={maxDepth} onChange={onChangeMaxDepth} />
+      <label>시야</label>
+      <Input value={sight} onChange={onChangeSight} />
+      <label>들어간 시간</label>
+      <DatePicker
+        selected={enterTime}
+        onChange={onChangeEnterTime}
+        showTimeSelect
+        showTimeSelectOnly
+        timeIntervals={15}
+        timeCaption="Time"
+        dateFormat="h:mm aa"
+      />
+      <label>나온 시간</label>
+      <DatePicker
+        selected={leaveTime}
+        onChange={onChangeLeaveTime}
+        showTimeSelect
+        showTimeSelectOnly
+        timeIntervals={15}
+        timeCaption="Time"
+        dateFormat="h:mm aa"
+      />
+      <label>들어갈 때 탱크량</label>
+      <Input value={maxOxygen} onChange={onChangeMaxOxygen} />
+      <label>나올 때 탱크량</label>
+      <Input value={minOxygen} onChange={onChangeMinOxygen} />
+      <button
+        type="button"
+        onClick={() => {
+          void onClickSubmitButton();
         }}
       >
-        <DatePicker selected={date} onChange={onChangeDatePicker} />
-        <select onChange={onChangeDiveType} defaultValue="type">
-          <option value="type" disabled>
-            다이브 종류
-          </option>
-          {DIVE_TYPE.map((option, index) => (
-            <option key={index}>{option}</option>
-          ))}
-        </select>
-        <label>수온</label>
-        <Input value={temperature} onChange={onChangeTemperature} />
-        <label>최고 깊이</label>
-        <Input value={maxDepth} onChange={onChangeMaxDepth} />
-        <label>시야</label>
-        <Input value={sight} onChange={onChangeSight} />
-        <label>들어간 시간</label>
-        <DatePicker
-          selected={enterTime}
-          onChange={onChangeEnterTime}
-          showTimeSelect
-          showTimeSelectOnly
-          timeIntervals={15}
-          timeCaption="Time"
-          dateFormat="h:mm aa"
-        />
-        <label>나온 시간</label>
-        <DatePicker
-          selected={leaveTime}
-          onChange={onChangeLeaveTime}
-          showTimeSelect
-          showTimeSelectOnly
-          timeIntervals={15}
-          timeCaption="Time"
-          dateFormat="h:mm aa"
-        />
-        <label>들어갈 때 탱크량</label>
-        <Input value={maxOxygen} onChange={onChangeMaxOxygen} />
-        <label>나올 때 탱크량</label>
-        <Input value={minOxygen} onChange={onChangeMinOxygen} />
-        <button>생성하기</button>
-      </form>
-      <Input type="file" onChange={onChangeImageFile} />
+        생성하기
+      </button>
+      <button onClick={onClickCancelButton}>돌아가기</button>
+      <input type="file" onChange={onChangeImageFile} />
       <label>노트</label>
       <Textarea value={content} onChange={onChangeDescription} />
       <KakaoMap position={position} setPosition={setPosition} />
-      <button onClick={onClickCancelButton}>돌아가기</button>
     </Layout>
   );
 };

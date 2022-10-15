@@ -5,18 +5,20 @@ import React from 'react';
 import { toggleLogFavoriteAPI } from '@apis/log';
 
 interface ReturnType {
-  onClick: () => Promise<void>;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
 }
 
 const useToggleFavoriteButton = (logId: number): ReturnType => {
   const dispatch = useDispatch();
 
-  const onClick = async (): Promise<void> => {
-    dispatch(logDetailActions.setIsFavorite(true));
+  const onChange = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
+    dispatch(logDetailActions.setIsFavorite(event.target.checked));
     await toggleLogFavoriteAPI(logId);
   };
 
-  return { onClick };
+  return { onChange };
 };
 
 interface Props {
@@ -25,14 +27,14 @@ interface Props {
 }
 
 const ToggleFavoriteButton: React.FC<Props> = ({ isFavorite, logId }) => {
-  const { onClick } = useToggleFavoriteButton(logId);
+  const { onChange } = useToggleFavoriteButton(logId);
 
   return (
     <input
       type="checkbox"
       checked={isFavorite}
-      onClick={() => {
-        void onClick;
+      onChange={(event) => {
+        void onChange(event);
       }}
     />
   );

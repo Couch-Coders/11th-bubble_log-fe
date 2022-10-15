@@ -51,6 +51,7 @@ const EditPage: React.FC = () => {
           lat: 33.55635,
           lng: 126.795841,
         };
+  const initialLocation = data !== null ? data.location : '';
 
   const [isLoading, setIsLoading] = useState(false);
   const [date, setDate] = useState(initialDate);
@@ -65,6 +66,7 @@ const EditPage: React.FC = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [content, setContent] = useState(initialContent);
   const [position, setPosition] = useState(initialPosition);
+  const [location, setLocation] = useState(initialLocation);
 
   const onChangeDatePicker = (date: Date): void => {
     setDate(date);
@@ -130,30 +132,28 @@ const EditPage: React.FC = () => {
     navigate(`/log/${logId}`);
   };
 
-  const onSubmit = async (
-    event: React.FormEvent<HTMLFormElement>,
-  ): Promise<any> => {
+  const onClickSubmitButton = async (): Promise<any> => {
     setIsLoading(true);
-
-    event.preventDefault();
     console.log('submit');
 
     const body = {
-      date: JSON.stringify(date),
+      date: date.toISOString().slice(0, -1),
       diveType,
-      enterTime: JSON.stringify(enterTime),
-      leaveTime: JSON.stringify(leaveTime),
+      enterTime: enterTime.toISOString().slice(0, -1),
+      leaveTime: leaveTime.toISOString().slice(0, -1),
       sight: Number(sight),
       maxDepth: Number(maxDepth),
       temperature: Number(temperature),
       maxOxygen: Number(maxOxygen),
       minOxygen: Number(minOxygen),
-      location: 'location',
+      location,
       content,
-      longitude: 1,
-      latitude: 1,
+      longitude: position.lng,
+      latitude: position.lat,
       images: [],
     };
+    console.log('@body', body);
+
     try {
       const response = await updateLogAPI(body, logId);
       console.log(response);
@@ -164,57 +164,57 @@ const EditPage: React.FC = () => {
   };
 
   console.log(imageFile);
-  console.log(position.lat, position.lng);
+  console.log(setLocation);
 
   return (
     <Layout>
       {isLoading && 'loading...'}
-      <form
-        onSubmit={() => {
-          void onSubmit;
+      <DatePicker selected={date} onChange={onChangeDatePicker} />
+      <select onChange={onChangeDiveType} defaultValue="type">
+        <option value="type" disabled>
+          다이브 종류
+        </option>
+        {DIVE_TYPE.map((option, index) => (
+          <option key={index}>{option}</option>
+        ))}
+      </select>
+      <label>수온</label>
+      <Input value={temperature} onChange={onChangeTemperature} />
+      <label>최고 깊이</label>
+      <Input value={maxDepth} onChange={onChangeMaxDepth} />
+      <label>시야</label>
+      <Input value={sight} onChange={onChangeSight} />
+      <label>들어간 시간</label>
+      <DatePicker
+        selected={enterTime}
+        onChange={onChangeEnterTime}
+        showTimeSelect
+        showTimeSelectOnly
+        timeIntervals={15}
+        timeCaption="Time"
+        dateFormat="h:mm aa"
+      />
+      <label>나온 시간</label>
+      <DatePicker
+        selected={leaveTime}
+        onChange={onChangeLeaveTime}
+        showTimeSelect
+        showTimeSelectOnly
+        timeIntervals={15}
+        timeCaption="Time"
+        dateFormat="h:mm aa"
+      />
+      <label>들어갈 때 탱크량</label>
+      <Input value={maxOxygen} onChange={onChangeMaxOxygen} />
+      <label>나올 때 탱크량</label>
+      <Input value={minOxygen} onChange={onChangeMinOxygen} />
+      <button
+        onClick={() => {
+          void onClickSubmitButton();
         }}
       >
-        <DatePicker selected={date} onChange={onChangeDatePicker} />
-        <select onChange={onChangeDiveType} defaultValue="type">
-          <option value="type" disabled>
-            다이브 종류
-          </option>
-          {DIVE_TYPE.map((option, index) => (
-            <option key={index}>{option}</option>
-          ))}
-        </select>
-        <label>수온</label>
-        <Input value={temperature} onChange={onChangeTemperature} />
-        <label>최고 깊이</label>
-        <Input value={maxDepth} onChange={onChangeMaxDepth} />
-        <label>시야</label>
-        <Input value={sight} onChange={onChangeSight} />
-        <label>들어간 시간</label>
-        <DatePicker
-          selected={enterTime}
-          onChange={onChangeEnterTime}
-          showTimeSelect
-          showTimeSelectOnly
-          timeIntervals={15}
-          timeCaption="Time"
-          dateFormat="h:mm aa"
-        />
-        <label>나온 시간</label>
-        <DatePicker
-          selected={leaveTime}
-          onChange={onChangeLeaveTime}
-          showTimeSelect
-          showTimeSelectOnly
-          timeIntervals={15}
-          timeCaption="Time"
-          dateFormat="h:mm aa"
-        />
-        <label>들어갈 때 탱크량</label>
-        <Input value={maxOxygen} onChange={onChangeMaxOxygen} />
-        <label>나올 때 탱크량</label>
-        <Input value={minOxygen} onChange={onChangeMinOxygen} />
-        <button>수정하기</button>
-      </form>
+        수정하기
+      </button>
       <Input type="file" onChange={onChangeImageFile} />
       <label>노트</label>
       <Textarea value={content} onChange={onChangeDescription} />
