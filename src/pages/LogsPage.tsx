@@ -2,7 +2,7 @@ import React from 'react';
 
 import Layout from '@components/Layout';
 import LogList from '@components/LogList';
-import SearchFilter from '@components/SearchFilter';
+import SearchFilterGroup from '@components/SearchFilterGroup';
 import SearchInput from '@components/SearchInput';
 import WriteLogButton from '@components/WriteLogButton';
 
@@ -10,10 +10,7 @@ const LogsPage: React.FC = () => {
   return (
     <Layout>
       <SearchInput />
-      <SearchFilter type="diveType" />
-      <SearchFilter type="depth" />
-      <SearchFilter type="location" />
-      <SearchFilter type="temperature" />
+      <SearchFilterGroup />
       <LogList />
       <WriteLogButton />
     </Layout>
