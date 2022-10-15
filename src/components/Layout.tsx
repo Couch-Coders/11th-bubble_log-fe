@@ -10,7 +10,7 @@ const Container = styled.main`
 
   .contents {
     background-color: white;
-    max-width: 1024px;
+    width: 1024px;
   }
 `;
 
