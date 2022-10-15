@@ -22,8 +22,9 @@ export interface User {
   profileImage: string;
 }
 
-export interface LogWithId extends Log {
+export interface LogResponse extends Log {
   id: number;
+  isFavorite: boolean;
 }
 
 export interface CreateLogBody {
@@ -42,21 +43,18 @@ export interface CreateLogBody {
   longitude: number;
 }
 
-export interface CreateLogResponse extends LogWithId {
+export interface CreateLogResponse extends LogResponse {
   user: User;
-  isFavorite: boolean;
 }
 
 export type UpdateLogBody = Log;
 
-export interface UpdateLogResponse extends LogWithId {
+export interface UpdateLogResponse extends LogResponse {
   user: User;
-  isFavorite: boolean;
 }
 
-export interface GetLogDetailResponse extends LogWithId {
+export interface GetLogDetailResponse extends LogResponse {
   user: User;
-  isFavorite: boolean;
 }
 
 interface Sort {
@@ -66,7 +64,7 @@ interface Sort {
 }
 
 export interface GetLogsResponse {
-  content: LogWithId[];
+  content: LogResponse[];
   pageable: {
     sort: Sort;
     offset: number;
@@ -101,16 +99,14 @@ export interface GetLogsQuery {
   orderBy: string;
 }
 
-export interface ToggleLogFavoriteRepsonse extends LogWithId {
+export interface ToggleLogFavoriteRepsonse extends LogResponse {
   user: User;
-  isFavorite: boolean;
 }
 
 export interface CreateLogImagesBody {
   formData: FormData;
 }
 
-export interface CreateLogImagesResponse extends LogWithId {
+export interface CreateLogImagesResponse extends LogResponse {
   user: User;
-  isFavorite: boolean;
 }
