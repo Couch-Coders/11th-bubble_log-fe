@@ -1,13 +1,23 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+
+import Button from './common/Button';
+
+const Container = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
 
 import Button from './common/Button';
 
 const WriteLogButton: React.FC = () => {
   return (
-    <Link to="/write">
-      <Button>로그 작성</Button>
-    </Link>
+    <Container>
+      <Link to="/write">
+        <Button>로그 작성</Button>
+      </Link>
+    </Container>
   );
 };
 

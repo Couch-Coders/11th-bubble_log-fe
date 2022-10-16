@@ -6,6 +6,7 @@ import { createLogAPI } from '@apis/log';
 import Input from '@components/common/Input';
 import Textarea from '@components/common/Textarea';
 import KakaoMap from '@components/KakaoMap';
+import Layout from '@components/Layout';
 import { DIVE_TYPE } from '@utils/constants';
 
 import 'react-datepicker/dist/react-datepicker.css';
@@ -128,7 +129,7 @@ const WritePage: React.FC = () => {
   console.log(diveType);
 
   return (
-    <main>
+    <Layout>
       {isLoading && 'loading...'}
       <DatePicker selected={date} onChange={onChangeDatePicker} />
       <select onChange={onChangeDiveType} defaultValue="type">
@@ -182,7 +183,7 @@ const WritePage: React.FC = () => {
       <label>노트</label>
       <Textarea value={content} onChange={onChangeDescription} />
       <KakaoMap position={position} setPosition={setPosition} />
-    </main>
+    </Layout>
   );
 };
 

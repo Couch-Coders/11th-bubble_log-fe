@@ -1,12 +1,46 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-const Container = styled.input`
-  border-radius: 0.5rem;
+import { gray } from '@styles/palette';
+
+interface ContainerProps {
+  startIcon?: boolean;
+  endIcon?: boolean;
+  fullWidth?: boolean;
+}
+
+const Container = styled.input<ContainerProps>`
+  border-radius: 0.25rem;
+  height: 1.5rem;
+  font-size: 1rem;
   padding: 0.5rem;
+  outline: none;
+  border: 1px solid ${gray[500]};
+
+  ${({ startIcon }) =>
+    startIcon === true &&
+    css`
+      padding-left: 2.5rem;
+    `}
+
+  ${({ endIcon }) =>
+    endIcon !== true &&
+    css`
+      padding-right: 2rem;
+    `}
+
+  ${({ fullWidth }) =>
+    fullWidth === true &&
+    css`
+      width: 100%;
+    `}
 `;
 
-interface Props extends React.InputHTMLAttributes<HTMLInputElement> {}
+interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
+  startIcon?: boolean;
+  endIcon?: boolean;
+  fullWidth?: boolean;
+}
 
 const Input: React.FC<Props> = ({ ...props }) => {
   return <Container {...props} />;

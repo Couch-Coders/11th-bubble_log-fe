@@ -8,6 +8,7 @@ import { updateLogAPI } from '@apis/log';
 import Input from '@components/common/Input';
 import Textarea from '@components/common/Textarea';
 import KakaoMap from '@components/KakaoMap';
+import Layout from '@components/Layout';
 import { DIVE_TYPE } from '@utils/constants';
 
 const EditPage: React.FC = () => {
@@ -166,7 +167,7 @@ const EditPage: React.FC = () => {
   console.log(setLocation);
 
   return (
-    <main>
+    <Layout>
       {isLoading && 'loading...'}
       <DatePicker selected={date} onChange={onChangeDatePicker} />
       <select onChange={onChangeDiveType} defaultValue="type">
@@ -219,7 +220,7 @@ const EditPage: React.FC = () => {
       <Textarea value={content} onChange={onChangeDescription} />
       <KakaoMap position={position} setPosition={setPosition} />
       <button onClick={onClickCancelButton}>취소하기</button>
-    </main>
+    </Layout>
   );
 };
 

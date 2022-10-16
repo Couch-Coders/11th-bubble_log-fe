@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import DeleteLogButton from '@components/DeleteLogButton';
+import Layout from '@components/Layout';
 import ReturnToListButton from '@components/ReturnToListButton';
 import ToggleFavoriteButton from '@components/ToggleFavoriteButton';
 import UpdateLogButton from '@components/UpdateLogButton';
@@ -27,7 +28,7 @@ const LogDetailPage: React.FC = () => {
   }, [logId]);
 
   return (
-    <main>
+    <Layout>
       {isLoading && <p>loading...</p>}
       {data !== null && <p>{JSON.stringify(data)}</p>}
       {data !== null && (
@@ -36,7 +37,7 @@ const LogDetailPage: React.FC = () => {
       <UpdateLogButton />
       <DeleteLogButton />
       <ReturnToListButton />
-    </main>
+    </Layout>
   );
 };
 

@@ -2,6 +2,7 @@ import { useSelector } from '@stores/index';
 import React from 'react';
 
 import { unregisterAPI } from '@apis/auth';
+import Layout from '@components/Layout';
 
 const MyPage: React.FC = () => {
   const { data } = useSelector((state) => state.user);
@@ -11,7 +12,7 @@ const MyPage: React.FC = () => {
   };
 
   return (
-    <main>
+    <Layout>
       <p>{data.name}</p>
       <p>{data.email}</p>
       <button
@@ -21,7 +22,7 @@ const MyPage: React.FC = () => {
       >
         탈퇴하기
       </button>
-    </main>
+    </Layout>
   );
 };
 
