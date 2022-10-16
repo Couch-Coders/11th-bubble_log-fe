@@ -1,5 +1,6 @@
+import useOutsideClick from '@hooks/useOutsideClick';
 import { useSelector } from '@stores/index';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { User } from 'types/log';
 
@@ -27,6 +28,7 @@ interface ReturnType {
   profileModalOpen: boolean;
   onCloseProfileModal: () => void;
   onClickAvatar: () => void;
+  ref: React.MutableRefObject<HTMLDivElement | null>;
 }
 
 const useHeader = (): ReturnType => {
@@ -42,17 +44,21 @@ const useHeader = (): ReturnType => {
     setProfileModalOpen(false);
   };
 
-  return { data, profileModalOpen, onCloseProfileModal, onClickAvatar };
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useOutsideClick(ref, onCloseProfileModal);
+
+  return { data, profileModalOpen, onCloseProfileModal, onClickAvatar, ref };
 };
 
 const Header: React.FC = () => {
-  const { data, profileModalOpen, onCloseProfileModal, onClickAvatar } =
+  const { data, profileModalOpen, onCloseProfileModal, onClickAvatar, ref } =
     useHeader();
 
   return (
     <Base>
       <HeaderLogo />
-      <div className="flex">
+      <div className="flex" ref={ref}>
         <Avatar
           src={data.profileImage}
           alt="profile image"
