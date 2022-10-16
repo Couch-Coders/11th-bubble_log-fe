@@ -1,13 +1,12 @@
 import { useSelector } from '@stores/index';
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { User } from 'types/log';
 
+import Avatar from '@components/common/Avatar';
+import HeaderLogo from '@components/HeaderLogo';
+import ProfileModal from '@components/ProfileModal';
 import { theme } from '@styles/theme';
-
-import Avatar from './common/Avatar';
-import HeaderLogo from './HeaderLogo';
-import LogOutButton from './LogOutButton';
 
 const Base = styled.header`
   display: flex;
@@ -25,23 +24,46 @@ const Base = styled.header`
 
 interface ReturnType {
   data: User;
+  profileModalOpen: boolean;
+  onCloseProfileModal: () => void;
+  onClickAvatar: () => void;
 }
 
 const useHeader = (): ReturnType => {
+  const [profileModalOpen, setProfileModalOpen] = useState(false);
+
   const { data } = useSelector((state) => state.user);
 
-  return { data };
+  const onClickAvatar = (): void => {
+    setProfileModalOpen((prev) => !prev);
+  };
+
+  const onCloseProfileModal = (): void => {
+    setProfileModalOpen(false);
+  };
+
+  return { data, profileModalOpen, onCloseProfileModal, onClickAvatar };
 };
 
 const Header: React.FC = () => {
-  const { data } = useHeader();
+  const { data, profileModalOpen, onCloseProfileModal, onClickAvatar } =
+    useHeader();
 
   return (
     <Base>
       <HeaderLogo />
       <div className="flex">
-        <LogOutButton />
-        <Avatar src={data.profileImage} alt="profile image" />
+        <Avatar
+          src={data.profileImage}
+          alt="profile image"
+          onClick={onClickAvatar}
+          clickable
+        />
+        <ProfileModal
+          data={data}
+          open={profileModalOpen}
+          onClose={onCloseProfileModal}
+        />
       </div>
     </Base>
   );
