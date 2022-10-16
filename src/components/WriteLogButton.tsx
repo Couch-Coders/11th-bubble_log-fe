@@ -9,8 +9,6 @@ const Container = styled.div`
   justify-content: flex-end;
 `;
 
-import Button from './common/Button';
-
 const WriteLogButton: React.FC = () => {
   return (
     <Container>

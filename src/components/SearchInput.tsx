@@ -28,8 +28,6 @@ const Container = styled.div`
   }
 `;
 
-import Input from '@components/common/Input';
-
 interface ReturnType {
   inputValue: string;
   onChangeInput: (event: React.ChangeEvent<HTMLInputElement>) => void;
