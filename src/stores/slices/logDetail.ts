@@ -33,6 +33,9 @@ export const logDetailSlice = createSlice({
     setIsFavorite(state, action: PayloadAction<boolean>) {
       if (state.data !== null) state.data.isFavorite = action.payload;
     },
+    clearData(state) {
+      state.data = null;
+    },
   },
   extraReducers: (builder) => {
     builder

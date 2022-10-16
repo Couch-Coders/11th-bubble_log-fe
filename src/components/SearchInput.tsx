@@ -3,6 +3,8 @@ import { useDispatch } from '@stores/index';
 import { logActions } from '@stores/slices/log';
 import React, { useEffect, useState } from 'react';
 
+import Input from '@components/common/Input';
+
 interface ReturnType {
   inputValue: string;
   onChangeInput: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -34,7 +36,7 @@ const SearchInput: React.FC = () => {
 
   return (
     <>
-      <input value={inputValue} onChange={onChangeInput} />
+      <Input value={inputValue} onChange={onChangeInput} />
       <button onClick={onClickButton}>x</button>
     </>
   );

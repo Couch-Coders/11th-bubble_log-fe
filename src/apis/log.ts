@@ -23,7 +23,7 @@ export const updateLogAPI = async (
   body: UpdateLogBody,
   logId: number,
 ): Promise<any> => {
-  const response = await axios.patch<UpdateLogResponse>(`/logs/${logId}`, body);
+  const response = await axios.put<UpdateLogResponse>(`/logs/${logId}`, body);
   return response.data;
 };
 
@@ -74,5 +74,15 @@ export const deleteLogImageAPI = async (
   imageName: string,
 ): Promise<any> => {
   const response = await axios.delete(`/logs/${logId}/images/${imageName}`);
+  return response.data;
+};
+
+export const getDiveTypeAPI = async (): Promise<any> => {
+  const response = await axios.get('/diveTypes');
+  return response.data;
+};
+
+export const getLocationAPI = async (): Promise<any> => {
+  const response = await axios.get('/locations');
   return response.data;
 };
