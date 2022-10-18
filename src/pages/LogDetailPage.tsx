@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import DeleteLogButton from '@components/DeleteLogButton';
 import Layout from '@components/Layout';
 import ReturnToListButton from '@components/ReturnToListButton';
-import ToggleFavoriteButton from '@components/ToggleFavoriteButton';
+import ToggleFavoriteButton from '@components/FavoriteToggleButton';
 import UpdateLogButton from '@components/UpdateLogButton';
 
 const LogDetailPage: React.FC = () => {
