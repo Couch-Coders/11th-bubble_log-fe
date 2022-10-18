@@ -27,7 +27,7 @@ export const createLogAPI = async (body: CreateLogBody): Promise<any> => {
 
 export const updateLogAPI = async (
   body: UpdateLogBody,
-  logId: number,
+  logId: string,
 ): Promise<any> => {
   const response = await axios.put<UpdateLogResponse>(
     `${BASE_URL_LOGS}/${logId}`,
@@ -36,7 +36,7 @@ export const updateLogAPI = async (
   return response.data;
 };
 
-export const deleteLogAPI = async (logId: number): Promise<any> => {
+export const deleteLogAPI = async (logId: string): Promise<any> => {
   const response = await axios.delete(`${BASE_URL_LOGS}/${logId}`);
   return response.data;
 };
@@ -49,14 +49,14 @@ export const getLogsAPI = async (query: GetLogsQuery): Promise<any> => {
   return response.data;
 };
 
-export const getLogDetailAPI = async (logId: number): Promise<any> => {
+export const getLogDetailAPI = async (logId: string): Promise<any> => {
   const response = await axios.get<GetLogDetailResponse>(
     `${BASE_URL_LOGS}/${logId}`,
   );
   return response.data;
 };
 
-export const toggleLogFavoriteAPI = async (logId: number): Promise<any> => {
+export const toggleLogFavoriteAPI = async (logId: string): Promise<any> => {
   const response = await axios.put<ToggleLogFavoriteRepsonse>(
     `${BASE_URL_LOGS}/${logId}/favorite`,
   );
@@ -65,7 +65,7 @@ export const toggleLogFavoriteAPI = async (logId: number): Promise<any> => {
 
 export const createLogImagesAPI = async (
   body: CreateLogImagesBody,
-  logId: number,
+  logId: string,
 ): Promise<any> => {
   const response = await axios.post<CreateLogImagesResponse>(
     `${BASE_URL_LOGS}/${logId}/images`,
@@ -85,7 +85,7 @@ export const getLogImageAPI = async (
 };
 
 export const deleteLogImageAPI = async (
-  logId: number,
+  logId: string,
   imageName: string,
 ): Promise<any> => {
   const response = await axios.delete(
