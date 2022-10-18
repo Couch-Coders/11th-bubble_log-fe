@@ -12,12 +12,12 @@ const useAuth = () => {
 
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
-  const login = async (): Promise<void> => {
+  const login = async () => {
     const token = await signInWithGoogle();
     await dispatch(fetchUser(token));
   };
 
-  const logOut = async (): Promise<void> => {
+  const logOut = async () => {
     await signOut();
     await logoutAPI();
     navigate('/', {

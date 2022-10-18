@@ -46,13 +46,11 @@ const SearchInput: React.FC = () => {
   const debouncedInputValue = useDebounce(inputValue);
   const dispatch = useDispatch();
 
-  const handleInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ): void => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
   };
 
-  const handleButtonClick = (): void => {
+  const handleClearButtonClick = () => {
     setInputValue('');
   };
 
@@ -71,7 +69,7 @@ const SearchInput: React.FC = () => {
         onChange={handleInputChange}
       />
       {inputValue !== '' && (
-        <SearchInputClearButton onClick={handleButtonClick}>
+        <SearchInputClearButton onClick={handleClearButtonClick}>
           <MdClose className="close-icon" />
         </SearchInputClearButton>
       )}
