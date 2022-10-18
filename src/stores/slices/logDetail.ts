@@ -9,9 +9,9 @@ import { GetLogDetailResponse } from 'types/log';
 
 import { getLogDetailAPI } from '@apis/log';
 
-export const fetchLogDetail = createAsyncThunk<GetLogDetailResponse, number>(
+export const fetchLogDetail = createAsyncThunk<GetLogDetailResponse, string>(
   'logDetail/fetchStatus',
-  async (logId: number) => await getLogDetailAPI(logId),
+  async (logId: string) => await getLogDetailAPI(logId),
 );
 
 interface LogState {
