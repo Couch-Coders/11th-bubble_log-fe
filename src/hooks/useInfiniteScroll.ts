@@ -5,9 +5,10 @@ const useInfiniteScroll = (
   target: any,
   onIntersect: IntersectionObserverCallback,
 ): void => {
+  const observer = new IntersectionObserver(onIntersect);
+
   useEffect(() => {
     if (target === null) return;
-    const observer = new IntersectionObserver(onIntersect);
 
     observer.observe(target);
 

@@ -1,20 +1,36 @@
+import useInfiniteScroll from '@hooks/useInfiniteScroll';
 import { useDispatch, useSelector } from '@stores/index';
-import { fetchLogs, logActions } from '@stores/slices/log';
-import React, { useEffect } from 'react';
-import { LogResponse } from 'types/log';
+import { fetchLogs, fetchLogsMore, logActions } from '@stores/slices/log';
+import React, { useEffect, useRef } from 'react';
 
 import LogListItem from './LogListItem';
 
-interface ReturnType {
-  data: LogResponse[];
-  isLoading: boolean;
-}
+const LogList: React.FC = () => {
+  const { data, isLoading, error, query } = useSelector((state) => state.log);
 
-const useLogList = (): ReturnType => {
-  const { data, isLoading, query } = useSelector((state) => state.log);
+  const {
+    startDate,
+    endDate,
+    diveType,
+    minDepth,
+    maxDepth,
+    location,
+    minTemperature,
+    maxTemperature,
+    keyword,
+    orderBy,
+  } = query;
 
-  console.log('@data', data);
   const dispatch = useDispatch();
+
+  const observerRef = useRef<HTMLDivElement | null>(null);
+
+  const handleIntersect = (): void => {
+    if (data === null || error !== null || isLoading) return;
+    void dispatch(fetchLogsMore(query));
+  };
+
+  useInfiniteScroll(observerRef.current, handleIntersect);
 
   useEffect(() => {
     const promise = dispatch(fetchLogs(query));
@@ -23,22 +39,31 @@ const useLogList = (): ReturnType => {
       promise.abort();
       dispatch(logActions.clearData());
     };
-  }, [query]);
-
-  return { data, isLoading };
-};
-
-const LogList: React.FC = () => {
-  const { data, isLoading } = useLogList();
-
-  console.log('@data', data);
+  }, [
+    startDate,
+    endDate,
+    diveType,
+    minDepth,
+    maxDepth,
+    location,
+    minTemperature,
+    maxTemperature,
+    keyword,
+    orderBy,
+  ]);
 
   return (
     <>
       {isLoading && <p>loading...</p>}
-      {data?.map((data) => (
-        <LogListItem key={data.id} data={data} />
+      {data?.map((data, index) => (
+        <LogListItem key={index} data={data} />
       ))}
+      <div
+        style={{ height: '2rem', border: '1px solid red' }}
+        ref={observerRef}
+      >
+        옵저버
+      </div>
     </>
   );
 };

@@ -13,6 +13,11 @@ export const fetchLogs = createAsyncThunk<GetLogsResponse, GetLogsQuery>(
   async (query: GetLogsQuery) => await getLogsAPI(query),
 );
 
+export const fetchLogsMore = createAsyncThunk<GetLogsResponse, GetLogsQuery>(
+  'log/get/more/fetchStatus',
+  async (query: GetLogsQuery) => await getLogsAPI(query),
+);
+
 interface LogState {
   data: LogResponse[];
   isLoading: boolean;
@@ -34,7 +39,7 @@ const initialState: LogState = {
     minTemperature: '',
     maxTemperature: '',
     keyword: '',
-    page: '',
+    page: '0',
     size: '',
     orderBy: '',
   },
@@ -73,6 +78,20 @@ export const logSlice = createSlice({
     },
     clearData: (state) => {
       state.data = [];
+      state.query = {
+        startDate: '',
+        endDate: '',
+        diveType: '',
+        location: '',
+        minDepth: '',
+        maxDepth: '',
+        minTemperature: '',
+        maxTemperature: '',
+        keyword: '',
+        page: '0',
+        size: '',
+        orderBy: '',
+      };
     },
   },
   extraReducers: (builder) => {
@@ -83,9 +102,24 @@ export const logSlice = createSlice({
       .addCase(fetchLogs.fulfilled, (state, action) => {
         state.isLoading = false;
         state.data = action.payload.content;
+        state.query.page = String(Number(state.query.page) + 1);
         state.error = null;
       })
       .addCase(fetchLogs.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error;
+      });
+    builder
+      .addCase(fetchLogsMore.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchLogsMore.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.data.push(...action.payload.content);
+        state.query.page = String(Number(state.query.page) + 1);
+        state.error = null;
+      })
+      .addCase(fetchLogsMore.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error;
       });

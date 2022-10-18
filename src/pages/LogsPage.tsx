@@ -18,10 +18,10 @@ const LogsPage: React.FC = () => {
   return (
     <Layout>
       <VerticalStack>
+        <WriteLogButton />
         <SearchInput />
         <SearchFilterGroup />
         <LogList />
-        <WriteLogButton />
       </VerticalStack>
     </Layout>
   );
