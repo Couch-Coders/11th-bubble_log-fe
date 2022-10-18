@@ -15,7 +15,7 @@ import { filterQueryObject } from '@utils/filterQueryObject';
 
 const BASE_URL_LOGS = '/logs';
 
-export const createLogAPI = async (body: LogBody): Promise<any> => {
+const createLog = async (body: LogBody) => {
   const response = await axios.post<CreateLogResponse>(
     `${BASE_URL_LOGS}`,
     body,
@@ -23,10 +23,7 @@ export const createLogAPI = async (body: LogBody): Promise<any> => {
   return response.data;
 };
 
-export const updateLogAPI = async (
-  body: LogBody,
-  logId: string,
-): Promise<any> => {
+const updateLog = async (body: LogBody, logId: string) => {
   const response = await axios.put<UpdateLogResponse>(
     `${BASE_URL_LOGS}/${logId}`,
     body,
@@ -34,12 +31,12 @@ export const updateLogAPI = async (
   return response.data;
 };
 
-export const deleteLogAPI = async (logId: string): Promise<any> => {
+const deleteLog = async (logId: string) => {
   const response = await axios.delete(`${BASE_URL_LOGS}/${logId}`);
   return response.data;
 };
 
-export const getLogsAPI = async (query: GetLogsQuery): Promise<any> => {
+const getLogs = async (query: GetLogsQuery) => {
   const filteredQueryObject = filterQueryObject(query);
   const response = await axios.get<GetLogsResponse>(`${BASE_URL_LOGS}`, {
     params: filteredQueryObject,
@@ -47,24 +44,21 @@ export const getLogsAPI = async (query: GetLogsQuery): Promise<any> => {
   return response.data;
 };
 
-export const getLogDetailAPI = async (logId: string): Promise<any> => {
+const getLogDetail = async (logId: string) => {
   const response = await axios.get<GetLogDetailResponse>(
     `${BASE_URL_LOGS}/${logId}`,
   );
   return response.data;
 };
 
-export const toggleLogFavoriteAPI = async (logId: string): Promise<any> => {
+const toggleLogFavorite = async (logId: string) => {
   const response = await axios.put<ToggleLogFavoriteRepsonse>(
     `${BASE_URL_LOGS}/${logId}/favorite`,
   );
   return response.data;
 };
 
-export const createLogImagesAPI = async (
-  body: CreateLogImagesBody,
-  logId: string,
-): Promise<any> => {
+const createLogImages = async (body: CreateLogImagesBody, logId: string) => {
   const response = await axios.post<CreateLogImagesResponse>(
     `${BASE_URL_LOGS}/${logId}/images`,
     body,
@@ -72,32 +66,40 @@ export const createLogImagesAPI = async (
   return response.data;
 };
 
-export const getLogImageAPI = async (
-  logId: number,
-  imageName: string,
-): Promise<any> => {
+const getLogImage = async (logId: number, imageName: string) => {
   const response = await axios.get(
     `${BASE_URL_LOGS}/${logId}/images/${imageName}`,
   );
   return response.data;
 };
 
-export const deleteLogImageAPI = async (
-  logId: string,
-  imageName: string,
-): Promise<any> => {
+const deleteLogImage = async (logId: string, imageName: string) => {
   const response = await axios.delete(
     `${BASE_URL_LOGS}/${logId}/images/${imageName}`,
   );
   return response.data;
 };
 
-export const getDiveTypeAPI = async (): Promise<any> => {
+const getDiveType = async () => {
   const response = await axios.get('/diveTypes');
   return response.data;
 };
 
-export const getLocationAPI = async (): Promise<any> => {
+const getLocation = async () => {
   const response = await axios.get('/locations');
   return response.data;
+};
+
+export const logAPI = {
+  createLog,
+  updateLog,
+  deleteLog,
+  getLogs,
+  getLogDetail,
+  toggleLogFavorite,
+  createLogImages,
+  getLogImage,
+  deleteLogImage,
+  getDiveType,
+  getLocation,
 };

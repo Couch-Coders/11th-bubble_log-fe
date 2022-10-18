@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { updateLogAPI } from '@apis/log';
+import { logAPI } from '@apis/log';
 import Input from '@components/common/Input';
 import Textarea from '@components/common/Textarea';
 import KakaoMap from '@components/KakaoMap';
@@ -151,7 +151,7 @@ const EditPage: React.FC = () => {
     console.log('@body', body);
 
     try {
-      const response = await updateLogAPI(body, String(data.id));
+      const response = await logAPI.updateLog(body, String(data.id));
       console.log(response);
       navigate(`/log/${logId}`);
     } catch (error) {

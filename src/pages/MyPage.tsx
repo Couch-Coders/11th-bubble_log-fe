@@ -2,7 +2,7 @@ import { useSelector } from '@stores/index';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { unregisterAPI } from '@apis/auth';
+import { authAPI } from '@apis/auth';
 import Layout from '@components/Layout';
 import UnregisterButton from '@components/UnregisterButton';
 
@@ -13,7 +13,7 @@ const MyPage: React.FC = () => {
 
   const handleUnregisterButtonClick = async () => {
     try {
-      await unregisterAPI();
+      await authAPI.unregister();
       navigate('/', {
         replace: true,
       });

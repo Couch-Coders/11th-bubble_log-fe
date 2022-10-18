@@ -6,30 +6,25 @@ import { gray } from '@styles/palette';
 
 type DropdownButtonSizeType = 'small' | 'medium' | 'large';
 
-const getDropdownButtonSize = (size?: DropdownButtonSizeType): any => {
-  switch (size) {
-    case 'small':
-      return css`
-        height: 2rem;
-        padding: 0.75rem;
-        font-size: 0.75rem;
-        min-width: 4rem;
-      `;
-    case 'medium':
-      return css`
-        height: 2.5rem;
-        padding: 0.75rem;
-        font-size: 0.875rem;
-        min-width: 5rem;
-      `;
-    case 'large':
-      return css`
-        height: 3rem;
-        padding: 0.75rem;
-        font-size: 1rem;
-        min-width: 6rem;
-      `;
-  }
+const dropdownButtonStyle = {
+  small: css`
+    height: 2rem;
+    padding: 0.75rem;
+    font-size: 0.75rem;
+    min-width: 4rem;
+  `,
+  medium: css`
+    height: 2.5rem;
+    padding: 0.75rem;
+    font-size: 0.875rem;
+    min-width: 5rem;
+  `,
+  large: css`
+    height: 3rem;
+    padding: 0.75rem;
+    font-size: 1rem;
+    min-width: 6rem;
+  `,
 };
 
 interface ContainerProps {
@@ -56,7 +51,7 @@ const Container = styled.button<ContainerProps>`
     background-color: ${gray[100]};
   }
 
-  ${({ size }) => getDropdownButtonSize(size)};
+  ${({ size }) => size !== undefined && dropdownButtonStyle[size]};
 
   ${({ open }) =>
     open &&
@@ -80,7 +75,7 @@ const DropdownButton: React.FC<Props> = ({
 }) => {
   const [open, setOpen] = useState(false);
 
-  const onClick = (): void => {
+  const onClick = () => {
     setOpen((prev) => !prev);
   };
 

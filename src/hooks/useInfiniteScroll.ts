@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-// TODO: type target parameter
+// target: HTMLElement | null?
 const useInfiniteScroll = (
   target: any,
   onIntersect: IntersectionObserverCallback,

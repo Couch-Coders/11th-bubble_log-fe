@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { useNavigate } from 'react-router-dom';
 
-import { createLogAPI } from '@apis/log';
+import { logAPI } from '@apis/log';
 import Input from '@components/common/Input';
 import Textarea from '@components/common/Textarea';
 import KakaoMap from '@components/KakaoMap';
@@ -115,7 +115,7 @@ const WritePage: React.FC = () => {
     };
     console.log('@body', body);
     try {
-      const response = await createLogAPI(body);
+      const response = await logAPI.createLog(body);
       console.log(response);
       navigate('/logs');
     } catch (error) {

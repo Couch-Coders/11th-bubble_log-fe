@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from '@stores/index';
 import { fetchUser, userActions } from '@stores/slices/user';
 import { useNavigate } from 'react-router-dom';
 
-import { logoutAPI } from '@apis/auth';
+import { authAPI } from '@apis/auth';
 import { FirebaseService } from '@services/firebase';
 
 const useAuth = () => {
@@ -19,7 +19,7 @@ const useAuth = () => {
 
   const logOut = async () => {
     await signOut();
-    await logoutAPI();
+    await authAPI.logOut();
     navigate('/', {
       replace: true,
     });

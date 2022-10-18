@@ -3,7 +3,7 @@ import { fetchLogDetail, logDetailActions } from '@stores/slices/logDetail';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
-import { deleteLogAPI, toggleLogFavoriteAPI } from '@apis/log';
+import { logAPI } from '@apis/log';
 import Button from '@components/common/Button';
 import FavoriteToggleButton from '@components/FavoriteToggleButton';
 import Layout from '@components/Layout';
@@ -26,7 +26,7 @@ const LogDetailPage: React.FC = () => {
     if (data === null) return;
     setIsFavorite((prev) => !prev);
     try {
-      await toggleLogFavoriteAPI(String(data.id));
+      await logAPI.toggleLogFavorite(String(data.id));
     } catch (error) {
       console.log(error);
     }
@@ -35,7 +35,7 @@ const LogDetailPage: React.FC = () => {
   const handleDeleteButtonClick = async () => {
     if (data === null) return;
     try {
-      await deleteLogAPI(String(data.id));
+      await logAPI.deleteLog(String(data.id));
       navigate('/logs');
     } catch (error) {
       console.log(error);

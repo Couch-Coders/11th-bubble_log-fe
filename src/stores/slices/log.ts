@@ -6,16 +6,16 @@ import {
 } from '@reduxjs/toolkit';
 import { GetLogsQuery, GetLogsResponse, LogResponse } from 'types/log';
 
-import { getLogsAPI } from '@apis/log';
+import { logAPI } from '@apis/log';
 
 export const fetchLogs = createAsyncThunk<GetLogsResponse, GetLogsQuery>(
   'log/get/fetchStatus',
-  async (query: GetLogsQuery) => await getLogsAPI(query),
+  async (query: GetLogsQuery) => await logAPI.getLogs(query),
 );
 
 export const fetchLogsMore = createAsyncThunk<GetLogsResponse, GetLogsQuery>(
   'log/get/more/fetchStatus',
-  async (query: GetLogsQuery) => await getLogsAPI(query),
+  async (query: GetLogsQuery) => await logAPI.getLogs(query),
 );
 
 interface LogState {

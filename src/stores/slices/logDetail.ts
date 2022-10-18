@@ -7,11 +7,11 @@ import {
 } from '@reduxjs/toolkit';
 import { GetLogDetailResponse } from 'types/log';
 
-import { getLogDetailAPI } from '@apis/log';
+import { logAPI } from '@apis/log';
 
 export const fetchLogDetail = createAsyncThunk<GetLogDetailResponse, string>(
   'logDetail/fetchStatus',
-  async (logId: string) => await getLogDetailAPI(logId),
+  async (logId: string) => await logAPI.getLogDetail(logId),
 );
 
 interface LogState {

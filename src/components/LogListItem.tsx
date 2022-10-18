@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { LogResponse } from 'types/log';
 
-import { toggleLogFavoriteAPI } from '@apis/log';
+import { logAPI } from '@apis/log';
 import FavoriteToggleButton from '@components/FavoriteToggleButton';
 import { blue } from '@styles/palette';
 
@@ -27,7 +27,7 @@ const LogListItem: React.FC<Props> = ({ data }) => {
     if (data?.id === undefined) return;
     setIsFavorite((prev) => !prev);
     try {
-      await toggleLogFavoriteAPI(String(data.id));
+      await logAPI.toggleLogFavorite(String(data.id));
     } catch (error) {
       console.log(error);
     }
