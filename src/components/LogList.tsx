@@ -1,6 +1,6 @@
 import useInfiniteScroll from '@hooks/useInfiniteScroll';
 import { useDispatch, useSelector } from '@stores/index';
-import { fetchLogs, fetchLogsMore } from '@stores/slices/log';
+import { fetchLogs, fetchLogsMore, logActions } from '@stores/slices/log';
 import React, { useEffect, useRef } from 'react';
 
 import LogListItem from '@components/LogListItem';
@@ -36,6 +36,10 @@ const LogList: React.FC = () => {
 
   useEffect(() => {
     void dispatch(fetchLogs(query));
+
+    return () => {
+      dispatch(logActions.clearData());
+    };
   }, [
     startDate,
     endDate,
