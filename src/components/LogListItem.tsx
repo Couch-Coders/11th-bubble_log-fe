@@ -27,7 +27,7 @@ const LogListItem: React.FC<Props> = ({ data }) => {
     if (data?.id === undefined) return;
     setIsFavorite((prev) => !prev);
     try {
-      await toggleLogFavoriteAPI(data.id);
+      await toggleLogFavoriteAPI(String(data.id));
     } catch (error) {
       console.log(error);
     }
