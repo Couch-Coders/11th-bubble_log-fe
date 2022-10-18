@@ -6,7 +6,9 @@ import React, { useEffect, useRef } from 'react';
 import LogListItem from '@components/LogListItem';
 
 const LogList: React.FC = () => {
-  const { data, isLoading, error, query } = useSelector((state) => state.log);
+  const { data, logList, isLoading, error, query } = useSelector(
+    (state) => state.log,
+  );
 
   const {
     startDate,
@@ -26,7 +28,7 @@ const LogList: React.FC = () => {
   const observerRef = useRef<HTMLDivElement | null>(null);
 
   const handleIntersect = () => {
-    if (data === null || error !== null || isLoading) return;
+    if (data === null || error !== null || isLoading || data.last) return;
     void dispatch(fetchLogsMore(query));
   };
 
@@ -50,7 +52,7 @@ const LogList: React.FC = () => {
   return (
     <>
       {isLoading && <p>loading...</p>}
-      {data?.map((data, index) => (
+      {logList.map((data, index) => (
         <LogListItem key={index} data={data} />
       ))}
       <div

@@ -19,14 +19,16 @@ export const fetchLogsMore = createAsyncThunk<GetLogsResponse, GetLogsQuery>(
 );
 
 interface LogState {
-  data: LogResponse[];
+  data: GetLogsResponse | null;
+  logList: LogResponse[];
   isLoading: boolean;
   error: SerializedError | null;
   query: GetLogsQuery;
 }
 
 const initialState: LogState = {
-  data: [],
+  data: null,
+  logList: [],
   isLoading: false,
   error: null,
   query: {
@@ -77,7 +79,8 @@ export const logSlice = createSlice({
       state.query.maxDepth = maxDepth;
     },
     clearData: (state) => {
-      state.data = [];
+      state.data = null;
+      state.logList = [];
       state.query = {
         startDate: '',
         endDate: '',
@@ -101,7 +104,8 @@ export const logSlice = createSlice({
       })
       .addCase(fetchLogs.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.data = action.payload.content;
+        state.data = action.payload;
+        state.logList = action.payload.content;
         state.query.page = String(Number(state.query.page) + 1);
         state.error = null;
       })
@@ -115,7 +119,7 @@ export const logSlice = createSlice({
       })
       .addCase(fetchLogsMore.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.data.push(...action.payload.content);
+        state.logList.push(...action.payload.content);
         state.query.page = String(Number(state.query.page) + 1);
         state.error = null;
       })
