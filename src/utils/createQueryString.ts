@@ -1,11 +1,7 @@
-import qs from 'qs';
-
-export const createQueryString = (query: object): string => {
+export const filterQueryObject = (query: object): object => {
   const filteredQueryObject = Object.fromEntries(
     Object.entries(query).filter((entry) => entry[1] !== ''),
   );
 
-  const queryString = qs.stringify(filteredQueryObject);
-
-  return queryString === '' ? '' : `?${queryString}`;
+  return filteredQueryObject;
 };

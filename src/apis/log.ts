@@ -12,7 +12,8 @@ import {
 } from 'types/log';
 
 import { axios } from '@apis/index';
-import { createQueryString } from '@utils/createQueryString';
+import { filterQueryObject } from '@utils/createQueryString';
+// import { createQueryString } from '@utils/createQueryString';
 
 const BASE_URL_LOGS = '/logs';
 
@@ -41,10 +42,10 @@ export const deleteLogAPI = async (logId: number): Promise<any> => {
 };
 
 export const getLogsAPI = async (query: GetLogsQuery): Promise<any> => {
-  const queryString = createQueryString(query);
-  const response = await axios.get<GetLogsResponse>(
-    `${BASE_URL_LOGS}${queryString}`,
-  );
+  const filteredQueryObject = filterQueryObject(query);
+  const response = await axios.get<GetLogsResponse>(`${BASE_URL_LOGS}`, {
+    params: filteredQueryObject,
+  });
   return response.data;
 };
 
