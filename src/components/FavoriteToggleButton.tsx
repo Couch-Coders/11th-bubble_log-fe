@@ -6,7 +6,7 @@ interface Props {
 }
 
 const FavoriteToggleButton: React.FC<Props> = ({ checked, onClick }) => {
-  return <input type="checkbox" checked={checked} onClick={onClick} />;
+  return <input type="checkbox" checked={checked} onClick={onClick} readOnly />;
 };
 
 export default FavoriteToggleButton;
