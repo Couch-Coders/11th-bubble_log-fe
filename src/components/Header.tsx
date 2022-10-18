@@ -2,7 +2,6 @@ import useOutsideClick from '@hooks/useOutsideClick';
 import { useSelector } from '@stores/index';
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
-import { User } from 'types/log';
 
 import Avatar from '@components/common/Avatar';
 import HeaderLogo from '@components/HeaderLogo';
@@ -23,37 +22,18 @@ const Base = styled.header`
   }
 `;
 
-interface ReturnType {
-  data: User;
-  profileModalOpen: boolean;
-  onCloseProfileModal: () => void;
-  onClickAvatar: () => void;
-  ref: React.MutableRefObject<HTMLDivElement | null>;
-}
-
-const useHeader = (): ReturnType => {
+const Header: React.FC = () => {
   const [profileModalOpen, setProfileModalOpen] = useState(false);
 
   const { data } = useSelector((state) => state.user);
 
-  const onClickAvatar = (): void => {
-    setProfileModalOpen((prev) => !prev);
-  };
-
-  const onCloseProfileModal = (): void => {
-    setProfileModalOpen(false);
-  };
-
   const ref = useRef<HTMLDivElement | null>(null);
 
-  useOutsideClick(ref, onCloseProfileModal);
+  useOutsideClick(ref, () => setProfileModalOpen(false));
 
-  return { data, profileModalOpen, onCloseProfileModal, onClickAvatar, ref };
-};
-
-const Header: React.FC = () => {
-  const { data, profileModalOpen, onCloseProfileModal, onClickAvatar, ref } =
-    useHeader();
+  const handleAvatarClick = (): void => {
+    setProfileModalOpen((prev) => !prev);
+  };
 
   return (
     <Base>
@@ -62,13 +42,13 @@ const Header: React.FC = () => {
         <Avatar
           src={data.profileImage}
           alt="profile image"
-          onClick={onClickAvatar}
+          onClick={handleAvatarClick}
           clickable
         />
         <ProfileModal
           data={data}
           open={profileModalOpen}
-          onClose={onCloseProfileModal}
+          onClose={() => setProfileModalOpen(false)}
         />
       </div>
     </Base>
