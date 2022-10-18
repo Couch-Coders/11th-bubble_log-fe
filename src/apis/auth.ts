@@ -5,19 +5,19 @@ import { axios } from '@apis/index';
 const BASE_URL_AUTH = '/auth';
 const BASE_URL_USER = '/users';
 
-export const logIn = async (token: string) => {
+const logIn = async (token: string) => {
   axios.defaults.headers.Authorization = `Bearer ${token}`;
 
   const response = await axios.post<LoginResponse>(`${BASE_URL_AUTH}/login`);
   return response.data;
 };
 
-export const logOut = async () => {
+const logOut = async () => {
   const response = await axios.delete(`${BASE_URL_AUTH}/logout`);
   return response.data;
 };
 
-export const unregister = async () => {
+const unregister = async () => {
   const response = await axios.delete(`${BASE_URL_USER}/me`);
   return response.data;
 };
