@@ -11,8 +11,7 @@ import {
 } from 'types/log';
 
 import { axios } from '@apis/index';
-import { filterQueryObject } from '@utils/createQueryString';
-// import { createQueryString } from '@utils/createQueryString';
+import { filterQueryObject } from '@utils/filterQueryObject';
 
 const BASE_URL_LOGS = '/logs';
 

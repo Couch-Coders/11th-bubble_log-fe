@@ -28,32 +28,6 @@ const Container = styled.div`
   }
 `;
 
-interface ReturnType {
-  inputValue: string;
-  onChangeInput: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onClickButton: () => void;
-}
-
-const useSearchInput = (): ReturnType => {
-  const [inputValue, setInputValue] = useState('');
-  const debouncedInputValue = useDebounce(inputValue);
-  const dispatch = useDispatch();
-
-  const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setInputValue(event.target.value);
-  };
-
-  const onClickButton = (): void => {
-    setInputValue('');
-  };
-
-  useEffect(() => {
-    dispatch(logActions.setQueryKeyword(debouncedInputValue));
-  }, [debouncedInputValue]);
-
-  return { inputValue, onChangeInput, onClickButton };
-};
-
 const SearchInputClearButton = styled.button`
   display: flex;
   justify-content: center;
@@ -68,7 +42,23 @@ const SearchInputClearButton = styled.button`
 `;
 
 const SearchInput: React.FC = () => {
-  const { inputValue, onChangeInput, onClickButton } = useSearchInput();
+  const [inputValue, setInputValue] = useState('');
+  const debouncedInputValue = useDebounce(inputValue);
+  const dispatch = useDispatch();
+
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ): void => {
+    setInputValue(event.target.value);
+  };
+
+  const handleButtonClick = (): void => {
+    setInputValue('');
+  };
+
+  useEffect(() => {
+    dispatch(logActions.setQueryKeyword(debouncedInputValue));
+  }, [debouncedInputValue]);
 
   return (
     <Container>
@@ -78,10 +68,10 @@ const SearchInput: React.FC = () => {
         endIcon
         fullWidth
         value={inputValue}
-        onChange={onChangeInput}
+        onChange={handleInputChange}
       />
       {inputValue !== '' && (
-        <SearchInputClearButton onClick={onClickButton}>
+        <SearchInputClearButton onClick={handleButtonClick}>
           <MdClose className="close-icon" />
         </SearchInputClearButton>
       )}

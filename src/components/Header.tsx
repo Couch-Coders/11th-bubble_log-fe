@@ -1,6 +1,7 @@
 import useOutsideClick from '@hooks/useOutsideClick';
 import { useSelector } from '@stores/index';
 import React, { useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Avatar from '@components/common/Avatar';
@@ -8,7 +9,7 @@ import HeaderLogo from '@components/HeaderLogo';
 import ProfileModal from '@components/ProfileModal';
 import { theme } from '@styles/theme';
 
-const Base = styled.header`
+const HeaderStyle = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -36,8 +37,10 @@ const Header: React.FC = () => {
   };
 
   return (
-    <Base>
-      <HeaderLogo />
+    <HeaderStyle>
+      <Link to="/logs">
+        <HeaderLogo />
+      </Link>
       <div className="flex" ref={ref}>
         <Avatar
           src={data.profileImage}
@@ -51,7 +54,7 @@ const Header: React.FC = () => {
           onClose={() => setProfileModalOpen(false)}
         />
       </div>
-    </Base>
+    </HeaderStyle>
   );
 };
 

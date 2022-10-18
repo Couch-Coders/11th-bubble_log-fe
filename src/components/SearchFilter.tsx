@@ -18,17 +18,13 @@ const Container = styled.div`
   gap: 0.5rem;
 `;
 
-type SearchFilterType = 'diveType' | 'location' | 'temperature' | 'depth';
-
-interface getSearchFilterReturnType {
+const getSearchFilterType = (
+  type: SearchFilterType,
+): {
   filterAction: ActionCreatorWithPayload<string, string>;
   label: string;
   options: string[];
-}
-
-const getSearchFilterType = (
-  type: SearchFilterType,
-): getSearchFilterReturnType => {
+} => {
   switch (type) {
     case 'diveType': {
       return {
@@ -61,21 +57,16 @@ const getSearchFilterType = (
   }
 };
 
-interface useSearchFilterReturnType {
-  label: string;
-  dropdownValue: string;
-  options:
-    | typeof DIVE_TYPE
-    | typeof DIVE_LOCATION
-    | typeof DIVE_TEMPERATURE
-    | typeof DIVE_DEPTH;
-  onClickMenuItem: (option: string) => void;
+type SearchFilterType = 'diveType' | 'location' | 'temperature' | 'depth';
+
+interface Props {
+  type: SearchFilterType;
 }
 
-const useSearchFilter = (type: SearchFilterType): useSearchFilterReturnType => {
-  const { filterAction, label, options } = getSearchFilterType(type);
-
+const SearchFilter: React.FC<Props> = ({ type }) => {
   const [dropdownValue, setDropdownValue] = useState('전체');
+
+  const { filterAction, label, options } = getSearchFilterType(type);
 
   const dispatch = useDispatch();
 
@@ -87,17 +78,6 @@ const useSearchFilter = (type: SearchFilterType): useSearchFilterReturnType => {
       dispatch(filterAction(option));
     }
   };
-
-  return { label, dropdownValue, options, onClickMenuItem };
-};
-
-interface Props {
-  type: SearchFilterType;
-}
-
-const SearchFilter: React.FC<Props> = ({ type }) => {
-  const { label, dropdownValue, options, onClickMenuItem } =
-    useSearchFilter(type);
 
   return (
     <Container>
