@@ -3,17 +3,13 @@ import styled, { css } from 'styled-components';
 
 type StackDirection = 'row' | 'column';
 
-const getStackDirection = (direction = 'column') => {
-  switch (direction) {
-    case 'row':
-      return css`
-        flex-direction: row;
-      `;
-    case 'column':
-      return css`
-        flex-direction: column;
-      `;
-  }
+const stackDirectionStyle = {
+  row: css`
+    flex-direction: row;
+  `,
+  column: css`
+    flex-direction: column;
+  `,
 };
 
 interface ContainerProps {
@@ -28,7 +24,7 @@ const Container = styled.div<ContainerProps>`
   gap: ${({ spacing }) => `${spacing * 0.5}rem`};
   padding: ${({ p }) => `${p * 0.5}rem`};
 
-  ${({ direction }) => getStackDirection(direction)};
+  ${({ direction }) => stackDirectionStyle[direction]};
 `;
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {

@@ -4,78 +4,58 @@ import styled, { css } from 'styled-components';
 import { blue } from '@styles/palette';
 import { theme } from '@styles/theme';
 
-type ButtonVariantType = 'text' | 'contained' | 'outlined';
-type ButtonSizeType = 'small' | 'medium' | 'large';
+type ButtonVariant = 'text' | 'contained' | 'outlined';
+type ButtonSize = 'small' | 'medium' | 'large';
 
-const getButtonVariant = (variant?: ButtonVariantType) => {
-  switch (variant) {
-    case 'text':
-      return css`
-        background: none;
-        color: ${theme.primary};
+const buttonVariantStyle = {
+  text: css`
+    background: none;
+    color: ${theme.primary};
 
-        &:hover {
-          background-color: white;
-        }
-      `;
-    case 'contained':
-      return css`
-        background-color: ${theme.primary};
-        color: white;
+    &:hover {
+      background-color: white;
+    }
+  `,
+  contained: css`
+    background-color: ${theme.primary};
+    color: white;
 
-        &:hover {
-          background-color: ${theme.primaryVariant};
-        }
-      `;
-    case 'outlined':
-      return css`
-        background-color: white;
-        border: 1px solid ${theme.primary};
-        color: ${theme.primary};
+    &:hover {
+      background-color: ${theme.primaryVariant};
+    }
+  `,
+  outlined: css`
+    background-color: white;
+    border: 1px solid ${theme.primary};
+    color: ${theme.primary};
 
-        &:hover {
-          background-color: ${blue[50]};
-        }
-      `;
-  }
+    &:hover {
+      background-color: ${blue[50]};
+    }
+  `,
 };
 
-const getButtonDisabled = (disabled?: boolean): any => {
-  switch (disabled) {
-    case true:
-      return css`
-        opacity: 0.38;
-        pointer-events: none;
-      `;
-  }
-};
-
-const getButtonSize = (size?: ButtonSizeType): any => {
-  switch (size) {
-    case 'small':
-      return css`
-        height: 2rem;
-        padding: 0.5rem 0.8rem;
-        font-size: 0.75rem;
-      `;
-    case 'medium':
-      return css`
-        height: 2.5rem;
-        padding: 0.625rem 1rem;
-        font-size: 0.875rem;
-      `;
-    case 'large':
-      return css`
-        height: 3rem;
-        padding: 0.75rem 1.2rem;
-        font-size: 1rem;
-      `;
-  }
+const buttonSizeStyle = {
+  small: css`
+    height: 2rem;
+    padding: 0.5rem 0.8rem;
+    font-size: 0.75rem;
+  `,
+  medium: css`
+    height: 2.5rem;
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+  `,
+  large: css`
+    height: 3rem;
+    padding: 0.75rem 1.2rem;
+    font-size: 1rem;
+  `,
 };
 
 interface ContainerProps {
-  variant?: ButtonVariantType;
-  size?: ButtonSizeType;
+  variant?: ButtonVariant;
+  size?: ButtonSize;
   disabled?: boolean;
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
@@ -112,11 +92,16 @@ const Container = styled.button<ContainerProps>`
       padding-right: 1rem;
     `};
 
-  ${({ variant }) => getButtonVariant(variant)};
+  ${({ variant }) => variant !== undefined && buttonVariantStyle[variant]};
 
-  ${({ size }) => getButtonSize(size)};
+  ${({ size }) => size !== undefined && buttonSizeStyle[size]};
 
-  ${({ disabled }) => getButtonDisabled(disabled)};
+  ${({ disabled }) =>
+    disabled === true &&
+    css`
+      opacity: 0.38;
+      pointer-events: none;
+    `}
 
   width: ${({ width }) => width};
   height: ${({ height }) => height};
@@ -124,8 +109,8 @@ const Container = styled.button<ContainerProps>`
 
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
-  variant?: ButtonVariantType;
-  size?: ButtonSizeType;
+  variant?: ButtonVariant;
+  size?: ButtonSize;
   width?: string;
   height?: string;
   disabled?: boolean;
