@@ -15,17 +15,15 @@ const EditPage: React.FC = () => {
   const navigate = useNavigate();
 
   const params = useParams();
-  const logId = Number(params.id);
-
-  const dispatch = useDispatch();
+  const logId = params.id as string;
 
   const { data } = useSelector((state) => state.logDetail);
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    if (data === null) {
-      void dispatch(fetchLogDetail(logId));
-    }
-  }, []);
+    void dispatch(fetchLogDetail(logId));
+  }, [logId]);
 
   const initialDate = data !== null ? new Date(data.date) : new Date();
   const initialDiveType = data !== null ? data.diveType : '';
@@ -68,53 +66,55 @@ const EditPage: React.FC = () => {
   const [position, setPosition] = useState(initialPosition);
   const [location, setLocation] = useState(initialLocation);
 
-  const onChangeDatePicker = (date: Date): void => {
+  const handleDatePickerChange = (date: Date): void => {
     setDate(date);
   };
 
-  const onChangeDiveType = (
+  const handleDiveTypeChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ): void => {
     setDiveType(event.target.value);
   };
 
-  const onChangeTemperature = (
+  const handleTemperatureChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ): void => {
     setTemperature(event.target.value);
   };
 
-  const onChangeMaxDepth = (
+  const handleMaxDepthChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ): void => {
     setMaxDepth(event.target.value);
   };
 
-  const onChangeSight = (event: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleSightChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ): void => {
     setSight(event.target.value);
   };
 
-  const onChangeEnterTime = (date: Date): void => {
+  const handleEnterTimeChange = (date: Date): void => {
     setEnterTime(date);
   };
 
-  const onChangeLeaveTime = (date: Date): void => {
+  const handleLeaveTimeChange = (date: Date): void => {
     setLeaveTime(date);
   };
 
-  const onChangeMinOxygen = (
+  const handleMinOxygenChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ): void => {
     setMinOxygen(event.target.value);
   };
 
-  const onChangeMaxOxygen = (
+  const handleMaxOxygenChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ): void => {
     setMaxOxygen(event.target.value);
   };
 
-  const onChangeImageFile = (
+  const handleImageFileChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ): void => {
     if (event.target.files !== null) {
@@ -122,17 +122,18 @@ const EditPage: React.FC = () => {
     }
   };
 
-  const onChangeDescription = (
+  const handleDescriptionChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>,
   ): void => {
     setContent(event.target.value);
   };
 
-  const onClickCancelButton = (): void => {
+  const handleCancelButtonClick = (): void => {
     navigate(`/log/${logId}`);
   };
 
-  const onClickSubmitButton = async (): Promise<any> => {
+  const handleSubmit = async (): Promise<any> => {
+    if (data === null) return;
     setIsLoading(true);
     console.log('submit');
 
@@ -150,12 +151,11 @@ const EditPage: React.FC = () => {
       content,
       longitude: position.lng,
       latitude: position.lat,
-      images: [],
     };
     console.log('@body', body);
 
     try {
-      const response = await updateLogAPI(body, logId);
+      const response = await updateLogAPI(body, String(data.id));
       console.log(response);
       navigate(`/log/${logId}`);
     } catch (error) {
@@ -169,8 +169,8 @@ const EditPage: React.FC = () => {
   return (
     <Layout>
       {isLoading && 'loading...'}
-      <DatePicker selected={date} onChange={onChangeDatePicker} />
-      <select onChange={onChangeDiveType} defaultValue="type">
+      <DatePicker selected={date} onChange={handleDatePickerChange} />
+      <select onChange={handleDiveTypeChange} defaultValue="type">
         <option value="type" disabled>
           다이브 종류
         </option>
@@ -179,15 +179,15 @@ const EditPage: React.FC = () => {
         ))}
       </select>
       <label>수온</label>
-      <Input value={temperature} onChange={onChangeTemperature} />
+      <Input value={temperature} onChange={handleTemperatureChange} />
       <label>최고 깊이</label>
-      <Input value={maxDepth} onChange={onChangeMaxDepth} />
+      <Input value={maxDepth} onChange={handleMaxDepthChange} />
       <label>시야</label>
-      <Input value={sight} onChange={onChangeSight} />
+      <Input value={sight} onChange={handleSightChange} />
       <label>들어간 시간</label>
       <DatePicker
         selected={enterTime}
-        onChange={onChangeEnterTime}
+        onChange={handleEnterTimeChange}
         showTimeSelect
         showTimeSelectOnly
         timeIntervals={15}
@@ -197,7 +197,7 @@ const EditPage: React.FC = () => {
       <label>나온 시간</label>
       <DatePicker
         selected={leaveTime}
-        onChange={onChangeLeaveTime}
+        onChange={handleLeaveTimeChange}
         showTimeSelect
         showTimeSelectOnly
         timeIntervals={15}
@@ -205,21 +205,21 @@ const EditPage: React.FC = () => {
         dateFormat="h:mm aa"
       />
       <label>들어갈 때 탱크량</label>
-      <Input value={maxOxygen} onChange={onChangeMaxOxygen} />
+      <Input value={maxOxygen} onChange={handleMaxOxygenChange} />
       <label>나올 때 탱크량</label>
-      <Input value={minOxygen} onChange={onChangeMinOxygen} />
+      <Input value={minOxygen} onChange={handleMinOxygenChange} />
       <button
         onClick={() => {
-          void onClickSubmitButton();
+          void handleSubmit();
         }}
       >
         수정하기
       </button>
-      <Input type="file" onChange={onChangeImageFile} />
+      <Input type="file" onChange={handleImageFileChange} />
       <label>노트</label>
-      <Textarea value={content} onChange={onChangeDescription} />
+      <Textarea value={content} onChange={handleDescriptionChange} />
       <KakaoMap position={position} setPosition={setPosition} />
-      <button onClick={onClickCancelButton}>취소하기</button>
+      <button onClick={handleCancelButtonClick}>취소하기</button>
     </Layout>
   );
 };
