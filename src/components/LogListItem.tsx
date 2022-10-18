@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { LogResponse } from 'types/log';
 
 import { toggleLogFavoriteAPI } from '@apis/log';
+import FavoriteToggleButton from '@components/FavoriteToggleButton';
 import { blue } from '@styles/palette';
-
-import FavoriteToggleButton from './FavoriteToggleButton';
 
 const Container = styled.li`
   display: flex;
@@ -22,8 +21,11 @@ interface Props {
 }
 
 const LogListItem: React.FC<Props> = ({ data }) => {
+  const [isFavorite, setIsFavorite] = useState(data.isFavorite);
+
   const handleFavoriteToggleButtonClick = async (): Promise<void> => {
     if (data?.id === undefined) return;
+    setIsFavorite((prev) => !prev);
     try {
       await toggleLogFavoriteAPI(data.id);
     } catch (error) {
@@ -36,7 +38,7 @@ const LogListItem: React.FC<Props> = ({ data }) => {
       <Container>
         <div style={{ display: 'flex', gap: '1rem' }}>
           <FavoriteToggleButton
-            checked={data.isFavorite}
+            checked={isFavorite}
             onClick={() => {
               void handleFavoriteToggleButtonClick;
             }}
