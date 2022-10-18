@@ -17,6 +17,7 @@ module.exports = {
       },
       rules: {
         'preferred-import/ts-imports': 'error',
+        '@typescript-eslint/explicit-function-return-type': 'off',
       },
     },
   ],
