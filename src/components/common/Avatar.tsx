@@ -27,6 +27,7 @@ const getAvatarShape = (shape?: 'rounded' | 'boxier'): any => {
 interface ContainerProps {
   size?: string;
   shape: 'rounded' | 'boxier';
+  clickable: boolean;
 }
 
 const Container = styled.div<ContainerProps>`
@@ -37,6 +38,12 @@ const Container = styled.div<ContainerProps>`
 
   width: ${({ size }) => size};
   height: ${({ size }) => size};
+
+  ${({ clickable }) =>
+    clickable &&
+    css`
+      cursor: pointer;
+    `}
 
   .image {
     width: 100%;
@@ -51,6 +58,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
   alt?: string;
   size?: string;
   shape?: 'rounded' | 'boxier';
+  clickable?: boolean;
 }
 
 const Avatar: React.FC<Props> = ({
@@ -58,10 +66,11 @@ const Avatar: React.FC<Props> = ({
   alt = 'image',
   size = '36px',
   shape = 'rounded',
+  clickable = false,
   ...props
 }) => {
   return (
-    <Container size={size} shape={shape} {...props}>
+    <Container size={size} shape={shape} clickable={clickable} {...props}>
       {src !== undefined && (
         <img className="image" src={src} alt={alt} width={size} height={size} />
       )}
