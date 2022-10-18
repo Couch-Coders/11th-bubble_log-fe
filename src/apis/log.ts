@@ -1,13 +1,12 @@
 import {
-  CreateLogBody,
   CreateLogImagesBody,
   CreateLogImagesResponse,
   CreateLogResponse,
   GetLogDetailResponse,
   GetLogsQuery,
   GetLogsResponse,
+  LogBody,
   ToggleLogFavoriteRepsonse,
-  UpdateLogBody,
   UpdateLogResponse,
 } from 'types/log';
 
@@ -17,7 +16,7 @@ import { filterQueryObject } from '@utils/createQueryString';
 
 const BASE_URL_LOGS = '/logs';
 
-export const createLogAPI = async (body: CreateLogBody): Promise<any> => {
+export const createLogAPI = async (body: LogBody): Promise<any> => {
   const response = await axios.post<CreateLogResponse>(
     `${BASE_URL_LOGS}`,
     body,
@@ -26,7 +25,7 @@ export const createLogAPI = async (body: CreateLogBody): Promise<any> => {
 };
 
 export const updateLogAPI = async (
-  body: UpdateLogBody,
+  body: LogBody,
   logId: string,
 ): Promise<any> => {
   const response = await axios.put<UpdateLogResponse>(
