@@ -1,4 +1,3 @@
-import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { useDispatch } from '@stores/index';
 import { logActions } from '@stores/slices/log';
 import React, { useState } from 'react';
@@ -12,52 +11,36 @@ import {
   DIVE_TYPE,
 } from '@utils/constants';
 
+const filterType = {
+  diveType: {
+    filterAction: logActions.setQueryType,
+    label: '다이브 종류',
+    options: DIVE_TYPE,
+  },
+  location: {
+    filterAction: logActions.setQueryLocation,
+    label: '위치',
+    options: DIVE_LOCATION,
+  },
+  temperature: {
+    filterAction: logActions.setQueryTemperature,
+    label: '수온',
+    options: DIVE_TEMPERATURE,
+  },
+  depth: {
+    filterAction: logActions.setQueryDepth,
+    label: '깊이',
+    options: DIVE_DEPTH,
+  },
+};
+
+type SearchFilterType = 'diveType' | 'location' | 'temperature' | 'depth';
+
 const Container = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
 `;
-
-const getSearchFilterType = (
-  type: SearchFilterType,
-): {
-  filterAction: ActionCreatorWithPayload<string, string>;
-  label: string;
-  options: string[];
-} => {
-  switch (type) {
-    case 'diveType': {
-      return {
-        filterAction: logActions.setQueryType,
-        label: '다이브 종류',
-        options: DIVE_TYPE,
-      };
-    }
-    case 'location': {
-      return {
-        filterAction: logActions.setQueryLocation,
-        label: '위치',
-        options: DIVE_LOCATION,
-      };
-    }
-    case 'temperature': {
-      return {
-        filterAction: logActions.setQueryTemperature,
-        label: '수온',
-        options: DIVE_TEMPERATURE,
-      };
-    }
-    case 'depth': {
-      return {
-        filterAction: logActions.setQueryDepth,
-        label: '깊이',
-        options: DIVE_DEPTH,
-      };
-    }
-  }
-};
-
-type SearchFilterType = 'diveType' | 'location' | 'temperature' | 'depth';
 
 interface Props {
   type: SearchFilterType;
@@ -66,17 +49,17 @@ interface Props {
 const SearchFilter: React.FC<Props> = ({ type }) => {
   const [dropdownValue, setDropdownValue] = useState('전체');
 
-  const { filterAction, label, options } = getSearchFilterType(type);
+  const { filterAction, label, options } = filterType[type];
 
   const dispatch = useDispatch();
 
-  const onClickMenuItem = (option: string): void => {
+  const resetSearchFilter = () => {
+    dispatch(filterAction(''));
+  };
+
+  const handleMenuItemClick = (option: string) => {
     setDropdownValue(option);
-    if (option === '전체') {
-      dispatch(filterAction(''));
-    } else {
-      dispatch(filterAction(option));
-    }
+    dispatch(filterAction(option));
   };
 
   return (
@@ -84,15 +67,12 @@ const SearchFilter: React.FC<Props> = ({ type }) => {
       <label>{label}</label>
       <Dropdown.Button label={dropdownValue}>
         <Dropdown.Menu>
-          <Dropdown.MenuItem
-            label="전체"
-            onClick={() => onClickMenuItem('전체')}
-          />
+          <Dropdown.MenuItem label="전체" onClick={resetSearchFilter} />
           {options.map((option, index) => (
             <Dropdown.MenuItem
               key={index}
               label={option}
-              onClick={() => onClickMenuItem(option)}
+              onClick={() => handleMenuItemClick(option)}
             />
           ))}
         </Dropdown.Menu>

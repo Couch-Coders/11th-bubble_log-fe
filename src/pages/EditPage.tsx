@@ -66,57 +66,53 @@ const EditPage: React.FC = () => {
   const [position, setPosition] = useState(initialPosition);
   const [location, setLocation] = useState(initialLocation);
 
-  const handleDatePickerChange = (date: Date): void => {
+  const handleDatePickerChange = (date: Date) => {
     setDate(date);
   };
 
   const handleDiveTypeChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
-  ): void => {
+  ) => {
     setDiveType(event.target.value);
   };
 
   const handleTemperatureChange = (
     event: React.ChangeEvent<HTMLInputElement>,
-  ): void => {
+  ) => {
     setTemperature(event.target.value);
   };
 
-  const handleMaxDepthChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ): void => {
+  const handleMaxDepthChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMaxDepth(event.target.value);
   };
 
-  const handleSightChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ): void => {
+  const handleSightChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSight(event.target.value);
   };
 
-  const handleEnterTimeChange = (date: Date): void => {
+  const handleEnterTimeChange = (date: Date) => {
     setEnterTime(date);
   };
 
-  const handleLeaveTimeChange = (date: Date): void => {
+  const handleLeaveTimeChange = (date: Date) => {
     setLeaveTime(date);
   };
 
   const handleMinOxygenChange = (
     event: React.ChangeEvent<HTMLInputElement>,
-  ): void => {
+  ) => {
     setMinOxygen(event.target.value);
   };
 
   const handleMaxOxygenChange = (
     event: React.ChangeEvent<HTMLInputElement>,
-  ): void => {
+  ) => {
     setMaxOxygen(event.target.value);
   };
 
   const handleImageFileChange = (
     event: React.ChangeEvent<HTMLInputElement>,
-  ): void => {
+  ) => {
     if (event.target.files !== null) {
       setImageFile(event.target.files[0]);
     }
@@ -124,15 +120,15 @@ const EditPage: React.FC = () => {
 
   const handleDescriptionChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>,
-  ): void => {
+  ) => {
     setContent(event.target.value);
   };
 
-  const handleCancelButtonClick = (): void => {
+  const handleCancelButtonClick = () => {
     navigate(`/log/${logId}`);
   };
 
-  const handleSubmit = async (): Promise<any> => {
+  const handleSubmit = async () => {
     if (data === null) return;
     setIsLoading(true);
     console.log('submit');

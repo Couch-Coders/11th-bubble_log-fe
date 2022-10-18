@@ -8,7 +8,7 @@ const auth = getAuth(app);
 
 const googleProvider = new GoogleAuthProvider();
 
-const signInWithGoogle = async (): Promise<string> => {
+const signInWithGoogle = async () => {
   const result = await signInWithPopup(auth, googleProvider);
 
   const token = await result.user.getIdToken();
@@ -16,6 +16,6 @@ const signInWithGoogle = async (): Promise<string> => {
   return token;
 };
 
-const signOut = async (): Promise<void> => await auth.signOut();
+const signOut = async () => await auth.signOut();
 
 export const FirebaseService = { signInWithGoogle, signOut, auth };

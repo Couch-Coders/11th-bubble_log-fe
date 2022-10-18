@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 
 import { gray } from '@styles/palette';
 
-const getAvatarShape = (shape?: 'rounded' | 'boxier'): any => {
+const getAvatarShape = (shape?: 'rounded' | 'boxier') => {
   switch (shape) {
     case 'rounded':
       return css`

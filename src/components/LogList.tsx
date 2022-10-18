@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from '@stores/index';
 import { fetchLogs, fetchLogsMore } from '@stores/slices/log';
 import React, { useEffect, useRef } from 'react';
 
-import LogListItem from './LogListItem';
+import LogListItem from '@components/LogListItem';
 
 const LogList: React.FC = () => {
   const { data, isLoading, error, query } = useSelector((state) => state.log);
@@ -25,7 +25,7 @@ const LogList: React.FC = () => {
 
   const observerRef = useRef<HTMLDivElement | null>(null);
 
-  const handleIntersect = (): void => {
+  const handleIntersect = () => {
     if (data === null || error !== null || isLoading) return;
     void dispatch(fetchLogsMore(query));
   };

@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 
 type StackDirection = 'row' | 'column';
 
-const getStackDirection = (direction = 'column'): any => {
+const getStackDirection = (direction = 'column') => {
   switch (direction) {
     case 'row':
       return css`

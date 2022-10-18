@@ -5,13 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { logoutAPI } from '@apis/auth';
 import { FirebaseService } from '@services/firebase';
 
-interface ReturnType {
-  isLoggedIn: boolean;
-  login: () => Promise<void>;
-  logOut: () => Promise<void>;
-}
-
-const useAuth = (): ReturnType => {
+const useAuth = () => {
   const { signInWithGoogle, signOut } = FirebaseService;
   const dispatch = useDispatch();
   const navigate = useNavigate();

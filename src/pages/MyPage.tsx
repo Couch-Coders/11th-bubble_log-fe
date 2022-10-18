@@ -11,7 +11,7 @@ const MyPage: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const handleUnregisterButtonClick = async (): Promise<void> => {
+  const handleUnregisterButtonClick = async () => {
     try {
       await unregisterAPI();
       navigate('/', {

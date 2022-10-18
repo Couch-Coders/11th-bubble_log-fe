@@ -1,4 +1,4 @@
-export const filterQueryObject = (query: object): object => {
+export const filterQueryObject = (query: object) => {
   const filteredQueryObject = Object.fromEntries(
     Object.entries(query).filter((entry) => entry[1] !== ''),
   );

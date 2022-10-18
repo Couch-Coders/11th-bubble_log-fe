@@ -19,9 +19,10 @@ const LogDetailPage: React.FC = () => {
     data === null ? false : data.isFavorite,
   );
 
-  const { logId } = useParams();
+  const params = useParams();
+  const logId = params.id as string;
 
-  const handleFavoriteToggleButtonClick = async (): Promise<void> => {
+  const handleFavoriteToggleButtonClick = async () => {
     if (data === null) return;
     setIsFavorite((prev) => !prev);
     try {
@@ -31,7 +32,7 @@ const LogDetailPage: React.FC = () => {
     }
   };
 
-  const handleDeleteButtonClick = async (): Promise<void> => {
+  const handleDeleteButtonClick = async () => {
     if (data === null) return;
     try {
       await deleteLogAPI(String(data.id));
@@ -42,7 +43,6 @@ const LogDetailPage: React.FC = () => {
   };
 
   useEffect(() => {
-    if (logId === undefined) return;
     const promise = dispatch(fetchLogDetail(logId));
 
     return () => {

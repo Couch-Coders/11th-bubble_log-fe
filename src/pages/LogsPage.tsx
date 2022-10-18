@@ -5,7 +5,7 @@ import Button from '@components/common/Button';
 import Stack from '@components/common/Stack';
 import Layout from '@components/Layout';
 import LogList from '@components/LogList';
-import SearchFilterGroup from '@components/SearchFilterGroup';
+import SearchFilter from '@components/SearchFilter';
 import SearchInput from '@components/SearchInput';
 
 const LogsPage: React.FC = () => {
@@ -18,7 +18,12 @@ const LogsPage: React.FC = () => {
           </Link>
         </div>
         <SearchInput />
-        <SearchFilterGroup />
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+          <SearchFilter type="diveType" />
+          <SearchFilter type="depth" />
+          <SearchFilter type="location" />
+          <SearchFilter type="temperature" />
+        </div>
         <LogList />
       </Stack>
     </Layout>

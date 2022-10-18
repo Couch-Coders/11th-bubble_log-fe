@@ -7,7 +7,7 @@ import { theme } from '@styles/theme';
 type ButtonVariantType = 'text' | 'contained' | 'outlined';
 type ButtonSizeType = 'small' | 'medium' | 'large';
 
-const getButtonVariant = (variant?: ButtonVariantType): any => {
+const getButtonVariant = (variant?: ButtonVariantType) => {
   switch (variant) {
     case 'text':
       return css`

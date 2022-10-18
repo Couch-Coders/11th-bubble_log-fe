@@ -23,7 +23,7 @@ interface Props {
 const LogListItem: React.FC<Props> = ({ data }) => {
   const [isFavorite, setIsFavorite] = useState(data.isFavorite);
 
-  const handleFavoriteToggleButtonClick = async (): Promise<void> => {
+  const handleFavoriteToggleButtonClick = async () => {
     if (data?.id === undefined) return;
     setIsFavorite((prev) => !prev);
     try {

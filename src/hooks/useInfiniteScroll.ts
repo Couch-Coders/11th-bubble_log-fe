@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 const useInfiniteScroll = (
   target: any,
   onIntersect: IntersectionObserverCallback,
-): void => {
+) => {
   const observer = new IntersectionObserver(onIntersect);
 
   useEffect(() => {
