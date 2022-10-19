@@ -1,8 +1,8 @@
-import { useSelector } from '@stores/index';
+import { authAPI } from '@lib/apis/auth';
+import { useSelector } from '@store/index';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { authAPI } from '@apis/auth';
 import Layout from '@components/Layout';
 import UnregisterButton from '@components/UnregisterButton';
 

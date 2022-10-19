@@ -1,7 +1,6 @@
+import { gray } from '@lib/styles/palette';
 import React from 'react';
 import styled from 'styled-components';
-
-import { gray } from '@styles/palette';
 
 const Container = styled.li`
   display: flex;

@@ -1,14 +1,13 @@
 import useOutsideClick from '@hooks/useOutsideClick';
-import { useSelector } from '@stores/index';
+import { theme } from '@lib/styles/theme';
+import { useSelector } from '@store/index';
 import React, { useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Avatar from '@components/common/Avatar';
 import Flexbox from '@components/common/Flexbox';
 import HeaderLogo from '@components/HeaderLogo';
 import ProfileModal from '@components/ProfileModal';
-import { theme } from '@styles/theme';
 
 const HeaderStyle = styled.header`
   display: flex;
@@ -39,9 +38,7 @@ const Header: React.FC = () => {
 
   return (
     <HeaderStyle>
-      <Link to="/logs">
-        <HeaderLogo />
-      </Link>
+      <HeaderLogo />
       <div ref={ref}>
         <Flexbox gap="1rem">
           <Avatar

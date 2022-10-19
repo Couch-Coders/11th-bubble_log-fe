@@ -1,6 +1,5 @@
-import { LoginResponse } from 'types/auth';
-
-import { axios } from '@apis/index';
+import { axios } from '@lib/apis/index';
+import { LoginResponse } from '@lib/types/auth';
 
 const BASE_URL_AUTH = '/auth';
 const BASE_URL_USER = '/users';

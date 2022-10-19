@@ -1,7 +1,7 @@
 import useAuth from '@hooks/useAuth';
 import useDebounce from '@hooks/useDebounce';
-import { useDispatch, useSelector } from '@stores/index';
-import { fetchLogs, logActions } from '@stores/slices/log';
+import { useDispatch, useSelector } from '@store/index';
+import { fetchLogs, logActions } from '@store/slices/log';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -69,12 +69,19 @@ const LogsPage: React.FC = () => {
     dispatch(logActions.setQueryLocation(optionValue));
   };
 
+  const splitFilterOptionValue = (filterOption: string) => {
+    const minValue = filterOption.split('-')[0];
+    const maxValue = filterOption.split('-')[1];
+
+    return [minValue, maxValue];
+  };
+
   const handleTemperatureFilterOptionClick = (filterOption: string) => {
     setTemperatureFilterValue(filterOption);
-    const minTemperature = filterOption.split('-')[0];
+    const [minTemperature, maxTemperature] =
+      splitFilterOptionValue(filterOption);
     const minTemperatureOptionValue =
       filterOption === '전체' ? '' : minTemperature;
-    const maxTemperature = filterOption.split('-')[1];
     const maxTemperatureOptionValue =
       filterOption === '전체' ? '' : maxTemperature;
     dispatch(logActions.setQueryMinTemperature(minTemperatureOptionValue));
@@ -83,9 +90,8 @@ const LogsPage: React.FC = () => {
 
   const handleDepthFilterOptionClick = (filterOption: string) => {
     setDepthFilterValue(filterOption);
-    const minDepth = filterOption.split('-')[0];
+    const [minDepth, maxDepth] = splitFilterOptionValue(filterOption);
     const minDepthOptionValue = filterOption === '전체' ? '' : minDepth;
-    const maxDepth = filterOption.split('-')[1];
     const maxDepthOptionValue = filterOption === '전체' ? '' : maxDepth;
     dispatch(logActions.setQueryMinDepth(minDepthOptionValue));
     dispatch(logActions.setQueryMaxDepth(maxDepthOptionValue));

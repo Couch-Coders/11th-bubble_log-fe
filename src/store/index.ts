@@ -1,13 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
-import logSlice from '@stores/slices/log';
-import userSlice from '@stores/slices/user';
+import logSlice from '@store/slices/log';
+import logDetailSlice from '@store/slices/logDetail';
+import userSlice from '@store/slices/user';
 import {
   TypedUseSelectorHook,
   useDispatch as useTypedDispatch,
   useSelector as useTypedSelector,
 } from 'react-redux';
-
-import logDetailSlice from './slices/logDetail';
 
 export const store = configureStore({
   reducer: {

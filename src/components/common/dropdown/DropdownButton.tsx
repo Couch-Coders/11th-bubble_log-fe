@@ -1,9 +1,8 @@
 import useOutsideClick from '@hooks/useOutsideClick';
+import { gray } from '@lib/styles/palette';
 import React, { useRef, useState } from 'react';
 import { MdArrowDropDown } from 'react-icons/md';
 import styled, { css } from 'styled-components';
-
-import { gray } from '@styles/palette';
 
 type DropdownButtonSize = 'small' | 'medium' | 'large';
 

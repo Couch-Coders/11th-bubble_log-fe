@@ -1,12 +1,11 @@
+import { logAPI } from '@lib/apis/log';
+import { blue } from '@lib/styles/palette';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { logAPI } from '@apis/log';
+import Flexbox from '@components/common/Flexbox';
 import FavoriteToggleButton from '@components/FavoriteToggleButton';
-import { blue } from '@styles/palette';
-
-import Flexbox from './common/Flexbox';
 
 const Container = styled.li`
   display: flex;

@@ -1,10 +1,10 @@
-import { useDispatch, useSelector } from '@stores/index';
-import { fetchLogDetail } from '@stores/slices/logDetail';
+import { logAPI } from '@lib/apis/log';
+import { useDispatch, useSelector } from '@store/index';
+import { fetchLogDetail } from '@store/slices/logDetail';
 import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { logAPI } from '@apis/log';
 import Input from '@components/common/Input';
 import Textarea from '@components/common/Textarea';
 import KakaoMap from '@components/KakaoMap';

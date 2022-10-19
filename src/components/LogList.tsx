@@ -1,4 +1,4 @@
-import { useSelector } from '@stores/index';
+import { useSelector } from '@store/index';
 import React from 'react';
 
 import LogListItem from '@components/LogListItem';

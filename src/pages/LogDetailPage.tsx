@@ -1,9 +1,9 @@
-import { useDispatch, useSelector } from '@stores/index';
-import { fetchLogDetail, logDetailActions } from '@stores/slices/logDetail';
+import { logAPI } from '@lib/apis/log';
+import { useDispatch, useSelector } from '@store/index';
+import { fetchLogDetail, logDetailActions } from '@store/slices/logDetail';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
-import { logAPI } from '@apis/log';
 import Button from '@components/common/Button';
 import FavoriteToggleButton from '@components/FavoriteToggleButton';
 import Layout from '@components/Layout';

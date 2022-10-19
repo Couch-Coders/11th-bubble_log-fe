@@ -1,12 +1,12 @@
+import { logAPI } from '@lib/apis/log';
+import { GetLogsQuery, GetLogsResponse, LogResponse } from '@lib/types/log';
 import {
   createSlice,
   createAsyncThunk,
   SerializedError,
   PayloadAction,
 } from '@reduxjs/toolkit';
-import { GetLogsQuery, GetLogsResponse, LogResponse } from 'types/log';
 
-import { logAPI } from '@apis/log';
 import { filterQueryObject } from '@utils/filterQueryObject';
 
 export const fetchLogs = createAsyncThunk<GetLogsResponse, GetLogsQuery>(

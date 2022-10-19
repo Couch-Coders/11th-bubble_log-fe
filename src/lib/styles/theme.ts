@@ -1,4 +1,4 @@
-import { blue, green, red } from '@styles/palette';
+import { blue, green, red } from '@lib/styles/palette';
 
 export const theme = {
   primary: blue[500],

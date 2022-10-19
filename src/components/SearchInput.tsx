@@ -1,9 +1,9 @@
+import { gray } from '@lib/styles/palette';
 import React from 'react';
 import { MdClose, MdSearch } from 'react-icons/md';
 import styled from 'styled-components';
 
 import Input from '@components/common/Input';
-import { gray } from '@styles/palette';
 
 const Container = styled.div`
   display: flex;

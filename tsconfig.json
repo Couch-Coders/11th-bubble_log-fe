@@ -6,9 +6,8 @@
       "@pages/*": ["./pages/*"],
       "@services/*": ["./services/*"],
       "@utils/*": ["./utils/*"],
-      "@stores/*": ["./stores/*"],
-      "@styles/*": ["./styles/*"],
-      "@apis/*": ["./apis/*"],
+      "@store/*": ["./store/*"],
+      "@lib/*": ["./lib/*"],
       "@hooks/*": ["./hooks/*"]
     },
     "target": "es5",

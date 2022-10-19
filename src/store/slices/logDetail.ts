@@ -1,3 +1,5 @@
+import { logAPI } from '@lib/apis/log';
+import { GetLogDetailResponse } from '@lib/types/log';
 import {
   createSlice,
   createAsyncThunk,
@@ -5,9 +7,6 @@ import {
   PayloadAction,
   AnyAction,
 } from '@reduxjs/toolkit';
-import { GetLogDetailResponse } from 'types/log';
-
-import { logAPI } from '@apis/log';
 
 export const fetchLogDetail = createAsyncThunk<GetLogDetailResponse, string>(
   'logDetail/fetchStatus',

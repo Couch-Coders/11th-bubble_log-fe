@@ -1,3 +1,4 @@
+import { axios } from '@lib/apis/index';
 import {
   CreateLogImagesBody,
   CreateLogImagesResponse,
@@ -7,9 +8,7 @@ import {
   LogBody,
   ToggleLogFavoriteRepsonse,
   UpdateLogResponse,
-} from 'types/log';
-
-import { axios } from '@apis/index';
+} from '@lib/types/log';
 
 const BASE_URL_LOGS = '/logs';
 

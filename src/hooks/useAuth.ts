@@ -1,8 +1,8 @@
-import { useDispatch, useSelector } from '@stores/index';
-import { fetchUser, userActions } from '@stores/slices/user';
+import { authAPI } from '@lib/apis/auth';
+import { useDispatch, useSelector } from '@store/index';
+import { fetchUser, userActions } from '@store/slices/user';
 import { useNavigate } from 'react-router-dom';
 
-import { authAPI } from '@apis/auth';
 import { FirebaseService } from '@services/firebase';
 
 const useAuth = () => {

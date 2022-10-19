@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import Avatar from './common/Avatar';
-import LogOutButton from './LogOutButton';
+import Avatar from '@components/common/Avatar';
+import LogOutButton from '@components/LogOutButton';
 
 const Container = styled.div`
   display: flex;

@@ -1,8 +1,7 @@
+import { blue } from '@lib/styles/palette';
+import { theme } from '@lib/styles/theme';
 import React from 'react';
 import styled, { css } from 'styled-components';
-
-import { blue } from '@styles/palette';
-import { theme } from '@styles/theme';
 
 type ButtonVariant = 'text' | 'contained' | 'outlined';
 type ButtonSize = 'small' | 'medium' | 'large';

@@ -1,8 +1,8 @@
+import { logAPI } from '@lib/apis/log';
 import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { useNavigate } from 'react-router-dom';
 
-import { logAPI } from '@apis/log';
 import Input from '@components/common/Input';
 import Textarea from '@components/common/Textarea';
 import KakaoMap from '@components/KakaoMap';

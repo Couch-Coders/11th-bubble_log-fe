@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const HeaderLogoStyle = styled.div`
@@ -8,7 +9,11 @@ const HeaderLogoStyle = styled.div`
 `;
 
 const HeaderLogo: React.FC = () => {
-  return <HeaderLogoStyle>BUBBLE LOG</HeaderLogoStyle>;
+  return (
+    <HeaderLogoStyle>
+      <Link to="/">BUBBLE LOG</Link>
+    </HeaderLogoStyle>
+  );
 };
 
 export default HeaderLogo;
