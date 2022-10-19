@@ -22,7 +22,7 @@ const LogsPage: React.FC = () => {
 
   const debouncedSearchInputValue = useDebounce(searchInputValue, 166);
 
-  const { query } = useSelector((state) => state.log);
+  const { data, isLoading, error, query } = useSelector((state) => state.log);
 
   const { isLoggedIn } = useAuth();
 
@@ -87,6 +87,31 @@ const LogsPage: React.FC = () => {
       dispatch(logActions.clearState());
     };
   }, [dispatch, fetchLogsWithQuery]);
+
+  const fetchMoreLogButtonDisabled =
+    data === null || error !== null || isLoading || data.last;
+
+  const fetchMoreLog = () => {
+    const queryWithNextPage = {
+      ...query,
+      page: String(parseInt(query.page) + 1),
+    };
+
+    void dispatch(fetchLogs(queryWithNextPage));
+    dispatch(logActions.setQueryPage(String(parseInt(query.page) + 1)));
+  };
+
+  const handleFetchMoreLogButtonClick = () => {
+    fetchMoreLog();
+  };
+
+  // const observerRef = useRef<HTMLDivElement | null>(null);
+
+  // const handleIntersect = () => {
+  //   fetchMoreLog();
+  // };
+
+  // useInfiniteScroll(observerRef.current, handleIntersect);
 
   return (
     <Layout>
@@ -176,6 +201,18 @@ const LogsPage: React.FC = () => {
           </div>
         </div>
         <LogList />
+        {/* <div
+          style={{ height: '2rem', border: '1px solid red' }}
+          ref={observerRef}
+        >
+          옵저버
+        </div> */}
+        <button
+          onClick={handleFetchMoreLogButtonClick}
+          disabled={fetchMoreLogButtonDisabled}
+        >
+          더보기
+        </button>
       </Stack>
     </Layout>
   );

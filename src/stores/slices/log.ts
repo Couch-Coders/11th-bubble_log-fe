@@ -76,6 +76,9 @@ export const logSlice = createSlice({
     setQueryOrderBy: (state, action: PayloadAction<string>) => {
       state.query.orderBy = action.payload;
     },
+    setQueryPage: (state, action: PayloadAction<string>) => {
+      state.query.page = action.payload;
+    },
     clearState: (state) => {
       state.data = null;
       state.logList = [];

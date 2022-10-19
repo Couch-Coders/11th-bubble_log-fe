@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { useNavigate } from 'react-router-dom';
 
@@ -22,6 +22,8 @@ const WritePage: React.FC = () => {
   const [leaveTime, setLeaveTime] = useState(new Date());
   const [minOxygen, setMinOxygen] = useState('');
   const [maxOxygen, setMaxOxygen] = useState('');
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageFileUrlList, setImageFileUrlList] = useState<string[]>([]);
   const [imageFileList, setImageFileList] = useState<File[]>([]);
   const [content, setContent] = useState('');
   const [position, setPosition] = useState({
@@ -90,7 +92,21 @@ const WritePage: React.FC = () => {
     if (event.target.files === null) return;
     // (prev => [...prev, event.target.files[0]]) causes nullable issue
     setImageFileList([...imageFileList, event.target.files[0]]);
+    setImageFile(event.target.files[0]);
   };
+
+  useEffect(() => {
+    if (imageFile === null) return;
+
+    const fileReader = new FileReader();
+
+    // event.target possibly null?
+    fileReader.onload = (event) => {
+      setImageFileUrlList((prev) => [...prev, event.target?.result as string]);
+    };
+
+    fileReader.readAsDataURL(imageFile);
+  }, [imageFile]);
 
   const handleDescriptionChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>,
@@ -204,7 +220,15 @@ const WritePage: React.FC = () => {
         생성하기
       </button>
       <button onClick={handleCancelButtonClick}>돌아가기</button>
-      <input type="file" onChange={handleImageFileChange} />
+      <input type="file" accept="image/*" onChange={handleImageFileChange} />
+      {imageFileUrlList.map((imageFileUrl, index) => (
+        <img
+          style={{ width: '100px', height: '100px' }}
+          key={index}
+          src={imageFileUrl}
+          alt="image"
+        />
+      ))}
       <label>노트</label>
       <Textarea value={content} onChange={handleDescriptionChange} />
       <KakaoMap position={position} setPosition={setPosition} />
