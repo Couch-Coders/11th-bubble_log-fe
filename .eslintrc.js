@@ -25,8 +25,10 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  plugins: ['react', 'import', 'preferred-import'],
+  plugins: ['react', 'import', 'preferred-import', 'react-hooks'],
   rules: {
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
     'import/order': [
       'error',
       {
