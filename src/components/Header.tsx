@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Avatar from '@components/common/Avatar';
+import Flexbox from '@components/common/Flexbox';
 import HeaderLogo from '@components/HeaderLogo';
 import ProfileModal from '@components/ProfileModal';
 import { theme } from '@styles/theme';
@@ -41,18 +42,20 @@ const Header: React.FC = () => {
       <Link to="/logs">
         <HeaderLogo />
       </Link>
-      <div className="flex" ref={ref}>
-        <Avatar
-          src={data.profileImage}
-          alt="profile image"
-          onClick={handleAvatarClick}
-          clickable
-        />
-        <ProfileModal
-          data={data}
-          open={profileModalOpen}
-          onClose={() => setProfileModalOpen(false)}
-        />
+      <div ref={ref}>
+        <Flexbox gap="1rem">
+          <Avatar
+            src={data.profileImage}
+            alt="profile image"
+            onClick={handleAvatarClick}
+            clickable
+          />
+          <ProfileModal
+            data={data}
+            open={profileModalOpen}
+            onClose={() => setProfileModalOpen(false)}
+          />
+        </Flexbox>
       </div>
     </HeaderStyle>
   );

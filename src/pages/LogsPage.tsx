@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 
 import Button from '@components/common/Button';
 import Dropdown from '@components/common/dropdown';
+import Flexbox from '@components/common/Flexbox';
 import Stack from '@components/common/Stack';
 import Layout from '@components/Layout';
 import LogList from '@components/LogList';
@@ -44,7 +45,9 @@ const LogsPage: React.FC = () => {
     dispatch(logActions.setQueryKeyword(debouncedSearchInputValue));
   }, [debouncedSearchInputValue, dispatch]);
 
-  const handleSearchInputClearButtonClick = () => {};
+  const handleSearchInputClearButtonClick = () => {
+    setSearchInputValue('');
+  };
 
   const handleDiveTypeFilterOptionClick = (filterOption: string) => {
     setDiveTypeFilterValue(filterOption);
@@ -116,18 +119,18 @@ const LogsPage: React.FC = () => {
   return (
     <Layout>
       <Stack spacing={2} p={2}>
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Flexbox justify="end">
           <Link to="/write">
             <Button>로그 작성</Button>
           </Link>
-        </div>
+        </Flexbox>
         <SearchInput
           value={searchInputValue}
           onChange={handleSearchInputChange}
           onClearButtonClick={handleSearchInputClearButtonClick}
         />
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        <Flexbox gap="1rem" wrap>
+          <Flexbox items="center" gap="1rem">
             <label>다이브 종류</label>
             <Dropdown.Button label={diveTypeFilterValue}>
               <Dropdown.Menu>
@@ -144,8 +147,8 @@ const LogsPage: React.FC = () => {
                 ))}
               </Dropdown.Menu>
             </Dropdown.Button>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          </Flexbox>
+          <Flexbox items="center" gap="1rem">
             <label>위치</label>
             <Dropdown.Button label={locationFilterValue}>
               <Dropdown.Menu>
@@ -162,8 +165,8 @@ const LogsPage: React.FC = () => {
                 ))}
               </Dropdown.Menu>
             </Dropdown.Button>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          </Flexbox>
+          <Flexbox items="center" gap="1rem">
             <label>수온</label>
             <Dropdown.Button label={temperatureFilterValue}>
               <Dropdown.Menu>
@@ -180,8 +183,8 @@ const LogsPage: React.FC = () => {
                 ))}
               </Dropdown.Menu>
             </Dropdown.Button>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          </Flexbox>
+          <Flexbox items="center" gap="1rem">
             <label>깊이</label>
             <Dropdown.Button label={depthFilterValue}>
               <Dropdown.Menu>
@@ -198,13 +201,13 @@ const LogsPage: React.FC = () => {
                 ))}
               </Dropdown.Menu>
             </Dropdown.Button>
-          </div>
-        </div>
+          </Flexbox>
+        </Flexbox>
         <LogList />
         {/* <div
           style={{ height: '2rem', border: '1px solid red' }}
           ref={observerRef}
-        >
+          >
           옵저버
         </div> */}
         <button
