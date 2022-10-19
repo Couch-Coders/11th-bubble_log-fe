@@ -49,7 +49,7 @@ const LogDetailPage: React.FC = () => {
       promise.abort();
       dispatch(logDetailActions.clearData());
     };
-  }, [logId]);
+  }, [logId, dispatch]);
 
   return (
     <Layout>

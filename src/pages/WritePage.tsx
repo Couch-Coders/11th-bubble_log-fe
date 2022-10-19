@@ -22,7 +22,7 @@ const WritePage: React.FC = () => {
   const [leaveTime, setLeaveTime] = useState(new Date());
   const [minOxygen, setMinOxygen] = useState('');
   const [maxOxygen, setMaxOxygen] = useState('');
-  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageFileList, setImageFileList] = useState<File[]>([]);
   const [content, setContent] = useState('');
   const [position, setPosition] = useState({
     lat: 33.55635,
@@ -30,6 +30,15 @@ const WritePage: React.FC = () => {
   });
 
   const navigate = useNavigate();
+
+  const isValidated =
+    diveType !== '' &&
+    temperature !== '' &&
+    maxDepth !== '' &&
+    sight !== '' &&
+    minOxygen !== '' &&
+    maxOxygen !== '' &&
+    content !== '';
 
   const handleDatePickerChange = (date: Date) => {
     setDate(date);
@@ -78,9 +87,9 @@ const WritePage: React.FC = () => {
   const handleImageFileChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    if (event.target.files !== null) {
-      setImageFile(event.target.files[0]);
-    }
+    if (event.target.files === null) return;
+    // (prev => [...prev, event.target.files[0]]) causes nullable issue
+    setImageFileList([...imageFileList, event.target.files[0]]);
   };
 
   const handleDescriptionChange = (
@@ -94,13 +103,15 @@ const WritePage: React.FC = () => {
   };
 
   const handleSubmit = async () => {
+    if (diveType === '') return;
+
     console.log('submitting...');
 
     setIsLoading(true);
 
-    const body = {
+    const createLogBody = {
       date: date.toISOString().slice(0, -1),
-      diveType: 'FREE',
+      diveType,
       enterTime: enterTime.toISOString().slice(0, -1),
       leaveTime: leaveTime.toISOString().slice(0, -1),
       sight: Number(sight),
@@ -113,18 +124,33 @@ const WritePage: React.FC = () => {
       longitude: position.lat,
       latitude: position.lng,
     };
-    console.log('@body', body);
+    console.log('@body', createLogBody);
+
     try {
-      const response = await logAPI.createLog(body);
-      console.log(response);
+      const createLogResponse = await logAPI.createLog(createLogBody);
+
+      const formData = new FormData();
+
+      imageFileList.forEach((imageFile) => {
+        formData.append('images', imageFile);
+      });
+
+      const createLogImagesBody = {
+        formData,
+      };
+
+      const createLogImagesResponse = await logAPI.createLogImages(
+        createLogImagesBody,
+        String(createLogResponse.id),
+      );
+      console.log('@createLogImagesResponse', createLogImagesResponse);
+
+      setIsLoading(false);
       navigate('/logs');
     } catch (error) {
       console.log(error);
     }
   };
-
-  console.log(imageFile);
-  console.log(diveType);
 
   return (
     <Layout>
@@ -173,6 +199,7 @@ const WritePage: React.FC = () => {
         onClick={() => {
           void handleSubmit();
         }}
+        disabled={!isValidated}
       >
         생성하기
       </button>

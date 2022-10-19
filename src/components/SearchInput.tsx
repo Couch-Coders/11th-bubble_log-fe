@@ -1,7 +1,4 @@
-import useDebounce from '@hooks/useDebounce';
-import { useDispatch } from '@stores/index';
-import { logActions } from '@stores/slices/log';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { MdClose, MdSearch } from 'react-icons/md';
 import styled from 'styled-components';
 
@@ -41,35 +38,23 @@ const SearchInputClearButton = styled.button`
   cursor: pointer;
 `;
 
-const SearchInput: React.FC = () => {
-  const [inputValue, setInputValue] = useState('');
-  const debouncedInputValue = useDebounce(inputValue);
-  const dispatch = useDispatch();
+interface Props {
+  value: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onClearButtonClick: () => void;
+}
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
-  };
-
-  const handleClearButtonClick = () => {
-    setInputValue('');
-  };
-
-  useEffect(() => {
-    dispatch(logActions.setQueryKeyword(debouncedInputValue));
-  }, [debouncedInputValue]);
-
+const SearchInput: React.FC<Props> = ({
+  value,
+  onChange,
+  onClearButtonClick,
+}) => {
   return (
     <Container>
       <MdSearch className="search-icon" />
-      <Input
-        startIcon
-        endIcon
-        fullWidth
-        value={inputValue}
-        onChange={handleInputChange}
-      />
-      {inputValue !== '' && (
-        <SearchInputClearButton onClick={handleClearButtonClick}>
+      <Input startIcon endIcon fullWidth value={value} onChange={onChange} />
+      {value !== '' && (
+        <SearchInputClearButton onClick={onClearButtonClick}>
           <MdClose className="close-icon" />
         </SearchInputClearButton>
       )}

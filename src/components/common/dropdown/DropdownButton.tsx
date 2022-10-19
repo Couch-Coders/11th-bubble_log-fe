@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import useOutsideClick from '@hooks/useOutsideClick';
+import React, { useRef, useState } from 'react';
 import { MdArrowDropDown } from 'react-icons/md';
 import styled, { css } from 'styled-components';
 
@@ -69,18 +70,28 @@ interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const DropdownButton: React.FC<Props> = ({
   children,
-  label = '메뉴',
+  label,
   size = 'medium',
   ...props
 }) => {
   const [open, setOpen] = useState(false);
 
-  const onClick = () => {
+  const dropdownRef = useRef<HTMLButtonElement | null>(null);
+
+  useOutsideClick(dropdownRef, () => setOpen(false));
+
+  const handleDropdownButtonClick = () => {
     setOpen((prev) => !prev);
   };
 
   return (
-    <Container size={size} open={open} onClick={onClick} {...props}>
+    <Container
+      size={size}
+      open={open}
+      onClick={handleDropdownButtonClick}
+      {...props}
+      ref={dropdownRef}
+    >
       {label}
       <MdArrowDropDown
         className="arrow-dropdown-icon"

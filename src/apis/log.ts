@@ -3,7 +3,6 @@ import {
   CreateLogImagesResponse,
   CreateLogResponse,
   GetLogDetailResponse,
-  GetLogsQuery,
   GetLogsResponse,
   LogBody,
   ToggleLogFavoriteRepsonse,
@@ -11,7 +10,6 @@ import {
 } from 'types/log';
 
 import { axios } from '@apis/index';
-import { filterQueryObject } from '@utils/filterQueryObject';
 
 const BASE_URL_LOGS = '/logs';
 
@@ -36,10 +34,9 @@ const deleteLog = async (logId: string) => {
   return response.data;
 };
 
-const getLogs = async (query: GetLogsQuery) => {
-  const filteredQueryObject = filterQueryObject(query);
+const getLogs = async (queryParams?: object) => {
   const response = await axios.get<GetLogsResponse>(`${BASE_URL_LOGS}`, {
-    params: filteredQueryObject,
+    params: queryParams,
   });
   return response.data;
 };

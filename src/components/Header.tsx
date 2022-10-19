@@ -32,7 +32,7 @@ const Header: React.FC = () => {
 
   useOutsideClick(ref, () => setProfileModalOpen(false));
 
-  const handleAvatarClick = (): void => {
+  const handleAvatarClick = () => {
     setProfileModalOpen((prev) => !prev);
   };
 

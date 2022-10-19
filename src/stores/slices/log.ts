@@ -7,17 +7,12 @@ import {
 import { GetLogsQuery, GetLogsResponse, LogResponse } from 'types/log';
 
 import { logAPI } from '@apis/log';
+import { filterQueryObject } from '@utils/filterQueryObject';
 
 export const fetchLogs = createAsyncThunk<GetLogsResponse, GetLogsQuery>(
   'log/get/fetchStatus',
-  async (query: GetLogsQuery) => await logAPI.getLogs(query),
+  async (query) => await logAPI.getLogs(filterQueryObject(query)),
 );
-
-export const fetchLogsMore = createAsyncThunk<GetLogsResponse, GetLogsQuery>(
-  'log/get/more/fetchStatus',
-  async (query: GetLogsQuery) => await logAPI.getLogs(query),
-);
-
 interface LogState {
   data: GetLogsResponse | null;
   logList: LogResponse[];
@@ -51,36 +46,41 @@ export const logSlice = createSlice({
   name: 'log',
   initialState,
   reducers: {
+    setQueryStartDate: (state, action: PayloadAction<string>) => {
+      state.query.startDate = action.payload;
+    },
+    setQueryEndDate: (state, action: PayloadAction<string>) => {
+      state.query.endDate = action.payload;
+    },
     setQueryKeyword: (state, action: PayloadAction<string>) => {
       state.query.keyword = action.payload;
     },
-    setQueryType: (state, action: PayloadAction<string>) => {
+    setQueryDiveType: (state, action: PayloadAction<string>) => {
       state.query.diveType = action.payload;
     },
     setQueryLocation: (state, action: PayloadAction<string>) => {
       state.query.location = action.payload;
     },
-    setQueryTemperature: (state, action: PayloadAction<string>) => {
-      const temperatureString = action.payload;
-
-      const minTemperature = temperatureString.split('-')[0];
-      const maxTemperature = temperatureString.split('-')[1];
-
-      state.query.minTemperature = minTemperature;
-      state.query.maxTemperature = maxTemperature;
+    setQueryMinTemperature: (state, action: PayloadAction<string>) => {
+      state.query.minTemperature = action.payload;
     },
-    setQueryDepth: (state, action: PayloadAction<string>) => {
-      const depthString = action.payload;
-
-      const minDepth = depthString.split('-')[0];
-      const maxDepth = depthString.split('-')[1];
-
-      state.query.minDepth = minDepth;
-      state.query.maxDepth = maxDepth;
+    setQueryMaxTemperature: (state, action: PayloadAction<string>) => {
+      state.query.maxTemperature = action.payload;
     },
-    clearData: (state) => {
+    setQueryMinDepth: (state, action: PayloadAction<string>) => {
+      state.query.minDepth = action.payload;
+    },
+    setQueryMaxDepth: (state, action: PayloadAction<string>) => {
+      state.query.maxDepth = action.payload;
+    },
+    setQueryOrderBy: (state, action: PayloadAction<string>) => {
+      state.query.orderBy = action.payload;
+    },
+    clearState: (state) => {
       state.data = null;
       state.logList = [];
+      state.isLoading = false;
+      state.error = null;
       state.query = {
         startDate: '',
         endDate: '',
@@ -105,25 +105,10 @@ export const logSlice = createSlice({
       .addCase(fetchLogs.fulfilled, (state, action) => {
         state.isLoading = false;
         state.data = action.payload;
-        state.logList = action.payload.content;
-        state.query.page = String(Number(state.query.page) + 1);
+        state.logList.push(...action.payload.content);
         state.error = null;
       })
       .addCase(fetchLogs.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.error;
-      });
-    builder
-      .addCase(fetchLogsMore.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(fetchLogsMore.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.logList.push(...action.payload.content);
-        state.query.page = String(Number(state.query.page) + 1);
-        state.error = null;
-      })
-      .addCase(fetchLogsMore.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error;
       });

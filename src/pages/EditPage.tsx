@@ -23,7 +23,7 @@ const EditPage: React.FC = () => {
 
   useEffect(() => {
     void dispatch(fetchLogDetail(logId));
-  }, [logId]);
+  }, [logId, dispatch]);
 
   const initialDate = data !== null ? new Date(data.date) : new Date();
   const initialDiveType = data !== null ? data.diveType : '';

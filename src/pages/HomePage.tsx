@@ -15,7 +15,7 @@ const HomePage: React.FC = () => {
 
   useEffect(() => {
     if (isLoggedIn) navigate('/logs');
-  }, [isLoggedIn]);
+  }, [isLoggedIn, navigate]);
 
   return (
     <main>
