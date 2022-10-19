@@ -39,8 +39,8 @@ interface ContainerProps {
   flex: FlexDirectionOption;
   justify: JustifyContentOption;
   items: AlignItemsOption;
-  gap?: string;
-  padding?: string;
+  gap: string;
+  padding: string;
   width?: string;
   wrap: boolean;
 }
@@ -71,8 +71,8 @@ const Flexbox: React.FC<Props> = ({
   flex = 'row',
   justify = 'center',
   items = 'center',
-  gap,
-  padding,
+  gap = '0',
+  padding = '0',
   width,
   wrap = false,
   ...props

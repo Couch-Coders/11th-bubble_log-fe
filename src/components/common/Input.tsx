@@ -5,7 +5,7 @@ import styled, { css } from 'styled-components';
 interface ContainerProps {
   startIcon?: boolean;
   endIcon?: boolean;
-  fullWidth?: boolean;
+  fullWidth: boolean;
 }
 
 const Container = styled.input<ContainerProps>`
@@ -29,7 +29,7 @@ const Container = styled.input<ContainerProps>`
     `}
 
   ${({ fullWidth }) =>
-    fullWidth === true &&
+    fullWidth &&
     css`
       width: 100%;
     `}
@@ -41,8 +41,20 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   fullWidth?: boolean;
 }
 
-const Input: React.FC<Props> = ({ ...props }) => {
-  return <Container {...props} />;
+const Input: React.FC<Props> = ({
+  startIcon,
+  endIcon,
+  fullWidth = false,
+  ...props
+}) => {
+  return (
+    <Container
+      startIcon={startIcon}
+      endIcon={endIcon}
+      fullWidth={fullWidth}
+      {...props}
+    />
+  );
 };
 
 export default React.memo(Input);

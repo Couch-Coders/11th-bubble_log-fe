@@ -28,7 +28,7 @@ const dropdownButtonStyle = {
 };
 
 interface ContainerProps {
-  size?: DropdownButtonSize;
+  size: DropdownButtonSize;
   open: boolean;
 }
 
@@ -51,7 +51,7 @@ const Container = styled.button<ContainerProps>`
     background-color: ${gray[100]};
   }
 
-  ${({ size }) => size !== undefined && dropdownButtonStyle[size]};
+  ${({ size }) => dropdownButtonStyle[size]};
 
   ${({ open }) =>
     open &&
@@ -79,15 +79,11 @@ const DropdownButton: React.FC<Props> = ({
 
   useOutsideClick(dropdownRef, () => setOpen(false));
 
-  const handleDropdownButtonClick = () => {
-    setOpen((prev) => !prev);
-  };
-
   return (
     <Container
       size={size}
       open={open}
-      onClick={handleDropdownButtonClick}
+      onClick={() => setOpen((prev) => !prev)}
       {...props}
       ref={dropdownRef}
     >

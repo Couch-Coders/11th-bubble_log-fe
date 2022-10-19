@@ -53,9 +53,9 @@ const buttonSizeStyle = {
 };
 
 interface ContainerProps {
-  variant?: ButtonVariant;
-  size?: ButtonSize;
-  disabled?: boolean;
+  variant: ButtonVariant;
+  size: ButtonSize;
+  disabled: boolean;
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
   width?: string;
@@ -91,12 +91,12 @@ const Container = styled.button<ContainerProps>`
       padding-right: 1rem;
     `};
 
-  ${({ variant }) => variant !== undefined && buttonVariantStyle[variant]};
+  ${({ variant }) => buttonVariantStyle[variant]};
 
-  ${({ size }) => size !== undefined && buttonSizeStyle[size]};
+  ${({ size }) => buttonSizeStyle[size]};
 
   ${({ disabled }) =>
-    disabled === true &&
+    disabled &&
     css`
       opacity: 0.38;
       pointer-events: none;
@@ -121,7 +121,7 @@ const Button: React.FC<Props> = ({
   children = '버튼',
   variant = 'contained',
   size = 'medium',
-  disabled,
+  disabled = false,
   startIcon,
   endIcon,
   width,

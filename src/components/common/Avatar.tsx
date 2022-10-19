@@ -20,7 +20,7 @@ const avatarShapeStyle = {
 };
 
 interface ContainerProps {
-  size?: string;
+  size: string;
   shape: 'rounded' | 'boxier';
   clickable: boolean;
 }

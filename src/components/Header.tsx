@@ -18,11 +18,6 @@ const HeaderStyle = styled.header`
   padding: 0 1rem;
   background-color: ${theme.primary};
   height: 3.5rem;
-
-  .flex {
-    display: flex;
-    gap: 1rem;
-  }
 `;
 
 const Header: React.FC = () => {
