@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { useNavigate } from 'react-router-dom';
 
-import { createLogAPI } from '@apis/log';
+import { logAPI } from '@apis/log';
 import Input from '@components/common/Input';
 import Textarea from '@components/common/Textarea';
 import KakaoMap from '@components/KakaoMap';
@@ -23,6 +23,8 @@ const WritePage: React.FC = () => {
   const [minOxygen, setMinOxygen] = useState('');
   const [maxOxygen, setMaxOxygen] = useState('');
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageFileUrlList, setImageFileUrlList] = useState<string[]>([]);
+  const [imageFileList, setImageFileList] = useState<File[]>([]);
   const [content, setContent] = useState('');
   const [position, setPosition] = useState({
     lat: 33.55635,
@@ -31,78 +33,101 @@ const WritePage: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const onChangeDatePicker = (date: Date): void => {
+  const isValidated =
+    diveType !== '' &&
+    temperature !== '' &&
+    maxDepth !== '' &&
+    sight !== '' &&
+    minOxygen !== '' &&
+    maxOxygen !== '' &&
+    content !== '';
+
+  const handleDatePickerChange = (date: Date) => {
     setDate(date);
   };
 
-  const onChangeDiveType = (
+  const handleDiveTypeChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
-  ): void => {
+  ) => {
     setDiveType(event.target.value);
   };
 
-  const onChangeTemperature = (
+  const handleTemperatureChange = (
     event: React.ChangeEvent<HTMLInputElement>,
-  ): void => {
+  ) => {
     setTemperature(event.target.value);
   };
 
-  const onChangeMaxDepth = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ): void => {
+  const handleMaxDepthChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMaxDepth(event.target.value);
   };
 
-  const onChangeSight = (event: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleSightChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSight(event.target.value);
   };
 
-  const onChangeEnterTime = (date: Date): void => {
+  const handleEnterTimeChange = (date: Date) => {
     setEnterTime(date);
   };
 
-  const onChangeLeaveTime = (date: Date): void => {
+  const handleLeaveTimeChange = (date: Date) => {
     setLeaveTime(date);
   };
 
-  const onChangeMinOxygen = (
+  const handleMinOxygenChange = (
     event: React.ChangeEvent<HTMLInputElement>,
-  ): void => {
+  ) => {
     setMinOxygen(event.target.value);
   };
 
-  const onChangeMaxOxygen = (
+  const handleMaxOxygenChange = (
     event: React.ChangeEvent<HTMLInputElement>,
-  ): void => {
+  ) => {
     setMaxOxygen(event.target.value);
   };
 
-  const onChangeImageFile = (
+  const handleImageFileChange = (
     event: React.ChangeEvent<HTMLInputElement>,
-  ): void => {
-    if (event.target.files !== null) {
-      setImageFile(event.target.files[0]);
-    }
+  ) => {
+    if (event.target.files === null) return;
+    // (prev => [...prev, event.target.files[0]]) causes nullable issue
+    setImageFileList([...imageFileList, event.target.files[0]]);
+    setImageFile(event.target.files[0]);
   };
 
-  const onChangeDescription = (
+  useEffect(() => {
+    if (imageFile === null) return;
+
+    const fileReader = new FileReader();
+
+    // event.target possibly null?
+    fileReader.onload = (event) => {
+      setImageFileUrlList((prev) => [...prev, event.target?.result as string]);
+    };
+
+    fileReader.readAsDataURL(imageFile);
+  }, [imageFile]);
+
+  const handleDescriptionChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>,
-  ): void => {
+  ) => {
     setContent(event.target.value);
   };
 
-  const onClickCancelButton = (): void => {
+  const handleCancelButtonClick = () => {
     navigate(-1);
   };
 
-  const onClickSubmitButton = async (): Promise<any> => {
+  const handleSubmit = async () => {
+    if (diveType === '') return;
+
     console.log('submitting...');
 
     setIsLoading(true);
 
-    const body = {
+    const createLogBody = {
       date: date.toISOString().slice(0, -1),
-      diveType: 'FREE',
+      diveType,
       enterTime: enterTime.toISOString().slice(0, -1),
       leaveTime: leaveTime.toISOString().slice(0, -1),
       sight: Number(sight),
@@ -115,24 +140,39 @@ const WritePage: React.FC = () => {
       longitude: position.lat,
       latitude: position.lng,
     };
-    console.log('@body', body);
+    console.log('@body', createLogBody);
+
     try {
-      const response = await createLogAPI(body);
-      console.log(response);
+      const createLogResponse = await logAPI.createLog(createLogBody);
+
+      const formData = new FormData();
+
+      imageFileList.forEach((imageFile) => {
+        formData.append('images', imageFile);
+      });
+
+      const createLogImagesBody = {
+        formData,
+      };
+
+      const createLogImagesResponse = await logAPI.createLogImages(
+        createLogImagesBody,
+        String(createLogResponse.id),
+      );
+      console.log('@createLogImagesResponse', createLogImagesResponse);
+
+      setIsLoading(false);
       navigate('/logs');
     } catch (error) {
       console.log(error);
     }
   };
 
-  console.log(imageFile);
-  console.log(diveType);
-
   return (
     <Layout>
       {isLoading && 'loading...'}
-      <DatePicker selected={date} onChange={onChangeDatePicker} />
-      <select onChange={onChangeDiveType} defaultValue="type">
+      <DatePicker selected={date} onChange={handleDatePickerChange} />
+      <select onChange={handleDiveTypeChange} defaultValue="type">
         <option value="type" disabled>
           다이브 종류
         </option>
@@ -141,15 +181,15 @@ const WritePage: React.FC = () => {
         ))}
       </select>
       <label>수온</label>
-      <Input value={temperature} onChange={onChangeTemperature} />
+      <Input value={temperature} onChange={handleTemperatureChange} />
       <label>최고 깊이</label>
-      <Input value={maxDepth} onChange={onChangeMaxDepth} />
+      <Input value={maxDepth} onChange={handleMaxDepthChange} />
       <label>시야</label>
-      <Input value={sight} onChange={onChangeSight} />
+      <Input value={sight} onChange={handleSightChange} />
       <label>들어간 시간</label>
       <DatePicker
         selected={enterTime}
-        onChange={onChangeEnterTime}
+        onChange={handleEnterTimeChange}
         showTimeSelect
         showTimeSelectOnly
         timeIntervals={15}
@@ -159,7 +199,7 @@ const WritePage: React.FC = () => {
       <label>나온 시간</label>
       <DatePicker
         selected={leaveTime}
-        onChange={onChangeLeaveTime}
+        onChange={handleLeaveTimeChange}
         showTimeSelect
         showTimeSelectOnly
         timeIntervals={15}
@@ -167,21 +207,30 @@ const WritePage: React.FC = () => {
         dateFormat="h:mm aa"
       />
       <label>들어갈 때 탱크량</label>
-      <Input value={maxOxygen} onChange={onChangeMaxOxygen} />
+      <Input value={maxOxygen} onChange={handleMaxOxygenChange} />
       <label>나올 때 탱크량</label>
-      <Input value={minOxygen} onChange={onChangeMinOxygen} />
+      <Input value={minOxygen} onChange={handleMinOxygenChange} />
       <button
         type="button"
         onClick={() => {
-          void onClickSubmitButton();
+          void handleSubmit();
         }}
+        disabled={!isValidated}
       >
         생성하기
       </button>
-      <button onClick={onClickCancelButton}>돌아가기</button>
-      <input type="file" onChange={onChangeImageFile} />
+      <button onClick={handleCancelButtonClick}>돌아가기</button>
+      <input type="file" accept="image/*" onChange={handleImageFileChange} />
+      {imageFileUrlList.map((imageFileUrl, index) => (
+        <img
+          style={{ width: '100px', height: '100px' }}
+          key={index}
+          src={imageFileUrl}
+          alt="image"
+        />
+      ))}
       <label>노트</label>
-      <Textarea value={content} onChange={onChangeDescription} />
+      <Textarea value={content} onChange={handleDescriptionChange} />
       <KakaoMap position={position} setPosition={setPosition} />
     </Layout>
   );

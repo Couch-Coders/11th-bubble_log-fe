@@ -6,22 +6,24 @@ import {
 } from '@reduxjs/toolkit';
 import { GetLogsQuery, GetLogsResponse, LogResponse } from 'types/log';
 
-import { getLogsAPI } from '@apis/log';
+import { logAPI } from '@apis/log';
+import { filterQueryObject } from '@utils/filterQueryObject';
 
 export const fetchLogs = createAsyncThunk<GetLogsResponse, GetLogsQuery>(
   'log/get/fetchStatus',
-  async (query: GetLogsQuery) => await getLogsAPI(query),
+  async (query) => await logAPI.getLogs(filterQueryObject(query)),
 );
-
 interface LogState {
-  data: LogResponse[];
+  data: GetLogsResponse | null;
+  logList: LogResponse[];
   isLoading: boolean;
   error: SerializedError | null;
   query: GetLogsQuery;
 }
 
 const initialState: LogState = {
-  data: [],
+  data: null,
+  logList: [],
   isLoading: false,
   error: null,
   query: {
@@ -34,7 +36,7 @@ const initialState: LogState = {
     minTemperature: '',
     maxTemperature: '',
     keyword: '',
-    page: '',
+    page: '0',
     size: '',
     orderBy: '',
   },
@@ -44,35 +46,58 @@ export const logSlice = createSlice({
   name: 'log',
   initialState,
   reducers: {
+    setQueryStartDate: (state, action: PayloadAction<string>) => {
+      state.query.startDate = action.payload;
+    },
+    setQueryEndDate: (state, action: PayloadAction<string>) => {
+      state.query.endDate = action.payload;
+    },
     setQueryKeyword: (state, action: PayloadAction<string>) => {
       state.query.keyword = action.payload;
     },
-    setQueryType: (state, action: PayloadAction<string>) => {
+    setQueryDiveType: (state, action: PayloadAction<string>) => {
       state.query.diveType = action.payload;
     },
     setQueryLocation: (state, action: PayloadAction<string>) => {
       state.query.location = action.payload;
     },
-    setQueryTemperature: (state, action: PayloadAction<string>) => {
-      const temperatureString = action.payload;
-
-      const minTemperature = temperatureString.split('-')[0];
-      const maxTemperature = temperatureString.split('-')[1];
-
-      state.query.minTemperature = minTemperature;
-      state.query.maxTemperature = maxTemperature;
+    setQueryMinTemperature: (state, action: PayloadAction<string>) => {
+      state.query.minTemperature = action.payload;
     },
-    setQueryDepth: (state, action: PayloadAction<string>) => {
-      const depthString = action.payload;
-
-      const minDepth = depthString.split('-')[0];
-      const maxDepth = depthString.split('-')[1];
-
-      state.query.minDepth = minDepth;
-      state.query.maxDepth = maxDepth;
+    setQueryMaxTemperature: (state, action: PayloadAction<string>) => {
+      state.query.maxTemperature = action.payload;
     },
-    clearData: (state) => {
-      state.data = [];
+    setQueryMinDepth: (state, action: PayloadAction<string>) => {
+      state.query.minDepth = action.payload;
+    },
+    setQueryMaxDepth: (state, action: PayloadAction<string>) => {
+      state.query.maxDepth = action.payload;
+    },
+    setQueryOrderBy: (state, action: PayloadAction<string>) => {
+      state.query.orderBy = action.payload;
+    },
+    setQueryPage: (state, action: PayloadAction<string>) => {
+      state.query.page = action.payload;
+    },
+    clearState: (state) => {
+      state.data = null;
+      state.logList = [];
+      state.isLoading = false;
+      state.error = null;
+      state.query = {
+        startDate: '',
+        endDate: '',
+        diveType: '',
+        location: '',
+        minDepth: '',
+        maxDepth: '',
+        minTemperature: '',
+        maxTemperature: '',
+        keyword: '',
+        page: '0',
+        size: '',
+        orderBy: '',
+      };
     },
   },
   extraReducers: (builder) => {
@@ -82,7 +107,8 @@ export const logSlice = createSlice({
       })
       .addCase(fetchLogs.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.data = action.payload.content;
+        state.data = action.payload;
+        state.logList.push(...action.payload.content);
         state.error = null;
       })
       .addCase(fetchLogs.rejected, (state, action) => {

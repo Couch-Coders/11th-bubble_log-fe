@@ -7,11 +7,11 @@ import {
 import { LoginResponse } from 'types/auth';
 import { User } from 'types/log';
 
-import { loginAPI } from '@apis/auth';
+import { authAPI } from '@apis/auth';
 
 export const fetchUser = createAsyncThunk<LoginResponse, string>(
   'user/fetchStatus',
-  async (token: string) => await loginAPI(token),
+  async (token: string) => await authAPI.logIn(token),
 );
 
 interface UserState {

@@ -1,88 +1,102 @@
 import {
-  CreateLogBody,
   CreateLogImagesBody,
   CreateLogImagesResponse,
   CreateLogResponse,
   GetLogDetailResponse,
-  GetLogsQuery,
   GetLogsResponse,
+  LogBody,
   ToggleLogFavoriteRepsonse,
-  UpdateLogBody,
   UpdateLogResponse,
 } from 'types/log';
 
 import { axios } from '@apis/index';
-import { createQueryString } from '@utils/createQueryString';
 
-export const createLogAPI = async (body: CreateLogBody): Promise<any> => {
-  const response = await axios.post<CreateLogResponse>('/logs', body);
-  return response.data;
-};
+const BASE_URL_LOGS = '/logs';
 
-export const updateLogAPI = async (
-  body: UpdateLogBody,
-  logId: number,
-): Promise<any> => {
-  const response = await axios.put<UpdateLogResponse>(`/logs/${logId}`, body);
-  return response.data;
-};
-
-export const deleteLogAPI = async (logId: number): Promise<any> => {
-  const response = await axios.delete(`/logs/${logId}`);
-  return response.data;
-};
-
-export const getLogsAPI = async (query: GetLogsQuery): Promise<any> => {
-  const queryString = createQueryString(query);
-  const response = await axios.get<GetLogsResponse>(`/logs${queryString}`);
-  return response.data;
-};
-
-export const getLogDetailAPI = async (logId: number): Promise<any> => {
-  const response = await axios.get<GetLogDetailResponse>(`/logs/${logId}`);
-  return response.data;
-};
-
-export const toggleLogFavoriteAPI = async (logId: number): Promise<any> => {
-  const response = await axios.put<ToggleLogFavoriteRepsonse>(
-    `/logs/${logId}/favorite`,
-  );
-  return response.data;
-};
-
-export const createLogImagesAPI = async (
-  body: CreateLogImagesBody,
-  logId: number,
-): Promise<any> => {
-  const response = await axios.post<CreateLogImagesResponse>(
-    `/logs/${logId}/images`,
+const createLog = async (body: LogBody) => {
+  const response = await axios.post<CreateLogResponse>(
+    `${BASE_URL_LOGS}`,
     body,
   );
   return response.data;
 };
 
-export const getLogImageAPI = async (
-  logId: number,
-  imageName: string,
-): Promise<any> => {
-  const response = await axios.get(`/logs/${logId}/images/${imageName}`);
+const updateLog = async (body: LogBody, logId: string) => {
+  const response = await axios.put<UpdateLogResponse>(
+    `${BASE_URL_LOGS}/${logId}`,
+    body,
+  );
   return response.data;
 };
 
-export const deleteLogImageAPI = async (
-  logId: number,
-  imageName: string,
-): Promise<any> => {
-  const response = await axios.delete(`/logs/${logId}/images/${imageName}`);
+const deleteLog = async (logId: string) => {
+  const response = await axios.delete(`${BASE_URL_LOGS}/${logId}`);
   return response.data;
 };
 
-export const getDiveTypeAPI = async (): Promise<any> => {
+const getLogs = async (queryParams?: object) => {
+  const response = await axios.get<GetLogsResponse>(`${BASE_URL_LOGS}`, {
+    params: queryParams,
+  });
+  return response.data;
+};
+
+const getLogDetail = async (logId: string) => {
+  const response = await axios.get<GetLogDetailResponse>(
+    `${BASE_URL_LOGS}/${logId}`,
+  );
+  return response.data;
+};
+
+const toggleLogFavorite = async (logId: string) => {
+  const response = await axios.put<ToggleLogFavoriteRepsonse>(
+    `${BASE_URL_LOGS}/${logId}/favorite`,
+  );
+  return response.data;
+};
+
+const createLogImages = async (body: CreateLogImagesBody, logId: string) => {
+  const response = await axios.post<CreateLogImagesResponse>(
+    `${BASE_URL_LOGS}/${logId}/images`,
+    body,
+  );
+  return response.data;
+};
+
+const getLogImage = async (logId: number, imageName: string) => {
+  const response = await axios.get(
+    `${BASE_URL_LOGS}/${logId}/images/${imageName}`,
+  );
+  return response.data;
+};
+
+const deleteLogImage = async (logId: string, imageName: string) => {
+  const response = await axios.delete(
+    `${BASE_URL_LOGS}/${logId}/images/${imageName}`,
+  );
+  return response.data;
+};
+
+const getDiveType = async () => {
   const response = await axios.get('/diveTypes');
   return response.data;
 };
 
-export const getLocationAPI = async (): Promise<any> => {
+const getLocation = async () => {
   const response = await axios.get('/locations');
   return response.data;
+};
+
+export const logAPI = {
+  createLog,
+  updateLog,
+  deleteLog,
+  getLogs,
+  getLogDetail,
+  toggleLogFavorite,
+  createLogImages,
+  getLogImage,
+  deleteLogImage,
+  getDiveType,
+  getLocation,
 };

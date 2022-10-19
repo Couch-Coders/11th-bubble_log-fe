@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import useOutsideClick from '@hooks/useOutsideClick';
+import React, { useRef, useState } from 'react';
 import { MdArrowDropDown } from 'react-icons/md';
 import styled, { css } from 'styled-components';
 
@@ -6,30 +7,25 @@ import { gray } from '@styles/palette';
 
 type DropdownButtonSizeType = 'small' | 'medium' | 'large';
 
-const getDropdownButtonSize = (size?: DropdownButtonSizeType): any => {
-  switch (size) {
-    case 'small':
-      return css`
-        height: 2rem;
-        padding: 0.75rem;
-        font-size: 0.75rem;
-        min-width: 4rem;
-      `;
-    case 'medium':
-      return css`
-        height: 2.5rem;
-        padding: 0.75rem;
-        font-size: 0.875rem;
-        min-width: 5rem;
-      `;
-    case 'large':
-      return css`
-        height: 3rem;
-        padding: 0.75rem;
-        font-size: 1rem;
-        min-width: 6rem;
-      `;
-  }
+const dropdownButtonStyle = {
+  small: css`
+    height: 2rem;
+    padding: 0.75rem;
+    font-size: 0.75rem;
+    min-width: 4rem;
+  `,
+  medium: css`
+    height: 2.5rem;
+    padding: 0.75rem;
+    font-size: 0.875rem;
+    min-width: 5rem;
+  `,
+  large: css`
+    height: 3rem;
+    padding: 0.75rem;
+    font-size: 1rem;
+    min-width: 6rem;
+  `,
 };
 
 interface ContainerProps {
@@ -56,7 +52,7 @@ const Container = styled.button<ContainerProps>`
     background-color: ${gray[100]};
   }
 
-  ${({ size }) => getDropdownButtonSize(size)};
+  ${({ size }) => size !== undefined && dropdownButtonStyle[size]};
 
   ${({ open }) =>
     open &&
@@ -74,18 +70,28 @@ interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const DropdownButton: React.FC<Props> = ({
   children,
-  label = '메뉴',
+  label,
   size = 'medium',
   ...props
 }) => {
   const [open, setOpen] = useState(false);
 
-  const onClick = (): void => {
+  const dropdownRef = useRef<HTMLButtonElement | null>(null);
+
+  useOutsideClick(dropdownRef, () => setOpen(false));
+
+  const handleDropdownButtonClick = () => {
     setOpen((prev) => !prev);
   };
 
   return (
-    <Container size={size} open={open} onClick={onClick} {...props}>
+    <Container
+      size={size}
+      open={open}
+      onClick={handleDropdownButtonClick}
+      {...props}
+      ref={dropdownRef}
+    >
       {label}
       <MdArrowDropDown
         className="arrow-dropdown-icon"

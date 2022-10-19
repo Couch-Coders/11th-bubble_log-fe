@@ -15,19 +15,7 @@ export interface Log {
   longitude: number;
 }
 
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  profileImage: string;
-}
-
-export interface LogResponse extends Log {
-  id: number;
-  isFavorite: boolean;
-}
-
-export interface CreateLogBody {
+export interface LogBody {
   date: string;
   diveType: string;
   enterTime: string;
@@ -43,11 +31,21 @@ export interface CreateLogBody {
   longitude: number;
 }
 
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  profileImage: string;
+}
+
+export interface LogResponse extends Log {
+  id: number;
+  isFavorite: boolean;
+}
+
 export interface CreateLogResponse extends LogResponse {
   user: User;
 }
-
-export type UpdateLogBody = Log;
 
 export interface UpdateLogResponse extends LogResponse {
   user: User;

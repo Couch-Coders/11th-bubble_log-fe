@@ -7,11 +7,11 @@ import {
 } from '@reduxjs/toolkit';
 import { GetLogDetailResponse } from 'types/log';
 
-import { getLogDetailAPI } from '@apis/log';
+import { logAPI } from '@apis/log';
 
-export const fetchLogDetail = createAsyncThunk<GetLogDetailResponse, number>(
+export const fetchLogDetail = createAsyncThunk<GetLogDetailResponse, string>(
   'logDetail/fetchStatus',
-  async (logId: number) => await getLogDetailAPI(logId),
+  async (logId: string) => await logAPI.getLogDetail(logId),
 );
 
 interface LogState {
@@ -30,9 +30,6 @@ export const logDetailSlice = createSlice({
   name: 'logDetail',
   initialState,
   reducers: {
-    setIsFavorite(state, action: PayloadAction<boolean>) {
-      if (state.data !== null) state.data.isFavorite = action.payload;
-    },
     clearData(state) {
       state.data = null;
     },

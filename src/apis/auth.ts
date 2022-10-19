@@ -2,19 +2,28 @@ import { LoginResponse } from 'types/auth';
 
 import { axios } from '@apis/index';
 
-export const loginAPI = async (token: string): Promise<any> => {
+const BASE_URL_AUTH = '/auth';
+const BASE_URL_USER = '/users';
+
+const logIn = async (token: string) => {
   axios.defaults.headers.Authorization = `Bearer ${token}`;
 
-  const response = await axios.post<LoginResponse>('/auth/login');
+  const response = await axios.post<LoginResponse>(`${BASE_URL_AUTH}/login`);
   return response.data;
 };
 
-export const logoutAPI = async (): Promise<any> => {
-  const response = await axios.delete('/auth/logout');
+const logOut = async () => {
+  const response = await axios.delete(`${BASE_URL_AUTH}/logout`);
   return response.data;
 };
 
-export const unregisterAPI = async (): Promise<any> => {
-  const response = await axios.delete('/users/me');
+const unregister = async () => {
+  const response = await axios.delete(`${BASE_URL_USER}/me`);
   return response.data;
+};
+
+export const authAPI = {
+  logIn,
+  logOut,
+  unregister,
 };

@@ -1,7 +1,4 @@
-import useDebounce from '@hooks/useDebounce';
-import { useDispatch } from '@stores/index';
-import { logActions } from '@stores/slices/log';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { MdClose, MdSearch } from 'react-icons/md';
 import styled from 'styled-components';
 
@@ -28,32 +25,6 @@ const Container = styled.div`
   }
 `;
 
-interface ReturnType {
-  inputValue: string;
-  onChangeInput: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onClickButton: () => void;
-}
-
-const useSearchInput = (): ReturnType => {
-  const [inputValue, setInputValue] = useState('');
-  const debouncedInputValue = useDebounce(inputValue);
-  const dispatch = useDispatch();
-
-  const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setInputValue(event.target.value);
-  };
-
-  const onClickButton = (): void => {
-    setInputValue('');
-  };
-
-  useEffect(() => {
-    dispatch(logActions.setQueryKeyword(debouncedInputValue));
-  }, [debouncedInputValue]);
-
-  return { inputValue, onChangeInput, onClickButton };
-};
-
 const SearchInputClearButton = styled.button`
   display: flex;
   justify-content: center;
@@ -67,21 +38,23 @@ const SearchInputClearButton = styled.button`
   cursor: pointer;
 `;
 
-const SearchInput: React.FC = () => {
-  const { inputValue, onChangeInput, onClickButton } = useSearchInput();
+interface Props {
+  value: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onClearButtonClick: () => void;
+}
 
+const SearchInput: React.FC<Props> = ({
+  value,
+  onChange,
+  onClearButtonClick,
+}) => {
   return (
     <Container>
       <MdSearch className="search-icon" />
-      <Input
-        startIcon
-        endIcon
-        fullWidth
-        value={inputValue}
-        onChange={onChangeInput}
-      />
-      {inputValue !== '' && (
-        <SearchInputClearButton onClick={onClickButton}>
+      <Input startIcon endIcon fullWidth value={value} onChange={onChange} />
+      {value !== '' && (
+        <SearchInputClearButton onClick={onClearButtonClick}>
           <MdClose className="close-icon" />
         </SearchInputClearButton>
       )}

@@ -9,17 +9,17 @@ const HomePage: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const onClickLoginButton = (): void => {
+  const handleLoginButtonClick = () => {
     void login();
   };
 
   useEffect(() => {
     if (isLoggedIn) navigate('/logs');
-  }, [isLoggedIn]);
+  }, [isLoggedIn, navigate]);
 
   return (
     <main>
-      <Button onClick={onClickLoginButton}>로그인</Button>
+      <Button onClick={handleLoginButtonClick}>로그인</Button>
     </main>
   );
 };

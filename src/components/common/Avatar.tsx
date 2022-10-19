@@ -3,25 +3,21 @@ import styled, { css } from 'styled-components';
 
 import { gray } from '@styles/palette';
 
-const getAvatarShape = (shape?: 'rounded' | 'boxier'): any => {
-  switch (shape) {
-    case 'rounded':
-      return css`
-        border-radius: 50%;
+const avatarShapeStyle = {
+  rounded: css`
+    border-radius: 50%;
 
-        .image {
-          border-radius: 50%;
-        }
-      `;
-    case 'boxier':
-      return css`
-        border-radius: 0.25rem;
+    .image {
+      border-radius: 50%;
+    }
+  `,
+  boxier: css`
+    border-radius: 0.25rem;
 
-        .image {
-          border-radius: 0.25rem;
-        }
-      `;
-  }
+    .image {
+      border-radius: 0.25rem;
+    }
+  `,
 };
 
 interface ContainerProps {
@@ -50,7 +46,7 @@ const Container = styled.div<ContainerProps>`
     height: 100%;
   }
 
-  ${({ shape }) => getAvatarShape(shape)};
+  ${({ shape }) => avatarShapeStyle[shape]};
 `;
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
