@@ -54,7 +54,6 @@ const LogListItem: React.FC<Props> = ({
           <p>#{logId}</p>
           <p>{location}</p>
         </Flexbox>
-
         <p>{date}</p>
       </Container>
     </Link>

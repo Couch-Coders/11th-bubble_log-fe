@@ -10,7 +10,7 @@ import Dropdown from '@components/common/dropdown';
 import Flexbox from '@components/common/Flexbox';
 import Stack from '@components/common/Stack';
 import Layout from '@components/Layout';
-import LogList from '@components/LogList';
+import LogListItem from '@components/LogListItem';
 import SearchInput from '@components/SearchInput';
 import { DIVE_TYPE } from '@utils/constants';
 
@@ -23,7 +23,9 @@ const LogsPage: React.FC = () => {
 
   const debouncedSearchInputValue = useDebounce(searchInputValue, 166);
 
-  const { data, isLoading, error, query } = useSelector((state) => state.log);
+  const { data, logList, isLoading, error, query } = useSelector(
+    (state) => state.log,
+  );
 
   const { isLoggedIn } = useAuth();
 
@@ -209,7 +211,16 @@ const LogsPage: React.FC = () => {
             </Dropdown.Button>
           </Flexbox>
         </Flexbox>
-        <LogList />
+        {isLoading && <p>loading...</p>}
+        {logList.map((data, index) => (
+          <LogListItem
+            key={index}
+            isFavorite={data.isFavorite}
+            logId={String(data.id)}
+            location={data.location}
+            date={data.date}
+          />
+        ))}
         {/* <div
           style={{ height: '2rem', border: '1px solid red' }}
           ref={observerRef}

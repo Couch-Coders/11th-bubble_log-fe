@@ -1,9 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-
-import Avatar from '@components/common/Avatar';
-import LogOutButton from '@components/LogOutButton';
 
 const Container = styled.div`
   display: flex;
@@ -24,27 +20,12 @@ const Container = styled.div`
 `;
 
 interface Props {
-  profileImageUrl: string;
+  children: React.ReactNode;
   open: boolean;
-  onClose: () => void;
 }
 
-const ProfileModal: React.FC<Props> = ({ profileImageUrl, open, onClose }) => {
-  return (
-    <>
-      {open && (
-        <Container>
-          <Avatar size="6rem" src={profileImageUrl} alt="profile-image" />
-          <Link to="/mypage" onClick={onClose}>
-            마이페이지
-          </Link>
-          <div onClick={onClose}>
-            <LogOutButton />
-          </div>
-        </Container>
-      )}
-    </>
-  );
+const ProfileModal: React.FC<Props> = ({ children, open }) => {
+  return <>{open && <Container>{children}</Container>}</>;
 };
 
 export default ProfileModal;
