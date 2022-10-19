@@ -10,7 +10,13 @@ const LogList: React.FC = () => {
     <>
       {isLoading && <p>loading...</p>}
       {logList.map((data, index) => (
-        <LogListItem key={index} data={data} />
+        <LogListItem
+          key={index}
+          isFavorite={data.isFavorite}
+          logId={String(data.id)}
+          location={data.location}
+          date={data.date}
+        />
       ))}
     </>
   );

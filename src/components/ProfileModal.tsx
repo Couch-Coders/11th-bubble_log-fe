@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { User } from 'types/log';
 
 import Avatar from './common/Avatar';
 import LogOutButton from './LogOutButton';
@@ -25,17 +24,17 @@ const Container = styled.div`
 `;
 
 interface Props {
-  data: User;
+  profileImageUrl: string;
   open: boolean;
   onClose: () => void;
 }
 
-const ProfileModal: React.FC<Props> = ({ data, open, onClose }) => {
+const ProfileModal: React.FC<Props> = ({ profileImageUrl, open, onClose }) => {
   return (
     <>
       {open && (
         <Container>
-          <Avatar size="6rem" src={data.profileImage} alt="profile-image" />
+          <Avatar size="6rem" src={profileImageUrl} alt="profile-image" />
           <Link to="/mypage" onClick={onClose}>
             마이페이지
           </Link>

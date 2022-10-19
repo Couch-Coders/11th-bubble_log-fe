@@ -51,7 +51,7 @@ const Header: React.FC = () => {
             clickable
           />
           <ProfileModal
-            data={data}
+            profileImageUrl={data.profileImage}
             open={profileModalOpen}
             onClose={() => setProfileModalOpen(false)}
           />

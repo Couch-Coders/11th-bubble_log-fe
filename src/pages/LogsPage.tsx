@@ -35,15 +35,23 @@ const LogsPage: React.FC = () => {
     await dispatch(fetchLogs(query));
   }, [dispatch, isLoggedIn]);
 
+  useEffect(() => {
+    void fetchLogsWithQuery();
+
+    return () => {
+      dispatch(logActions.clearState());
+    };
+  }, [dispatch, fetchLogsWithQuery]);
+
+  useEffect(() => {
+    dispatch(logActions.setQueryKeyword(debouncedSearchInputValue));
+  }, [debouncedSearchInputValue, dispatch]);
+
   const handleSearchInputChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setSearchInputValue(event.target.value);
   };
-
-  useEffect(() => {
-    dispatch(logActions.setQueryKeyword(debouncedSearchInputValue));
-  }, [debouncedSearchInputValue, dispatch]);
 
   const handleSearchInputClearButtonClick = () => {
     setSearchInputValue('');
@@ -83,17 +91,6 @@ const LogsPage: React.FC = () => {
     dispatch(logActions.setQueryMaxDepth(maxDepthOptionValue));
   };
 
-  useEffect(() => {
-    void fetchLogsWithQuery();
-
-    return () => {
-      dispatch(logActions.clearState());
-    };
-  }, [dispatch, fetchLogsWithQuery]);
-
-  const fetchMoreLogButtonDisabled =
-    data === null || error !== null || isLoading || data.last;
-
   const fetchMoreLog = () => {
     const queryWithNextPage = {
       ...query,
@@ -107,6 +104,9 @@ const LogsPage: React.FC = () => {
   const handleFetchMoreLogButtonClick = () => {
     fetchMoreLog();
   };
+
+  const fetchMoreLogButtonDisabled =
+    data === null || error !== null || isLoading || data.last;
 
   // const observerRef = useRef<HTMLDivElement | null>(null);
 
@@ -129,7 +129,7 @@ const LogsPage: React.FC = () => {
           onChange={handleSearchInputChange}
           onClearButtonClick={handleSearchInputClearButtonClick}
         />
-        <Flexbox gap="1rem" wrap>
+        <Flexbox justify="start" gap="1rem" wrap>
           <Flexbox items="center" gap="1rem">
             <label>다이브 종류</label>
             <Dropdown.Button label={diveTypeFilterValue}>

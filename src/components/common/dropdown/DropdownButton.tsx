@@ -5,7 +5,7 @@ import styled, { css } from 'styled-components';
 
 import { gray } from '@styles/palette';
 
-type DropdownButtonSizeType = 'small' | 'medium' | 'large';
+type DropdownButtonSize = 'small' | 'medium' | 'large';
 
 const dropdownButtonStyle = {
   small: css`
@@ -29,7 +29,7 @@ const dropdownButtonStyle = {
 };
 
 interface ContainerProps {
-  size?: DropdownButtonSizeType;
+  size?: DropdownButtonSize;
   open: boolean;
 }
 
@@ -65,7 +65,7 @@ const Container = styled.button<ContainerProps>`
 
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   label?: string;
-  size?: DropdownButtonSizeType;
+  size?: DropdownButtonSize;
 }
 
 const DropdownButton: React.FC<Props> = ({
