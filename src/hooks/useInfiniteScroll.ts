@@ -5,15 +5,15 @@ const useInfiniteScroll = (
   target: any,
   onIntersect: IntersectionObserverCallback,
 ) => {
-  const observer = new IntersectionObserver(onIntersect);
-
   useEffect(() => {
+    const observer = new IntersectionObserver(onIntersect);
+
     if (target === null) return;
 
     observer.observe(target);
 
     return () => observer.disconnect();
-  }, [target]);
+  }, [target, onIntersect]);
 };
 
 export default useInfiniteScroll;
