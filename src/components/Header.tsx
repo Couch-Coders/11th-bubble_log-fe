@@ -11,6 +11,9 @@ import Flexbox from '@components/common/Flexbox';
 import HeaderLogo from '@components/HeaderLogo';
 import ProfileModal from '@components/ProfileModal';
 
+import Divider from './common/Divider';
+import MenuItem from './common/MenuItem';
+
 const HeaderStyle = styled.header`
   display: flex;
   justify-content: space-between;
@@ -52,11 +55,25 @@ const Header: React.FC = () => {
             clickable
           />
           <ProfileModal isOpen={profileModalOpen}>
-            <Avatar size="6rem" src={data.profileImage} alt="profile-image" />
-            <Link to="/mypage" onClick={() => setProfileModalOpen(false)}>
-              마이페이지
-            </Link>
-            <button onClick={handleLogOutButtonClick}>로그아웃</button>
+            <Flexbox flex="col" width="100%">
+              <Flexbox flex="col" gap="1rem" padding="2rem">
+                <Avatar
+                  size="6rem"
+                  src={data.profileImage}
+                  alt="profile-image"
+                />
+                <p style={{ fontSize: '1.25rem' }}>{data.name}</p>
+              </Flexbox>
+              <Divider />
+              <MenuItem>
+                <Link to="/mypage" onClick={() => setProfileModalOpen(false)}>
+                  마이페이지
+                </Link>
+              </MenuItem>
+              <Divider />
+              <MenuItem onClick={handleLogOutButtonClick}>로그아웃</MenuItem>
+              <Divider />
+            </Flexbox>
           </ProfileModal>
         </Flexbox>
       </div>
