@@ -8,7 +8,7 @@ import Flexbox from '@components/common/Flexbox';
 const Container = styled.li`
   display: flex;
   justify-content: space-between;
-  padding: 1rem;
+  padding: 1.5rem;
   &:hover {
     background-color: ${blue[50]};
   }

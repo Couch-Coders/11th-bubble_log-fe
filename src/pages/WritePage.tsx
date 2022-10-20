@@ -1,15 +1,24 @@
 import { logAPI } from '@lib/apis/log';
+import { theme } from '@lib/styles/theme';
 import React, { useEffect, useState } from 'react';
-import DatePicker from 'react-datepicker';
 import { useNavigate } from 'react-router-dom';
 
+import Button from '@components/common/Button';
+import FileInput from '@components/common/FileInput';
+import Flexbox from '@components/common/Flexbox';
 import Input from '@components/common/Input';
 import Textarea from '@components/common/Textarea';
+import DatePicker from '@components/DatePicker';
+import ImagePreview from '@components/ImagePreview';
 import KakaoMap from '@components/KakaoMap';
 import Layout from '@components/Layout';
+import MeasureInput from '@components/MeasureInput';
+import TimePicker from '@components/TimePicker';
 import { DIVE_TYPE } from '@utils/constants';
 
 import 'react-datepicker/dist/react-datepicker.css';
+
+const NUMBER_REG_EXP = /^[0-9]$/g;
 
 const WritePage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -42,7 +51,8 @@ const WritePage: React.FC = () => {
     maxOxygen !== '' &&
     content !== '';
 
-  const handleDatePickerChange = (date: Date) => {
+  const handleDatePickerChange = (date: Date | null) => {
+    if (date === null) return;
     setDate(date);
   };
 
@@ -55,6 +65,7 @@ const WritePage: React.FC = () => {
   const handleTemperatureChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
+    if (!NUMBER_REG_EXP.test(event.target.value)) return;
     setTemperature(event.target.value);
   };
 
@@ -66,11 +77,13 @@ const WritePage: React.FC = () => {
     setSight(event.target.value);
   };
 
-  const handleEnterTimeChange = (date: Date) => {
+  const handleEnterTimeChange = (date: Date | null) => {
+    if (date === null) return;
     setEnterTime(date);
   };
 
-  const handleLeaveTimeChange = (date: Date) => {
+  const handleLeaveTimeChange = (date: Date | null) => {
+    if (date === null) return;
     setLeaveTime(date);
   };
 
@@ -93,6 +106,7 @@ const WritePage: React.FC = () => {
     // (prev => [...prev, event.target.files[0]]) causes nullable issue
     setImageFileList([...imageFileList, event.target.files[0]]);
     setImageFile(event.target.files[0]);
+    event.target.value = '';
   };
 
   useEffect(() => {
@@ -166,70 +180,121 @@ const WritePage: React.FC = () => {
     }
   };
 
+  const removeImageFileUrl = (imageFileIndex: number) => {
+    setImageFileUrlList((imageFileUrlList) =>
+      imageFileUrlList.filter((_, index) => imageFileIndex !== index),
+    );
+  };
+
   return (
     <Layout>
-      {isLoading && 'loading...'}
-      <DatePicker selected={date} onChange={handleDatePickerChange} />
-      <select onChange={handleDiveTypeChange} defaultValue="type">
-        <option value="type" disabled>
-          다이브 종류
-        </option>
-        {DIVE_TYPE.map((option, index) => (
-          <option key={index}>{option}</option>
-        ))}
-      </select>
-      <label>수온</label>
-      <Input value={temperature} onChange={handleTemperatureChange} />
-      <label>최고 깊이</label>
-      <Input value={maxDepth} onChange={handleMaxDepthChange} />
-      <label>시야</label>
-      <Input value={sight} onChange={handleSightChange} />
-      <label>들어간 시간</label>
-      <DatePicker
-        selected={enterTime}
-        onChange={handleEnterTimeChange}
-        showTimeSelect
-        showTimeSelectOnly
-        timeIntervals={15}
-        timeCaption="Time"
-        dateFormat="h:mm aa"
-      />
-      <label>나온 시간</label>
-      <DatePicker
-        selected={leaveTime}
-        onChange={handleLeaveTimeChange}
-        showTimeSelect
-        showTimeSelectOnly
-        timeIntervals={15}
-        timeCaption="Time"
-        dateFormat="h:mm aa"
-      />
-      <label>들어갈 때 탱크량</label>
-      <Input value={maxOxygen} onChange={handleMaxOxygenChange} />
-      <label>나올 때 탱크량</label>
-      <Input value={minOxygen} onChange={handleMinOxygenChange} />
-      <button
-        type="button"
-        onClick={() => {
-          void handleSubmit();
-        }}
-        disabled={!isValidated}
-      >
-        생성하기
-      </button>
-      <button onClick={handleCancelButtonClick}>돌아가기</button>
-      <input type="file" accept="image/*" onChange={handleImageFileChange} />
-      {imageFileUrlList.map((imageFileUrl, index) => (
-        <img
-          style={{ width: '100px', height: '100px' }}
-          key={index}
-          src={imageFileUrl}
-          alt="image"
+      <Flexbox padding="1rem" flex="col" items="start" gap="1rem">
+        <h1
+          style={{
+            color: theme.primary,
+            fontSize: '3rem',
+            fontWeight: 600,
+            marginTop: '2rem',
+            marginBottom: '1rem',
+          }}
+        >
+          새 로그 생성
+        </h1>
+        {isLoading && 'loading...'}
+        <DatePicker startDate={date} onChange={handleDatePickerChange} />
+        <select onChange={handleDiveTypeChange} defaultValue="type">
+          <option value="type" disabled>
+            다이브 종류
+          </option>
+          {DIVE_TYPE.map((option, index) => (
+            <option key={index}>{option}</option>
+          ))}
+        </select>
+        <Flexbox gap="1rem">
+          <label>수온</label>
+          <MeasureInput
+            value={temperature}
+            measure="°"
+            onChange={handleTemperatureChange}
+            placeholder="수온을 입력하세요."
+          />
+        </Flexbox>
+        <Flexbox gap="1rem">
+          <label>최고 깊이</label>
+          <MeasureInput
+            value={maxDepth}
+            measure="m"
+            onChange={handleMaxDepthChange}
+            placeholder="최고 깊이를 입력하세요."
+          />
+        </Flexbox>
+        <Flexbox gap="1rem">
+          <label>시야</label>
+          <Input
+            value={sight}
+            onChange={handleSightChange}
+            placeholder="시야를 입력하세요."
+          />
+        </Flexbox>
+        <Flexbox gap="1rem">
+          <label>들어간 시간</label>
+          <TimePicker startTime={enterTime} onChange={handleEnterTimeChange} />
+        </Flexbox>
+        <Flexbox gap="1rem">
+          <label>나온 시간</label>
+          <TimePicker startTime={leaveTime} onChange={handleLeaveTimeChange} />
+        </Flexbox>
+        <Flexbox gap="1rem">
+          <label>들어갈 때 탱크량</label>
+          <Input
+            value={maxOxygen}
+            onChange={handleMaxOxygenChange}
+            placeholder="들어갈 때 탱크량을 입력하세요."
+          />
+        </Flexbox>
+        <Flexbox gap="1rem">
+          <label>나올 때 탱크량</label>
+          <Input
+            value={minOxygen}
+            onChange={handleMinOxygenChange}
+            placeholder="나올 때 탱크량을 입력하세요."
+          />
+        </Flexbox>
+        <label>메모</label>
+        <Textarea
+          value={content}
+          onChange={handleDescriptionChange}
+          placeholder="여기에 메모를 입력하세요."
         />
-      ))}
-      <label>노트</label>
-      <Textarea value={content} onChange={handleDescriptionChange} />
+        <FileInput onChange={handleImageFileChange} />
+        <Flexbox justify="start" gap="1rem" flexWrap>
+          {imageFileUrlList.map((imageFileUrl, index) => (
+            <ImagePreview
+              key={index}
+              imageFileUrl={imageFileUrl}
+              imageFileIndex={index}
+              onRemoveButtonClick={() => removeImageFileUrl(index)}
+            />
+          ))}
+        </Flexbox>
+      </Flexbox>
       <KakaoMap position={position} setPosition={setPosition} />
+      <Flexbox padding="1rem" width="100%" justify="between">
+        <Button>임시 저장</Button>
+        <Flexbox gap="1rem">
+          <Button variant="text" onClick={handleCancelButtonClick}>
+            돌아가기
+          </Button>
+          <Button
+            onClick={() => {
+              void handleSubmit();
+            }}
+            disabled={!isValidated}
+          >
+            생성하기
+          </Button>
+        </Flexbox>
+      </Flexbox>
     </Layout>
   );
 };

@@ -8,20 +8,16 @@ import Input from '@components/common/Input';
 const Container = styled.div`
   display: flex;
   position: relative;
-
-  .close-icon {
-    width: 1.25rem;
-    height: 1.25rem;
-  }
+  width: 12rem;
 
   .search-icon {
     position: absolute;
     top: 50%;
     left: 0.5rem;
     transform: translateY(-50%);
-    width: 1.5rem;
-    height: 1.5rem;
-    color: ${gray[400]};
+    width: 1.25rem;
+    height: 1.25rem;
+    color: ${gray[500]};
   }
 `;
 
@@ -34,8 +30,14 @@ const SearchInputClearButton = styled.button`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  right: 0.5rem;
+  right: 0.25rem;
   cursor: pointer;
+
+  .close-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: ${gray[500]};
+  }
 `;
 
 interface Props {

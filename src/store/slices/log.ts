@@ -24,7 +24,7 @@ interface LogState {
 const initialState: LogState = {
   data: null,
   logList: [],
-  isLoading: false,
+  isLoading: true,
   error: null,
   query: {
     startDate: '',

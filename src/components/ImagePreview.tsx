@@ -1,15 +1,21 @@
+import { gray } from '@lib/styles/palette';
 import { theme } from '@lib/styles/theme';
 import React from 'react';
 import { MdClose } from 'react-icons/md';
 import styled from 'styled-components';
 
 const Container = styled.div`
+  display: flex;
+  justify-content: center;
   position: relative;
+  width: 8rem;
+  height: 8rem;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  border: 1px solid ${gray[200]};
 
   .uploaded-image {
-    width: 8rem;
-    height: 8rem;
-    border-radius: 0.5rem;
+    height: 100%;
   }
 
   .remove-button {

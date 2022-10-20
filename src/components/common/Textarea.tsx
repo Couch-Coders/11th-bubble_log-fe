@@ -10,7 +10,7 @@ const Container = styled.textarea<ContainerProps>`
   width: 100%;
   border: none;
   outline: none;
-  background-color: ${gray[100]};
+  border: 0.5px solid ${gray[500]};
   border-radius: 0.25rem;
   padding: 1rem;
   resize: none;

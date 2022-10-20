@@ -5,6 +5,7 @@ import styled, { css } from 'styled-components';
 interface ContainerProps {
   startIcon: boolean;
   endIcon: boolean;
+  width?: string;
   fullWidth: boolean;
 }
 
@@ -12,9 +13,16 @@ const Container = styled.input<ContainerProps>`
   border-radius: 0.25rem;
   height: 1.5rem;
   font-size: 1rem;
-  padding: 0.5rem;
+  padding: 1rem;
   outline: none;
-  border: 1px solid ${gray[500]};
+  border: 1px solid ${gray[400]};
+  color: ${gray[600]};
+
+  ::placeholder {
+    color: ${gray[300]};
+  }
+
+  width: ${({ width }) => width};
 
   ${({ startIcon }) =>
     startIcon &&
@@ -39,18 +47,21 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   startIcon?: boolean;
   endIcon?: boolean;
   fullWidth?: boolean;
+  width?: string;
 }
 
 const Input: React.FC<Props> = ({
   startIcon = false,
   endIcon = false,
   fullWidth = false,
+  width,
   ...props
 }) => {
   return (
     <Container
       startIcon={startIcon}
       endIcon={endIcon}
+      width={width}
       fullWidth={fullWidth}
       {...props}
     />

@@ -5,6 +5,8 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import Button from '@components/common/Button';
+import Flexbox from '@components/common/Flexbox';
+import LoadingSpinner from '@components/common/LoadingSpinner';
 import FavoriteToggleButton from '@components/FavoriteToggleButton';
 import Layout from '@components/Layout';
 import { BASE_URL } from '@utils/constants';
@@ -15,6 +17,7 @@ const LogDetailPage: React.FC = () => {
   const navigate = useNavigate();
 
   const { data, isLoading } = useSelector((state) => state.logDetail);
+  console.log('@isLoading', isLoading);
 
   const [isFavorite, setIsFavorite] = useState(
     data === null ? false : data.isFavorite,
@@ -50,57 +53,68 @@ const LogDetailPage: React.FC = () => {
 
     return () => {
       promise.abort();
-      dispatch(logDetailActions.clearData());
+      dispatch(logDetailActions.clearState());
     };
   }, [logId, dispatch]);
 
   return (
     <Layout>
-      {isLoading && <p>loading...</p>}
-      {data !== null && <p>id: {data.id}</p>}
-      {data !== null && <p>노트: {data.content}</p>}
-      {data !== null && <p>다이브 종류: {data.diveType}</p>}
-      {data !== null && <p>들어간 시간: {data.enterTime}</p>}
-      {data !== null && <p>장소: {data.location}</p>}
-      {data !== null && <p>위도: {data.latitude}</p>}
-      {data !== null && <p>경도: {data.longitude}</p>}
-      {data !== null && <p>최대 깊이: {data.maxDepth}</p>}
-      {data !== null && <p>들어갈 때 산소량: {data.maxOxygen}</p>}
-      {data !== null && <p>나올 때 산소량: {data.minOxygen}</p>}
-      {data !== null && <p>수온: {data.temperature}</p>}
-      {data !== null && <p>시야 정도: {data.sight}</p>}
-      {data?.images.map((image, index) => (
-        <img
-          style={{ width: '200px', height: '200px' }}
-          key={index}
-          src={`${BASE_URL}${image}`}
-          alt="image"
-        />
-      ))}
-      {data !== null && (
-        <FavoriteToggleButton
-          isFavorite={isFavorite}
-          onClick={() => {
-            void handleFavoriteToggleButtonClick();
-          }}
-        />
-      )}
-      {data !== null && (
-        <Link to={`/logs/${data.id}/edit`}>
-          <Button>수정하기</Button>
-        </Link>
-      )}
+      <Flexbox flex="col" padding="1rem" gap="1rem" items="start">
+        {data !== null && (
+          <FavoriteToggleButton
+            isFavorite={isFavorite}
+            onClick={() => {
+              void handleFavoriteToggleButtonClick();
+            }}
+          />
+        )}
+        {isLoading && (
+          <Flexbox width="100%" height="26rem">
+            <LoadingSpinner />
+          </Flexbox>
+        )}
+        {data !== null && <p>id: {data.id}</p>}
+        {data !== null && <p>노트: {data.content}</p>}
+        {data !== null && <p>다이브 종류: {data.diveType}</p>}
+        {data !== null && <p>들어간 시간: {data.enterTime}</p>}
+        {data !== null && <p>장소: {data.location}</p>}
+        {data !== null && <p>위도: {data.latitude}</p>}
+        {data !== null && <p>경도: {data.longitude}</p>}
+        {data !== null && <p>최대 깊이: {data.maxDepth}</p>}
+        {data !== null && <p>들어갈 때 산소량: {data.maxOxygen}</p>}
+        {data !== null && <p>나올 때 산소량: {data.minOxygen}</p>}
+        {data !== null && <p>수온: {data.temperature}</p>}
+        {data !== null && <p>시야 정도: {data.sight}</p>}
+        {data?.images.map((image, index) => (
+          <img
+            style={{ width: '200px', height: '200px' }}
+            key={index}
+            src={`${BASE_URL}${image}`}
+            alt="image"
+          />
+        ))}
 
-      <Button
-        onClick={() => {
-          void handleDeleteButtonClick();
-        }}
-      >
-        삭제하기
-      </Button>
-      <Link to="/logs">
-        <Button>돌아가기</Button>
-      </Link>
+        <Flexbox justify="between" width="100%">
+          <Link to="/logs">
+            <Button>목록으로 돌아가기</Button>
+          </Link>
+          <Flexbox gap="1rem">
+            {data !== null && (
+              <Link to={`/logs/${data.id}/edit`}>
+                <Button>수정하기</Button>
+              </Link>
+            )}
+
+            <Button
+              onClick={() => {
+                void handleDeleteButtonClick();
+              }}
+            >
+              삭제하기
+            </Button>
+          </Flexbox>
+        </Flexbox>
+      </Flexbox>
     </Layout>
   );
 };

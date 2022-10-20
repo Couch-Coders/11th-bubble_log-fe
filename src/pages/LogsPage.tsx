@@ -7,8 +7,10 @@ import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
 import Button from '@components/common/Button';
+import Divider from '@components/common/Divider';
 import Flexbox from '@components/common/Flexbox';
 import IconButton from '@components/common/IconButton';
+import LoadingSpinner from '@components/common/LoadingSpinner';
 import Stack from '@components/common/Stack';
 import FavoriteToggleButton from '@components/FavoriteToggleButton';
 import Layout from '@components/Layout';
@@ -136,11 +138,13 @@ const LogsPage: React.FC = () => {
             <Button>로그 작성</Button>
           </Link>
         </Flexbox>
-        <SearchInput
-          value={searchInputValue}
-          onChange={handleSearchInputChange}
-          onClearButtonClick={() => setSearchInputValue('')}
-        />
+        <Flexbox justify="end">
+          <SearchInput
+            value={searchInputValue}
+            onChange={handleSearchInputChange}
+            onClearButtonClick={() => setSearchInputValue('')}
+          />
+        </Flexbox>
         <Flexbox justify="start" gap="1rem" flexWrap>
           <SearchFilter
             name="다이브 종류"
@@ -168,31 +172,39 @@ const LogsPage: React.FC = () => {
           />
           <FavoriteToggleButton isFavorite={false} onClick={() => {}} />
         </Flexbox>
-        {isLoading && <p>loading...</p>}
-        <ul>
-          {logList.map((data, index) => (
+        {isLoading && (
+          <Flexbox height="32rem">
+            <LoadingSpinner />
+          </Flexbox>
+        )}
+      </Stack>
+      <ul>
+        <Divider />
+        {logList.map((data, index) => (
+          <>
             <LogListItem
               key={index}
               logId={String(data.id)}
               location={data.location}
               date={data.date}
             />
-          ))}
-        </ul>
-        {/* <div
+            <Divider />
+          </>
+        ))}
+      </ul>
+      {/* <div
           style={{ height: '2rem', border: '1px solid red' }}
           ref={observerRef}
           >
           옵저버
         </div> */}
-        {!fetchMoreLogButtonDisabled && (
-          <Flexbox>
-            <IconButton variant="outlined" onClick={fetchMoreLog}>
-              <MdOutlineKeyboardArrowDown size="2rem" />
-            </IconButton>
-          </Flexbox>
-        )}
-      </Stack>
+      {!fetchMoreLogButtonDisabled && (
+        <Flexbox padding="1rem">
+          <IconButton variant="outlined" onClick={fetchMoreLog}>
+            <MdOutlineKeyboardArrowDown size="2rem" />
+          </IconButton>
+        </Flexbox>
+      )}
     </Layout>
   );
 };

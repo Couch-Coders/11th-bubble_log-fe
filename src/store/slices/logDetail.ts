@@ -21,7 +21,7 @@ interface LogState {
 
 const initialState: LogState = {
   data: null,
-  isLoading: false,
+  isLoading: true,
   error: null,
 };
 
@@ -29,8 +29,10 @@ export const logDetailSlice = createSlice({
   name: 'logDetail',
   initialState,
   reducers: {
-    clearData(state) {
+    clearState(state) {
       state.data = null;
+      state.isLoading = false;
+      state.error = null;
     },
   },
   extraReducers: (builder) => {

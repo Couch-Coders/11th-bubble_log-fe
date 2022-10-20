@@ -41,8 +41,8 @@ const Container = styled.button<ContainerProps>`
   gap: 0.5rem;
 
   font-weight: 500;
-  border-radius: 0.5rem;
-  border: 1px solid ${gray[300]};
+  border-radius: 0.25rem;
+  border: 1px solid ${gray[400]};
   background-color: white;
 
   cursor: pointer;

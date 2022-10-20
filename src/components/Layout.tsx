@@ -6,6 +6,7 @@ const Container = styled.main`
   display: flex;
   justify-content: center;
   background-color: ${gray[100]};
+  min-height: calc(100vh - 3.5rem);
 
   .contents {
     background-color: white;

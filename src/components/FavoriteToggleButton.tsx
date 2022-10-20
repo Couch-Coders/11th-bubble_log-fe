@@ -1,22 +1,24 @@
 import { yellow } from '@lib/styles/palette';
 import React from 'react';
-import { MdStar, MdStarOutline } from 'react-icons/md';
+import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
 import styled from 'styled-components';
+
+const STAR_SIZE = '1.75rem';
 
 const Container = styled.div`
   color: ${yellow[300]};
-  width: 2rem;
-  height: 2rem;
+  width: ${STAR_SIZE};
+  height: ${STAR_SIZE};
   cursor: pointer;
 
   .star-contained {
-    width: 2rem;
-    height: 2rem;
+    width: ${STAR_SIZE};
+    height: ${STAR_SIZE};
   }
 
   .star-outlined {
-    width: 2rem;
-    height: 2rem;
+    width: ${STAR_SIZE};
+    height: ${STAR_SIZE};
   }
 `;
 
@@ -28,9 +30,11 @@ interface Props {
 const FavoriteToggleButton: React.FC<Props> = ({ isFavorite, onClick }) => {
   return (
     <Container>
-      {isFavorite && <MdStar className="star-contained" onClick={onClick} />}
+      {isFavorite && (
+        <AiFillStar className="star-contained" onClick={onClick} />
+      )}
       {!isFavorite && (
-        <MdStarOutline className="star-outlined" onClick={onClick} />
+        <AiOutlineStar className="star-outlined" onClick={onClick} />
       )}
     </Container>
   );

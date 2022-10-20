@@ -1,17 +1,60 @@
 import { logAPI } from '@lib/apis/log';
-import { useDispatch, useSelector } from '@store/index';
-import { fetchLogDetail } from '@store/slices/logDetail';
+import { useSelector } from '@store/index';
 import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import Button from '@components/common/Button';
+import FileInput from '@components/common/FileInput';
+import Flexbox from '@components/common/Flexbox';
 import Input from '@components/common/Input';
 import Textarea from '@components/common/Textarea';
+import ImagePreview from '@components/ImagePreview';
 import KakaoMap from '@components/KakaoMap';
 import Layout from '@components/Layout';
-import { DIVE_TYPE } from '@utils/constants';
+import { BASE_URL, DIVE_TYPE } from '@utils/constants';
 
 const EditPage: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [date, setDate] = useState(new Date());
+  const [diveType, setDiveType] = useState('');
+  const [temperature, setTemperature] = useState('');
+  const [maxDepth, setMaxDepth] = useState('');
+  const [sight, setSight] = useState('');
+  const [enterTime, setEnterTime] = useState(new Date());
+  const [leaveTime, setLeaveTime] = useState(new Date());
+  const [minOxygen, setMinOxygen] = useState('');
+  const [maxOxygen, setMaxOxygen] = useState('');
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageFileUrlList, setImageFileUrlList] = useState<string[]>([]);
+  const [imageFileList, setImageFileList] = useState<File[]>([]);
+  const [content, setContent] = useState('');
+  const [position, setPosition] = useState({
+    lat: 33.55635,
+    lng: 126.795841,
+  });
+
+  const [deletedImageFileList, setDeletedImageFileList] = useState<string[]>(
+    [],
+  );
+  const [addedImageFileList, setAddedImageFileList] = useState<File[]>([]);
+
+  console.log(
+    deletedImageFileList,
+    setDeletedImageFileList,
+    addedImageFileList,
+    setAddedImageFileList,
+  );
+
+  const isValidated =
+    diveType !== '' &&
+    temperature !== '' &&
+    maxDepth !== '' &&
+    sight !== '' &&
+    minOxygen !== '' &&
+    maxOxygen !== '' &&
+    content !== '';
+
   const navigate = useNavigate();
 
   const params = useParams();
@@ -19,52 +62,25 @@ const EditPage: React.FC = () => {
 
   const { data } = useSelector((state) => state.logDetail);
 
-  const dispatch = useDispatch();
-
   useEffect(() => {
-    void dispatch(fetchLogDetail(logId));
-  }, [logId, dispatch]);
+    if (data === null) return;
+    setDate(new Date(data.date));
+    setDiveType(data.diveType);
+    setTemperature(String(data.temperature));
+    setMaxDepth(String(data.maxDepth));
+    setSight(String(data.sight));
+    setEnterTime(new Date(data.enterTime));
+    setLeaveTime(new Date(data.leaveTime));
+    setMinOxygen(String(data.minOxygen));
+    setMaxOxygen(String(data.maxOxygen));
+    setContent(data.content);
 
-  const initialDate = data !== null ? new Date(data.date) : new Date();
-  const initialDiveType = data !== null ? data.diveType : '';
-  const initialTemperature = data !== null ? data.temperature : '';
-  const initialMaxDepth = data !== null ? data.maxDepth : '';
-  const initialSight = data !== null ? data.sight : '';
-  const initialEnterTime =
-    data !== null ? new Date(data.enterTime) : new Date();
-  const initialLeaveTime =
-    data !== null ? new Date(data.leaveTime) : new Date();
-  const initialMinOxygen = data !== null ? data.minOxygen : '';
-  const initialMaxOxygen = data !== null ? data.maxOxygen : '';
-  const initialImageFile = data !== null ? data.images[0] : '';
-  console.log(initialImageFile);
-  const initialContent = data !== null ? data.content : '';
-  const initialPosition =
-    data !== null
-      ? {
-          lat: data.latitude,
-          lng: data.longitude,
-        }
-      : {
-          lat: 33.55635,
-          lng: 126.795841,
-        };
-  const initialLocation = data !== null ? data.location : '';
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [date, setDate] = useState(initialDate);
-  const [diveType, setDiveType] = useState(initialDiveType);
-  const [temperature, setTemperature] = useState(initialTemperature);
-  const [maxDepth, setMaxDepth] = useState(initialMaxDepth);
-  const [sight, setSight] = useState(initialSight);
-  const [enterTime, setEnterTime] = useState(initialEnterTime);
-  const [leaveTime, setLeaveTime] = useState(initialLeaveTime);
-  const [minOxygen, setMinOxygen] = useState(initialMinOxygen);
-  const [maxOxygen, setMaxOxygen] = useState(initialMaxOxygen);
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [content, setContent] = useState(initialContent);
-  const [position, setPosition] = useState(initialPosition);
-  const [location, setLocation] = useState(initialLocation);
+    setPosition({
+      lat: data.latitude,
+      lng: data.longitude,
+    });
+    setImageFileUrlList(data.images.map((image) => `${BASE_URL}${image}`));
+  }, [data]);
 
   const handleDatePickerChange = (date: Date) => {
     setDate(date);
@@ -113,9 +129,10 @@ const EditPage: React.FC = () => {
   const handleImageFileChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    if (event.target.files !== null) {
-      setImageFile(event.target.files[0]);
-    }
+    if (event.target.files === null) return;
+    // (prev => [...prev, event.target.files[0]]) causes nullable issue
+    setImageFileList([...imageFileList, event.target.files[0]]);
+    setImageFile(event.target.files[0]);
   };
 
   const handleDescriptionChange = (
@@ -125,7 +142,32 @@ const EditPage: React.FC = () => {
   };
 
   const handleCancelButtonClick = () => {
-    navigate(`/log/${logId}`);
+    navigate(-1);
+  };
+
+  const addLogImages = async () => {
+    const formData = new FormData();
+    addedImageFileList.forEach((imageFile) => {
+      formData.append('images', imageFile);
+    });
+
+    try {
+      const response = await logAPI.createLogImages(formData, logId);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteLogImages = async () => {
+    deletedImageFileList.map(async (imageFile) => {
+      try {
+        const response = await logAPI.deleteLogImage(logId, imageFile);
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
+    });
   };
 
   const handleSubmit = async () => {
@@ -143,7 +185,7 @@ const EditPage: React.FC = () => {
       temperature: Number(temperature),
       maxOxygen: Number(maxOxygen),
       minOxygen: Number(minOxygen),
-      location,
+      location: '서울특별시',
       content,
       longitude: position.lng,
       latitude: position.lat,
@@ -151,71 +193,125 @@ const EditPage: React.FC = () => {
     console.log('@body', body);
 
     try {
-      const response = await logAPI.updateLog(body, String(data.id));
-      console.log(response);
+      const updateLogResponse = await logAPI.updateLog(body, String(data.id));
+      console.log(updateLogResponse);
+
+      if (deletedImageFileList.length !== 0) await deleteLogImages();
+      if (addedImageFileList.length !== 0) await addLogImages();
+
       navigate(`/log/${logId}`);
     } catch (error) {
       console.log(error);
     }
   };
 
-  console.log(imageFile);
-  console.log(setLocation);
+  useEffect(() => {
+    if (imageFile === null) return;
+
+    const fileReader = new FileReader();
+
+    // event.target possibly null?
+    fileReader.onload = (event) => {
+      setImageFileUrlList((prev) => [...prev, event.target?.result as string]);
+    };
+
+    fileReader.readAsDataURL(imageFile);
+  }, [imageFile]);
+
+  const removeImageFileUrl = (imageFileIndex: number) => {
+    setImageFileUrlList((imageFileUrlList) =>
+      imageFileUrlList.filter((_, index) => imageFileIndex !== index),
+    );
+  };
 
   return (
     <Layout>
-      {isLoading && 'loading...'}
-      <DatePicker selected={date} onChange={handleDatePickerChange} />
-      <select onChange={handleDiveTypeChange} defaultValue="type">
-        <option value="type" disabled>
-          다이브 종류
-        </option>
-        {DIVE_TYPE.map((option, index) => (
-          <option key={index}>{option}</option>
-        ))}
-      </select>
-      <label>수온</label>
-      <Input value={temperature} onChange={handleTemperatureChange} />
-      <label>최고 깊이</label>
-      <Input value={maxDepth} onChange={handleMaxDepthChange} />
-      <label>시야</label>
-      <Input value={sight} onChange={handleSightChange} />
-      <label>들어간 시간</label>
-      <DatePicker
-        selected={enterTime}
-        onChange={handleEnterTimeChange}
-        showTimeSelect
-        showTimeSelectOnly
-        timeIntervals={15}
-        timeCaption="Time"
-        dateFormat="h:mm aa"
-      />
-      <label>나온 시간</label>
-      <DatePicker
-        selected={leaveTime}
-        onChange={handleLeaveTimeChange}
-        showTimeSelect
-        showTimeSelectOnly
-        timeIntervals={15}
-        timeCaption="Time"
-        dateFormat="h:mm aa"
-      />
-      <label>들어갈 때 탱크량</label>
-      <Input value={maxOxygen} onChange={handleMaxOxygenChange} />
-      <label>나올 때 탱크량</label>
-      <Input value={minOxygen} onChange={handleMinOxygenChange} />
-      <button
-        onClick={() => {
-          void handleSubmit();
-        }}
-      >
-        수정하기
-      </button>
-      <Input type="file" onChange={handleImageFileChange} />
-      <label>노트</label>
-      <Textarea value={content} onChange={handleDescriptionChange} />
+      <Flexbox padding="1rem" flex="col" items="start" gap="1rem">
+        {isLoading && 'loading...'}
+        <DatePicker selected={date} onChange={handleDatePickerChange} />
+        <select onChange={handleDiveTypeChange} defaultValue="type">
+          <option value="type" disabled>
+            다이브 종류
+          </option>
+          {DIVE_TYPE.map((option, index) => (
+            <option key={index}>{option}</option>
+          ))}
+        </select>
+        <Flexbox gap="1rem">
+          <label>수온</label>
+          <Input value={temperature} onChange={handleTemperatureChange} />
+        </Flexbox>
+        <Flexbox gap="1rem">
+          <label>최고 깊이</label>
+          <Input value={maxDepth} onChange={handleMaxDepthChange} />
+        </Flexbox>
+        <Flexbox gap="1rem">
+          <label>시야</label>
+          <Input value={sight} onChange={handleSightChange} />
+        </Flexbox>
+        <Flexbox gap="1rem">
+          <label>들어간 시간</label>
+          <DatePicker
+            selected={enterTime}
+            onChange={handleEnterTimeChange}
+            showTimeSelect
+            showTimeSelectOnly
+            timeIntervals={15}
+            timeCaption="Time"
+            dateFormat="h:mm aa"
+          />
+        </Flexbox>
+        <Flexbox gap="1rem">
+          <label>나온 시간</label>
+          <DatePicker
+            selected={leaveTime}
+            onChange={handleLeaveTimeChange}
+            showTimeSelect
+            showTimeSelectOnly
+            timeIntervals={15}
+            timeCaption="Time"
+            dateFormat="h:mm aa"
+          />
+        </Flexbox>
+        <Flexbox gap="1rem">
+          <label>들어갈 때 탱크량</label>
+          <Input value={maxOxygen} onChange={handleMaxOxygenChange} />
+        </Flexbox>
+        <Flexbox gap="1rem">
+          <label>나올 때 탱크량</label>
+          <Input value={minOxygen} onChange={handleMinOxygenChange} />
+        </Flexbox>
+
+        <FileInput onChange={handleImageFileChange} />
+        <Flexbox justify="start" gap="1rem" flexWrap>
+          {imageFileUrlList.map((imageFileUrl, index) => (
+            <ImagePreview
+              key={index}
+              imageFileUrl={imageFileUrl}
+              imageFileIndex={index}
+              onRemoveButtonClick={() => removeImageFileUrl(index)}
+            />
+          ))}
+        </Flexbox>
+        <label>노트</label>
+        <Textarea value={content} onChange={handleDescriptionChange} />
+      </Flexbox>
       <KakaoMap position={position} setPosition={setPosition} />
-      <button onClick={handleCancelButtonClick}>취소하기</button>
+      <Flexbox padding="1rem" width="100%" justify="end">
+        <Flexbox gap="1rem">
+          <Button variant="text" onClick={handleCancelButtonClick}>
+            돌아가기
+          </Button>
+          <Button
+            onClick={() => {
+              void handleSubmit();
+            }}
+            disabled={!isValidated}
+          >
+            수정하기
+          </Button>
+        </Flexbox>
+      </Flexbox>
     </Layout>
   );
 };
