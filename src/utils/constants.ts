@@ -1,3 +1,4 @@
+export const BASE_URL = 'https://umqzvoxbkl.us09.qoddiapp.com';
 export const DIVE_TYPE = ['FREE', 'SCUBA'];
 export const DIVE_LOCATION = [
   '서울특별시',

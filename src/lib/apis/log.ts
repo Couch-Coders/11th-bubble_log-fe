@@ -1,6 +1,5 @@
 import { axios } from '@lib/apis/index';
 import {
-  CreateLogImagesBody,
   CreateLogImagesResponse,
   CreateLogResponse,
   GetLogDetailResponse,
@@ -54,10 +53,15 @@ const toggleLogFavorite = async (logId: string) => {
   return response.data;
 };
 
-const createLogImages = async (body: CreateLogImagesBody, logId: string) => {
+const createLogImages = async (body: FormData, logId: string) => {
   const response = await axios.post<CreateLogImagesResponse>(
     `${BASE_URL_LOGS}/${logId}/images`,
     body,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    },
   );
   return response.data;
 };

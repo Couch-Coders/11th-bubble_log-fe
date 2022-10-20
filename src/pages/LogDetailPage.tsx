@@ -7,6 +7,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import Button from '@components/common/Button';
 import FavoriteToggleButton from '@components/FavoriteToggleButton';
 import Layout from '@components/Layout';
+import { BASE_URL } from '@utils/constants';
 
 const LogDetailPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -22,6 +23,7 @@ const LogDetailPage: React.FC = () => {
   const { logId } = useParams();
 
   console.log(logId);
+  console.log('@data', data);
 
   const handleFavoriteToggleButtonClick = async () => {
     if (data === null) return;
@@ -55,7 +57,26 @@ const LogDetailPage: React.FC = () => {
   return (
     <Layout>
       {isLoading && <p>loading...</p>}
-      {data !== null && <p>{JSON.stringify(data)}</p>}
+      {data !== null && <p>id: {data.id}</p>}
+      {data !== null && <p>노트: {data.content}</p>}
+      {data !== null && <p>다이브 종류: {data.diveType}</p>}
+      {data !== null && <p>들어간 시간: {data.enterTime}</p>}
+      {data !== null && <p>장소: {data.location}</p>}
+      {data !== null && <p>위도: {data.latitude}</p>}
+      {data !== null && <p>경도: {data.longitude}</p>}
+      {data !== null && <p>최대 깊이: {data.maxDepth}</p>}
+      {data !== null && <p>들어갈 때 산소량: {data.maxOxygen}</p>}
+      {data !== null && <p>나올 때 산소량: {data.minOxygen}</p>}
+      {data !== null && <p>수온: {data.temperature}</p>}
+      {data !== null && <p>시야 정도: {data.sight}</p>}
+      {data?.images.map((image, index) => (
+        <img
+          style={{ width: '200px', height: '200px' }}
+          key={index}
+          src={`${BASE_URL}${image}`}
+          alt="image"
+        />
+      ))}
       {data !== null && (
         <FavoriteToggleButton
           checked={isFavorite}

@@ -145,18 +145,16 @@ const WritePage: React.FC = () => {
     try {
       const createLogResponse = await logAPI.createLog(createLogBody);
 
+      if (imageFileList.length === 0) return;
+
       const formData = new FormData();
 
       imageFileList.forEach((imageFile) => {
         formData.append('images', imageFile);
       });
 
-      const createLogImagesBody = {
-        formData,
-      };
-
       const createLogImagesResponse = await logAPI.createLogImages(
-        createLogImagesBody,
+        formData,
         String(createLogResponse.id),
       );
       console.log('@createLogImagesResponse', createLogImagesResponse);
