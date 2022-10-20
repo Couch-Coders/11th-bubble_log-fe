@@ -51,7 +51,7 @@ const Header: React.FC = () => {
             onClick={handleAvatarClick}
             clickable
           />
-          <ProfileModal open={profileModalOpen}>
+          <ProfileModal isOpen={profileModalOpen}>
             <Avatar size="6rem" src={data.profileImage} alt="profile-image" />
             <Link to="/mypage" onClick={() => setProfileModalOpen(false)}>
               마이페이지

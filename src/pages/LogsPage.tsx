@@ -59,6 +59,12 @@ const LogsPage: React.FC = () => {
     };
   }, [dispatch, fetchLogsWithQuery]);
 
+  const handleSearchInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setSearchInputValue(event.target.value);
+  };
+
   useEffect(() => {
     dispatch(logActions.setQueryKeyword(debouncedSearchInputValue));
   }, [debouncedSearchInputValue, dispatch]);
@@ -123,11 +129,11 @@ const LogsPage: React.FC = () => {
         </Flexbox>
         <SearchInput
           value={searchInputValue}
-          onChange={(e) => setSearchInputValue(e.target.value)}
+          onChange={handleSearchInputChange}
           onClearButtonClick={() => setSearchInputValue('')}
         />
         <Flexbox justify="start" gap="1rem" flexWrap>
-          <Flexbox items="center" gap="1rem">
+          <Flexbox gap="1rem">
             <label>다이브 종류</label>
             <Dropdown.Button label={diveTypeFilterButtonLabel}>
               <Dropdown.Menu>
@@ -145,7 +151,7 @@ const LogsPage: React.FC = () => {
               </Dropdown.Menu>
             </Dropdown.Button>
           </Flexbox>
-          <Flexbox items="center" gap="1rem">
+          <Flexbox gap="1rem">
             <label>위치</label>
             <Dropdown.Button label={locationFilterButtonLabel}>
               <Dropdown.Menu>
@@ -163,7 +169,7 @@ const LogsPage: React.FC = () => {
               </Dropdown.Menu>
             </Dropdown.Button>
           </Flexbox>
-          <Flexbox items="center" gap="1rem">
+          <Flexbox gap="1rem">
             <label>수온</label>
             <Dropdown.Button label={temperatureFilterButtonLabel}>
               <Dropdown.Menu>
@@ -181,7 +187,7 @@ const LogsPage: React.FC = () => {
               </Dropdown.Menu>
             </Dropdown.Button>
           </Flexbox>
-          <Flexbox items="center" gap="1rem">
+          <Flexbox gap="1rem">
             <label>깊이</label>
             <Dropdown.Button label={depthFilterButtonLabel}>
               <Dropdown.Menu>

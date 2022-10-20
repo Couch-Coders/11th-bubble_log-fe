@@ -21,11 +21,11 @@ const Container = styled.div`
 
 interface Props {
   children: React.ReactNode;
-  open: boolean;
+  isOpen: boolean;
 }
 
-const ProfileModal: React.FC<Props> = ({ children, open }) => {
-  return <>{open && <Container>{children}</Container>}</>;
+const ProfileModal: React.FC<Props> = ({ children, isOpen }) => {
+  return <>{isOpen && <Container>{children}</Container>}</>;
 };
 
 export default ProfileModal;
