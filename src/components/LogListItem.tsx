@@ -1,11 +1,9 @@
-import { logAPI } from '@lib/apis/log';
 import { blue } from '@lib/styles/palette';
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Flexbox from '@components/common/Flexbox';
-import FavoriteToggleButton from '@components/FavoriteToggleButton';
 
 const Container = styled.li`
   display: flex;
@@ -17,40 +15,16 @@ const Container = styled.li`
 `;
 
 interface Props {
-  isFavorite: boolean;
   logId: string;
   location: string;
   date: string;
 }
 
-const LogListItem: React.FC<Props> = ({
-  isFavorite,
-  logId,
-  location,
-  date,
-}) => {
-  const [isToggleButtonChecked, setIsToggleButtonChecked] =
-    useState(isFavorite);
-
-  const handleFavoriteToggleButtonClick = async () => {
-    setIsToggleButtonChecked((prev) => !prev);
-    try {
-      await logAPI.toggleLogFavorite(logId);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
+const LogListItem: React.FC<Props> = ({ logId, location, date }) => {
   return (
     <Link to={`/logs/${logId}`}>
       <Container>
         <Flexbox gap="1rem">
-          <FavoriteToggleButton
-            checked={isToggleButtonChecked}
-            onClick={() => {
-              void handleFavoriteToggleButtonClick;
-            }}
-          />
           <p>#{logId}</p>
           <p>{location}</p>
         </Flexbox>

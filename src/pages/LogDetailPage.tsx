@@ -79,9 +79,9 @@ const LogDetailPage: React.FC = () => {
       ))}
       {data !== null && (
         <FavoriteToggleButton
-          checked={isFavorite}
+          isFavorite={isFavorite}
           onClick={() => {
-            void handleFavoriteToggleButtonClick;
+            void handleFavoriteToggleButtonClick();
           }}
         />
       )}
@@ -93,7 +93,7 @@ const LogDetailPage: React.FC = () => {
 
       <Button
         onClick={() => {
-          void handleDeleteButtonClick;
+          void handleDeleteButtonClick();
         }}
       >
         삭제하기

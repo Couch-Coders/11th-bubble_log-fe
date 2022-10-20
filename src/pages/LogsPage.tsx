@@ -3,22 +3,30 @@ import useDebounce from '@hooks/useDebounce';
 import { useDispatch, useSelector } from '@store/index';
 import { fetchLogs, logActions } from '@store/slices/log';
 import React, { useCallback, useEffect, useState } from 'react';
+import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
 import Button from '@components/common/Button';
-import Dropdown from '@components/common/dropdown';
 import Flexbox from '@components/common/Flexbox';
+import IconButton from '@components/common/IconButton';
 import Stack from '@components/common/Stack';
+import FavoriteToggleButton from '@components/FavoriteToggleButton';
 import Layout from '@components/Layout';
 import LogListItem from '@components/LogListItem';
+import SearchFilter from '@components/SearchFilter';
 import SearchInput from '@components/SearchInput';
-import { DIVE_TYPE } from '@utils/constants';
+import {
+  DIVE_DEPTH,
+  DIVE_LOCATION,
+  DIVE_TEMPERATURE,
+  DIVE_TYPE,
+} from '@utils/constants';
 
 const LogsPage: React.FC = () => {
-  const [diveTypeFilterValue, setDiveTypeFilterValue] = useState('전체');
-  const [locationFilterValue, setLocationFilterValue] = useState('전체');
+  const [diveTypeFilterValue, setDiveTypeFilterValue] = useState('');
+  const [locationFilterValue, setLocationFilterValue] = useState('');
   const [temperatureFilterValue, setTemperatureFilterValue] = useState('');
-  const [depthFilterValue, setDepthFilterValue] = useState('전체');
+  const [depthFilterValue, setDepthFilterValue] = useState('');
   const [searchInputValue, setSearchInputValue] = useState('');
 
   const { data, logList, isLoading, error, query } = useSelector(
@@ -70,6 +78,7 @@ const LogsPage: React.FC = () => {
   }, [debouncedSearchInputValue, dispatch]);
 
   const handleDiveTypeFilterOptionClick = (filterOption: string) => {
+    console.log(filterOption);
     setDiveTypeFilterValue(filterOption);
     dispatch(logActions.setQueryDiveType(filterOption));
   };
@@ -133,85 +142,37 @@ const LogsPage: React.FC = () => {
           onClearButtonClick={() => setSearchInputValue('')}
         />
         <Flexbox justify="start" gap="1rem" flexWrap>
-          <Flexbox gap="1rem">
-            <label>다이브 종류</label>
-            <Dropdown.Button label={diveTypeFilterButtonLabel}>
-              <Dropdown.Menu>
-                <Dropdown.MenuItem
-                  label="전체"
-                  onClick={() => handleDiveTypeFilterOptionClick('')}
-                />
-                {DIVE_TYPE.map((option, index) => (
-                  <Dropdown.MenuItem
-                    key={index}
-                    label={option}
-                    onClick={() => handleDiveTypeFilterOptionClick(option)}
-                  />
-                ))}
-              </Dropdown.Menu>
-            </Dropdown.Button>
-          </Flexbox>
-          <Flexbox gap="1rem">
-            <label>위치</label>
-            <Dropdown.Button label={locationFilterButtonLabel}>
-              <Dropdown.Menu>
-                <Dropdown.MenuItem
-                  label="전체"
-                  onClick={() => handleLocationFilterOptionClick('')}
-                />
-                {DIVE_TYPE.map((option, index) => (
-                  <Dropdown.MenuItem
-                    key={index}
-                    label={option}
-                    onClick={() => handleLocationFilterOptionClick(option)}
-                  />
-                ))}
-              </Dropdown.Menu>
-            </Dropdown.Button>
-          </Flexbox>
-          <Flexbox gap="1rem">
-            <label>수온</label>
-            <Dropdown.Button label={temperatureFilterButtonLabel}>
-              <Dropdown.Menu>
-                <Dropdown.MenuItem
-                  label="전체"
-                  onClick={() => handleTemperatureFilterOptionClick('')}
-                />
-                {DIVE_TYPE.map((option, index) => (
-                  <Dropdown.MenuItem
-                    key={index}
-                    label={option}
-                    onClick={() => handleTemperatureFilterOptionClick(option)}
-                  />
-                ))}
-              </Dropdown.Menu>
-            </Dropdown.Button>
-          </Flexbox>
-          <Flexbox gap="1rem">
-            <label>깊이</label>
-            <Dropdown.Button label={depthFilterButtonLabel}>
-              <Dropdown.Menu>
-                <Dropdown.MenuItem
-                  label="전체"
-                  onClick={() => handleDepthFilterOptionClick('')}
-                />
-                {DIVE_TYPE.map((option, index) => (
-                  <Dropdown.MenuItem
-                    key={index}
-                    label={option}
-                    onClick={() => handleDepthFilterOptionClick(option)}
-                  />
-                ))}
-              </Dropdown.Menu>
-            </Dropdown.Button>
-          </Flexbox>
+          <SearchFilter
+            name="다이브 종류"
+            label={diveTypeFilterButtonLabel}
+            onClick={handleDiveTypeFilterOptionClick}
+            options={DIVE_TYPE}
+          />
+          <SearchFilter
+            name="위치"
+            label={locationFilterButtonLabel}
+            onClick={handleLocationFilterOptionClick}
+            options={DIVE_LOCATION}
+          />
+          <SearchFilter
+            name="수온"
+            label={temperatureFilterButtonLabel}
+            onClick={handleTemperatureFilterOptionClick}
+            options={DIVE_TEMPERATURE}
+          />
+          <SearchFilter
+            name="깊이"
+            label={depthFilterButtonLabel}
+            onClick={handleDepthFilterOptionClick}
+            options={DIVE_DEPTH}
+          />
+          <FavoriteToggleButton isFavorite={false} onClick={() => {}} />
         </Flexbox>
         {isLoading && <p>loading...</p>}
         <ul>
           {logList.map((data, index) => (
             <LogListItem
               key={index}
-              isFavorite={data.isFavorite}
               logId={String(data.id)}
               location={data.location}
               date={data.date}
@@ -224,9 +185,13 @@ const LogsPage: React.FC = () => {
           >
           옵저버
         </div> */}
-        <button onClick={fetchMoreLog} disabled={fetchMoreLogButtonDisabled}>
-          더보기
-        </button>
+        {!fetchMoreLogButtonDisabled && (
+          <Flexbox>
+            <IconButton variant="outlined" onClick={fetchMoreLog}>
+              <MdOutlineKeyboardArrowDown size="2rem" />
+            </IconButton>
+          </Flexbox>
+        )}
       </Stack>
     </Layout>
   );
