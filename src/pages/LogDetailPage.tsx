@@ -19,8 +19,9 @@ const LogDetailPage: React.FC = () => {
     data === null ? false : data.isFavorite,
   );
 
-  const params = useParams();
-  const logId = params.id as string;
+  const { logId } = useParams();
+
+  console.log(logId);
 
   const handleFavoriteToggleButtonClick = async () => {
     if (data === null) return;
@@ -43,7 +44,7 @@ const LogDetailPage: React.FC = () => {
   };
 
   useEffect(() => {
-    const promise = dispatch(fetchLogDetail(logId));
+    const promise = dispatch(fetchLogDetail(logId as string));
 
     return () => {
       promise.abort();
@@ -64,7 +65,7 @@ const LogDetailPage: React.FC = () => {
         />
       )}
       {data !== null && (
-        <Link to={`/log/${data.id}/edit`}>
+        <Link to={`/logs/${data.id}/edit`}>
           <Button>수정하기</Button>
         </Link>
       )}

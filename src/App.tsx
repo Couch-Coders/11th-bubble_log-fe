@@ -46,8 +46,8 @@ const App: React.FC = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/logs" element={<LogsPage />} />
         <Route path="/write" element={<WritePage />} />
-        <Route path="/log/:logId" element={<LogDetailPage />} />
-        <Route path="/log/:logId/edit" element={<EditPage />} />
+        <Route path="/logs/:logId" element={<LogDetailPage />} />
+        <Route path="/logs/:logId/edit" element={<EditPage />} />
         <Route path="/mypage" element={<MyPage />} />
       </Routes>
     </>

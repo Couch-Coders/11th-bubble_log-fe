@@ -12,7 +12,7 @@ const useAuth = () => {
 
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
-  const login = async () => {
+  const logIn = async () => {
     const token = await signInWithGoogle();
     await dispatch(fetchUser(token));
   };
@@ -26,7 +26,7 @@ const useAuth = () => {
     dispatch(userActions.setIsLoggedIn(false));
   };
 
-  return { isLoggedIn, login, logOut };
+  return { isLoggedIn, logIn, logOut };
 };
 
 export default useAuth;

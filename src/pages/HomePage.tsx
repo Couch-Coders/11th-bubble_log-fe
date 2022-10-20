@@ -5,12 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import Button from '@components/common/Button';
 
 const HomePage: React.FC = () => {
-  const { isLoggedIn, login } = useAuth();
+  const { isLoggedIn, logIn } = useAuth();
 
   const navigate = useNavigate();
 
   const handleLoginButtonClick = () => {
-    void login();
+    void logIn();
   };
 
   useEffect(() => {

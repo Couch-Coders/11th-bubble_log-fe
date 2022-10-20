@@ -42,7 +42,7 @@ interface ContainerProps {
   gap: string;
   padding: string;
   width?: string;
-  wrap: boolean;
+  flexWrap: boolean;
 }
 
 const Container = styled.div<ContainerProps>`
@@ -53,7 +53,7 @@ const Container = styled.div<ContainerProps>`
   gap: ${({ gap }) => gap};
   padding: ${({ padding }) => padding};
   width: ${({ width }) => width};
-  flex-wrap: ${({ wrap }) => wrap && 'wrap'};
+  flex-wrap: ${({ flexWrap }) => flexWrap && 'wrap'};
 `;
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
@@ -63,7 +63,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
   gap?: string;
   padding?: string;
   width?: string;
-  wrap?: boolean;
+  flexWrap?: boolean;
 }
 
 const Flexbox: React.FC<Props> = ({
@@ -74,7 +74,7 @@ const Flexbox: React.FC<Props> = ({
   gap = '0',
   padding = '0',
   width,
-  wrap = false,
+  flexWrap = false,
   ...props
 }) => {
   return (
@@ -85,7 +85,7 @@ const Flexbox: React.FC<Props> = ({
       gap={gap}
       padding={padding}
       width={width}
-      wrap={wrap}
+      flexWrap={flexWrap}
       {...props}
     >
       {children}
@@ -93,4 +93,4 @@ const Flexbox: React.FC<Props> = ({
   );
 };
 
-export default Flexbox;
+export default React.memo(Flexbox);

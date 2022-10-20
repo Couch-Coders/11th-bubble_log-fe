@@ -17,15 +17,29 @@ import { DIVE_TYPE } from '@utils/constants';
 const LogsPage: React.FC = () => {
   const [diveTypeFilterValue, setDiveTypeFilterValue] = useState('전체');
   const [locationFilterValue, setLocationFilterValue] = useState('전체');
-  const [temperatureFilterValue, setTemperatureFilterValue] = useState('전체');
+  const [temperatureFilterValue, setTemperatureFilterValue] = useState('');
   const [depthFilterValue, setDepthFilterValue] = useState('전체');
   const [searchInputValue, setSearchInputValue] = useState('');
-
-  const debouncedSearchInputValue = useDebounce(searchInputValue, 166);
 
   const { data, logList, isLoading, error, query } = useSelector(
     (state) => state.log,
   );
+
+  const debouncedSearchInputValue = useDebounce(searchInputValue, 166);
+
+  const diveTypeFilterButtonLabel =
+    temperatureFilterValue === '' ? '전체' : temperatureFilterValue;
+  const locationFilterButtonLabel =
+    locationFilterValue === '' ? '전체' : locationFilterValue;
+  const temperatureFilterButtonLabel =
+    diveTypeFilterValue === '' ? '전체' : diveTypeFilterValue;
+  const depthFilterButtonLabel =
+    depthFilterValue === '' ? '전체' : depthFilterValue;
+
+  const fetchMoreLogButtonDisabled =
+    data === null || error !== null || isLoading || data.last;
+
+  console.log('@logList', logList);
 
   const { isLoggedIn } = useAuth();
 
@@ -49,26 +63,14 @@ const LogsPage: React.FC = () => {
     dispatch(logActions.setQueryKeyword(debouncedSearchInputValue));
   }, [debouncedSearchInputValue, dispatch]);
 
-  const handleSearchInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setSearchInputValue(event.target.value);
-  };
-
-  const handleSearchInputClearButtonClick = () => {
-    setSearchInputValue('');
-  };
-
   const handleDiveTypeFilterOptionClick = (filterOption: string) => {
     setDiveTypeFilterValue(filterOption);
-    const optionValue = filterOption === '전체' ? '' : filterOption;
-    dispatch(logActions.setQueryDiveType(optionValue));
+    dispatch(logActions.setQueryDiveType(filterOption));
   };
 
   const handleLocationFilterOptionClick = (filterOption: string) => {
     setLocationFilterValue(filterOption);
-    const optionValue = filterOption === '전체' ? '' : filterOption;
-    dispatch(logActions.setQueryLocation(optionValue));
+    dispatch(logActions.setQueryLocation(filterOption));
   };
 
   const splitFilterOptionValue = (filterOption: string) => {
@@ -82,21 +84,15 @@ const LogsPage: React.FC = () => {
     setTemperatureFilterValue(filterOption);
     const [minTemperature, maxTemperature] =
       splitFilterOptionValue(filterOption);
-    const minTemperatureOptionValue =
-      filterOption === '전체' ? '' : minTemperature;
-    const maxTemperatureOptionValue =
-      filterOption === '전체' ? '' : maxTemperature;
-    dispatch(logActions.setQueryMinTemperature(minTemperatureOptionValue));
-    dispatch(logActions.setQueryMaxTemperature(maxTemperatureOptionValue));
+    dispatch(logActions.setQueryMinTemperature(minTemperature));
+    dispatch(logActions.setQueryMaxTemperature(maxTemperature));
   };
 
   const handleDepthFilterOptionClick = (filterOption: string) => {
     setDepthFilterValue(filterOption);
     const [minDepth, maxDepth] = splitFilterOptionValue(filterOption);
-    const minDepthOptionValue = filterOption === '전체' ? '' : minDepth;
-    const maxDepthOptionValue = filterOption === '전체' ? '' : maxDepth;
-    dispatch(logActions.setQueryMinDepth(minDepthOptionValue));
-    dispatch(logActions.setQueryMaxDepth(maxDepthOptionValue));
+    dispatch(logActions.setQueryMinDepth(minDepth));
+    dispatch(logActions.setQueryMaxDepth(maxDepth));
   };
 
   const fetchMoreLog = () => {
@@ -108,13 +104,6 @@ const LogsPage: React.FC = () => {
     void dispatch(fetchLogs(queryWithNextPage));
     dispatch(logActions.setQueryPage(String(parseInt(query.page) + 1)));
   };
-
-  const handleFetchMoreLogButtonClick = () => {
-    fetchMoreLog();
-  };
-
-  const fetchMoreLogButtonDisabled =
-    data === null || error !== null || isLoading || data.last;
 
   // const observerRef = useRef<HTMLDivElement | null>(null);
 
@@ -134,17 +123,17 @@ const LogsPage: React.FC = () => {
         </Flexbox>
         <SearchInput
           value={searchInputValue}
-          onChange={handleSearchInputChange}
-          onClearButtonClick={handleSearchInputClearButtonClick}
+          onChange={(e) => setSearchInputValue(e.target.value)}
+          onClearButtonClick={() => setSearchInputValue('')}
         />
-        <Flexbox justify="start" gap="1rem" wrap>
+        <Flexbox justify="start" gap="1rem" flexWrap>
           <Flexbox items="center" gap="1rem">
             <label>다이브 종류</label>
-            <Dropdown.Button label={diveTypeFilterValue}>
+            <Dropdown.Button label={diveTypeFilterButtonLabel}>
               <Dropdown.Menu>
                 <Dropdown.MenuItem
                   label="전체"
-                  onClick={() => handleDiveTypeFilterOptionClick('전체')}
+                  onClick={() => handleDiveTypeFilterOptionClick('')}
                 />
                 {DIVE_TYPE.map((option, index) => (
                   <Dropdown.MenuItem
@@ -158,11 +147,11 @@ const LogsPage: React.FC = () => {
           </Flexbox>
           <Flexbox items="center" gap="1rem">
             <label>위치</label>
-            <Dropdown.Button label={locationFilterValue}>
+            <Dropdown.Button label={locationFilterButtonLabel}>
               <Dropdown.Menu>
                 <Dropdown.MenuItem
                   label="전체"
-                  onClick={() => handleLocationFilterOptionClick('전체')}
+                  onClick={() => handleLocationFilterOptionClick('')}
                 />
                 {DIVE_TYPE.map((option, index) => (
                   <Dropdown.MenuItem
@@ -176,11 +165,11 @@ const LogsPage: React.FC = () => {
           </Flexbox>
           <Flexbox items="center" gap="1rem">
             <label>수온</label>
-            <Dropdown.Button label={temperatureFilterValue}>
+            <Dropdown.Button label={temperatureFilterButtonLabel}>
               <Dropdown.Menu>
                 <Dropdown.MenuItem
                   label="전체"
-                  onClick={() => handleTemperatureFilterOptionClick('전체')}
+                  onClick={() => handleTemperatureFilterOptionClick('')}
                 />
                 {DIVE_TYPE.map((option, index) => (
                   <Dropdown.MenuItem
@@ -194,11 +183,11 @@ const LogsPage: React.FC = () => {
           </Flexbox>
           <Flexbox items="center" gap="1rem">
             <label>깊이</label>
-            <Dropdown.Button label={depthFilterValue}>
+            <Dropdown.Button label={depthFilterButtonLabel}>
               <Dropdown.Menu>
                 <Dropdown.MenuItem
                   label="전체"
-                  onClick={() => handleDepthFilterOptionClick('전체')}
+                  onClick={() => handleDepthFilterOptionClick('')}
                 />
                 {DIVE_TYPE.map((option, index) => (
                   <Dropdown.MenuItem
@@ -212,25 +201,24 @@ const LogsPage: React.FC = () => {
           </Flexbox>
         </Flexbox>
         {isLoading && <p>loading...</p>}
-        {logList.map((data, index) => (
-          <LogListItem
-            key={index}
-            isFavorite={data.isFavorite}
-            logId={String(data.id)}
-            location={data.location}
-            date={data.date}
-          />
-        ))}
+        <ul>
+          {logList.map((data, index) => (
+            <LogListItem
+              key={index}
+              isFavorite={data.isFavorite}
+              logId={String(data.id)}
+              location={data.location}
+              date={data.date}
+            />
+          ))}
+        </ul>
         {/* <div
           style={{ height: '2rem', border: '1px solid red' }}
           ref={observerRef}
           >
           옵저버
         </div> */}
-        <button
-          onClick={handleFetchMoreLogButtonClick}
-          disabled={fetchMoreLogButtonDisabled}
-        >
+        <button onClick={fetchMoreLog} disabled={fetchMoreLogButtonDisabled}>
           더보기
         </button>
       </Stack>

@@ -42,7 +42,7 @@ const LogListItem: React.FC<Props> = ({
   };
 
   return (
-    <Link to={`/log/${logId}`}>
+    <Link to={`/logs/${logId}`}>
       <Container>
         <Flexbox gap="1rem">
           <FavoriteToggleButton
