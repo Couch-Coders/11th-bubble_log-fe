@@ -153,23 +153,7 @@ const WritePage: React.FC = () => {
   };
 
   const handleTempSaveButtonClick = () => {
-    const tempPostData = {
-      date,
-      diveType,
-      enterTime,
-      leaveTime,
-      sight,
-      maxDepth,
-      temperature,
-      maxOxygen,
-      minOxygen,
-      location,
-      content,
-      longitude,
-      latitude,
-    };
-
-    createTempPost(tempPostData);
+    createTempPost();
   };
 
   useEffect(() => {

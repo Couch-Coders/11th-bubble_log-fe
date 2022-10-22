@@ -1,9 +1,25 @@
-import { useDispatch } from '@store/index';
+import { useDispatch, useSelector } from '@store/index';
 import { logCreateActions } from '@store/slices/logCreate';
 import { useCallback } from 'react';
 
 const useTempPost = () => {
   const dispatch = useDispatch();
+
+  const {
+    diveType,
+    date,
+    leaveTime,
+    enterTime,
+    sight,
+    maxDepth,
+    temperature,
+    minOxygen,
+    maxOxygen,
+    location,
+    content,
+    latitude,
+    longitude,
+  } = useSelector((state) => state.logCreate);
 
   const checkTempPost = () => {
     return localStorage.getItem('temp') !== null;
@@ -33,26 +49,39 @@ const useTempPost = () => {
     localStorage.removeItem('temp');
   }, []);
 
-  const createTempPost = useCallback(
-    (tempPostData: {
-      diveType: 'FREE' | 'SCUBA';
-      date: Date | null;
-      leaveTime: Date | null;
-      enterTime: Date | null;
-      sight: string;
-      maxDepth: string;
-      temperature: string;
-      maxOxygen: string;
-      minOxygen: string;
-      location: string;
-      content: string;
-      longitude: number;
-      latitude: number;
-    }) => {
-      localStorage.setItem('temp', JSON.stringify(tempPostData));
-    },
-    [],
-  );
+  const createTempPost = useCallback(() => {
+    const tempPostData = {
+      diveType,
+      date,
+      leaveTime,
+      enterTime,
+      sight,
+      maxDepth,
+      temperature,
+      maxOxygen,
+      minOxygen,
+      location,
+      content,
+      longitude,
+      latitude,
+    };
+
+    localStorage.setItem('temp', JSON.stringify(tempPostData));
+  }, [
+    diveType,
+    date,
+    leaveTime,
+    enterTime,
+    sight,
+    maxDepth,
+    temperature,
+    maxOxygen,
+    minOxygen,
+    location,
+    longitude,
+    latitude,
+    content,
+  ]);
 
   return { checkTempPost, loadTempPost, removeTempPost, createTempPost };
 };
