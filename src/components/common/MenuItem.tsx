@@ -19,8 +19,8 @@ interface Props extends React.HTMLAttributes<HTMLLIElement> {
   children: React.ReactNode;
 }
 
-const MenuItem: React.FC<Props> = ({ children }) => {
-  return <Container>{children}</Container>;
+const MenuItem: React.FC<Props> = ({ children, ...props }) => {
+  return <Container {...props}>{children}</Container>;
 };
 
 export default MenuItem;
