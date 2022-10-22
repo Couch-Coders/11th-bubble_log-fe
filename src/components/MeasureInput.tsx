@@ -33,11 +33,12 @@ const MeasureInput: React.FC<Props> = ({
   value,
   measure,
   width = '12rem',
+  onChange,
   ...props
 }) => {
   return (
     <Container width={width}>
-      <Input width={width} {...props} />
+      <Input value={value} onChange={onChange} width={width} {...props} />
       {value !== '' && <div className="floating-measure">{measure}</div>}
     </Container>
   );
