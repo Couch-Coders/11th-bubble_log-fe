@@ -7,31 +7,31 @@ import Button from '@components/common/Button';
 import FileInput from '@components/common/FileInput';
 import Flexbox from '@components/common/Flexbox';
 import Input from '@components/common/Input';
+import Snackbar from '@components/common/Snackbar';
 import Textarea from '@components/common/Textarea';
 import DatePicker from '@components/DatePicker';
 import ImagePreview from '@components/ImagePreview';
 import KakaoMap from '@components/KakaoMap';
 import Layout from '@components/Layout';
+import LoadingBackdrop from '@components/LoadingBackdrop';
 import MeasureInput from '@components/MeasureInput';
+import TempPostPromptModal from '@components/TempPostPromptModal';
 import TimePicker from '@components/TimePicker';
 import { DIVE_TYPE } from '@utils/constants';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
-const NUMBER_REG_EXP = /^[0-9]$/g;
-
 const WritePage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState<Date | null>(null);
   const [diveType, setDiveType] = useState('');
   const [temperature, setTemperature] = useState('');
   const [maxDepth, setMaxDepth] = useState('');
   const [sight, setSight] = useState('');
-  const [enterTime, setEnterTime] = useState(new Date());
-  const [leaveTime, setLeaveTime] = useState(new Date());
+  const [enterTime, setEnterTime] = useState<Date | null>(null);
+  const [leaveTime, setLeaveTime] = useState<Date | null>(null);
   const [minOxygen, setMinOxygen] = useState('');
   const [maxOxygen, setMaxOxygen] = useState('');
-  const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageFileUrlList, setImageFileUrlList] = useState<string[]>([]);
   const [imageFileList, setImageFileList] = useState<File[]>([]);
   const [content, setContent] = useState('');
@@ -39,6 +39,53 @@ const WritePage: React.FC = () => {
     lat: 33.55635,
     lng: 126.795841,
   });
+
+  const [isTempPostPromptModalOpen, setIsTempPostPromptModalOpen] =
+    useState(false);
+  const [isTempPostSnackbarOpen, setIsTempPostSnackbarOpen] = useState(false);
+
+  const loadTempPost = () => {
+    const tempPost = localStorage.getItem('temp');
+    if (tempPost === null) return;
+
+    const tempPostData = JSON.parse(tempPost);
+    console.log('@tempPostData', tempPostData);
+
+    if (tempPostData.date !== null) setDate(new Date(tempPostData.date));
+    setDiveType(tempPostData.diveType);
+    if (tempPostData.enterTime !== null)
+      setEnterTime(new Date(tempPostData.enterTime));
+    if (tempPostData.leaveTime !== null)
+      setLeaveTime(new Date(tempPostData.leaveTime));
+    setPosition({
+      lat: tempPostData.latitude,
+      lng: tempPostData.longitude,
+    });
+    setMaxDepth(tempPostData.maxDepth);
+    setMinOxygen(tempPostData.minOxygen);
+    setSight(tempPostData.sight);
+    setTemperature(tempPostData.temperature);
+  };
+
+  const removeTempPost = () => {
+    localStorage.removeItem('temp');
+  };
+
+  const handleTempPostPromptModalConfirm = () => {
+    loadTempPost();
+    setIsTempPostPromptModalOpen(false);
+    setIsTempPostSnackbarOpen(true);
+  };
+
+  const handleTempPostPromptModalClose = () => {
+    removeTempPost();
+    setIsTempPostPromptModalOpen(false);
+  };
+
+  useEffect(() => {
+    if (localStorage.getItem('temp') !== null)
+      setIsTempPostPromptModalOpen(true);
+  }, []);
 
   const navigate = useNavigate();
 
@@ -49,83 +96,38 @@ const WritePage: React.FC = () => {
     sight !== '' &&
     minOxygen !== '' &&
     maxOxygen !== '' &&
-    content !== '';
+    content !== '' &&
+    enterTime !== null &&
+    leaveTime !== null &&
+    date !== null;
 
-  const handleDatePickerChange = (date: Date | null) => {
-    if (date === null) return;
-    setDate(date);
-  };
-
-  const handleDiveTypeChange = (
-    event: React.ChangeEvent<HTMLSelectElement>,
+  const loadImageFile = (
+    imageFile: File,
+    onLoad: (event: ProgressEvent<FileReader>) => void,
   ) => {
-    setDiveType(event.target.value);
-  };
+    const fileReader = new FileReader();
 
-  const handleTemperatureChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    if (!NUMBER_REG_EXP.test(event.target.value)) return;
-    setTemperature(event.target.value);
-  };
+    fileReader.onload = (event) => {
+      onLoad(event);
+    };
 
-  const handleMaxDepthChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setMaxDepth(event.target.value);
-  };
-
-  const handleSightChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSight(event.target.value);
-  };
-
-  const handleEnterTimeChange = (date: Date | null) => {
-    if (date === null) return;
-    setEnterTime(date);
-  };
-
-  const handleLeaveTimeChange = (date: Date | null) => {
-    if (date === null) return;
-    setLeaveTime(date);
-  };
-
-  const handleMinOxygenChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setMinOxygen(event.target.value);
-  };
-
-  const handleMaxOxygenChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setMaxOxygen(event.target.value);
+    fileReader.readAsDataURL(imageFile);
   };
 
   const handleImageFileChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     if (event.target.files === null) return;
-    // (prev => [...prev, event.target.files[0]]) causes nullable issue
+
+    console.log(event.target.files[0]);
+
     setImageFileList([...imageFileList, event.target.files[0]]);
-    setImageFile(event.target.files[0]);
+
+    loadImageFile(event.target.files[0], (e) => {
+      setImageFileUrlList((prev) => [...prev, e.target?.result as string]);
+    });
+
     event.target.value = '';
-  };
-
-  useEffect(() => {
-    if (imageFile === null) return;
-
-    const fileReader = new FileReader();
-
-    // event.target possibly null?
-    fileReader.onload = (event) => {
-      setImageFileUrlList((prev) => [...prev, event.target?.result as string]);
-    };
-
-    fileReader.readAsDataURL(imageFile);
-  }, [imageFile]);
-
-  const handleDescriptionChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement>,
-  ) => {
-    setContent(event.target.value);
   };
 
   const handleCancelButtonClick = () => {
@@ -133,7 +135,13 @@ const WritePage: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    if (diveType === '') return;
+    if (
+      diveType === '' ||
+      date === null ||
+      enterTime === null ||
+      leaveTime === null
+    )
+      return;
 
     console.log('submitting...');
 
@@ -159,7 +167,7 @@ const WritePage: React.FC = () => {
     try {
       const createLogResponse = await logAPI.createLog(createLogBody);
 
-      if (imageFileList.length === 0) return;
+      if (imageFileList.length === 0) return navigate('/logs');
 
       const formData = new FormData();
 
@@ -177,6 +185,8 @@ const WritePage: React.FC = () => {
       navigate('/logs');
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -186,8 +196,39 @@ const WritePage: React.FC = () => {
     );
   };
 
+  const handleTempSaveButtonClick = () => {
+    const tempPostData = {
+      date,
+      diveType,
+      enterTime,
+      leaveTime,
+      sight,
+      maxDepth,
+      temperature,
+      maxOxygen,
+      minOxygen,
+      location: '서울특별시',
+      content,
+      longitude: position.lat,
+      latitude: position.lng,
+    };
+
+    localStorage.setItem('temp', JSON.stringify(tempPostData));
+  };
+
   return (
     <Layout>
+      <LoadingBackdrop isOpen={isLoading} />
+      <TempPostPromptModal
+        isOpen={isTempPostPromptModalOpen}
+        onConfirm={handleTempPostPromptModalConfirm}
+        onClose={handleTempPostPromptModalClose}
+      />
+      <Snackbar
+        isOpen={isTempPostSnackbarOpen}
+        onClose={() => setIsTempPostSnackbarOpen(false)}
+        message="임시 저장된 글을 불러왔습니다."
+      />
       <Flexbox padding="1rem" flex="col" items="start" gap="1rem">
         <h1
           style={{
@@ -201,8 +242,11 @@ const WritePage: React.FC = () => {
           새 로그 생성
         </h1>
         {isLoading && 'loading...'}
-        <DatePicker startDate={date} onChange={handleDatePickerChange} />
-        <select onChange={handleDiveTypeChange} defaultValue="type">
+        <DatePicker startDate={date} onChange={setDate} />
+        <select
+          onChange={(e) => setDiveType(e.target.value)}
+          defaultValue="type"
+        >
           <option value="type" disabled>
             다이브 종류
           </option>
@@ -215,7 +259,7 @@ const WritePage: React.FC = () => {
           <MeasureInput
             value={temperature}
             measure="°"
-            onChange={handleTemperatureChange}
+            onChange={(e) => setTemperature(e.target.value)}
             placeholder="수온을 입력하세요."
           />
         </Flexbox>
@@ -224,7 +268,7 @@ const WritePage: React.FC = () => {
           <MeasureInput
             value={maxDepth}
             measure="m"
-            onChange={handleMaxDepthChange}
+            onChange={(e) => setMaxDepth(e.target.value)}
             placeholder="최고 깊이를 입력하세요."
           />
         </Flexbox>
@@ -232,23 +276,23 @@ const WritePage: React.FC = () => {
           <label>시야</label>
           <Input
             value={sight}
-            onChange={handleSightChange}
+            onChange={(e) => setSight(e.target.value)}
             placeholder="시야를 입력하세요."
           />
         </Flexbox>
         <Flexbox gap="1rem">
           <label>들어간 시간</label>
-          <TimePicker startTime={enterTime} onChange={handleEnterTimeChange} />
+          <TimePicker startTime={enterTime} onChange={setEnterTime} />
         </Flexbox>
         <Flexbox gap="1rem">
           <label>나온 시간</label>
-          <TimePicker startTime={leaveTime} onChange={handleLeaveTimeChange} />
+          <TimePicker startTime={leaveTime} onChange={setLeaveTime} />
         </Flexbox>
         <Flexbox gap="1rem">
           <label>들어갈 때 탱크량</label>
           <Input
             value={maxOxygen}
-            onChange={handleMaxOxygenChange}
+            onChange={(e) => setMaxOxygen(e.target.value)}
             placeholder="들어갈 때 탱크량을 입력하세요."
           />
         </Flexbox>
@@ -256,14 +300,14 @@ const WritePage: React.FC = () => {
           <label>나올 때 탱크량</label>
           <Input
             value={minOxygen}
-            onChange={handleMinOxygenChange}
+            onChange={(e) => setMinOxygen(e.target.value)}
             placeholder="나올 때 탱크량을 입력하세요."
           />
         </Flexbox>
         <label>메모</label>
         <Textarea
           value={content}
-          onChange={handleDescriptionChange}
+          onChange={(e) => setContent(e.target.value)}
           placeholder="여기에 메모를 입력하세요."
         />
         <FileInput onChange={handleImageFileChange} />
@@ -280,10 +324,12 @@ const WritePage: React.FC = () => {
       </Flexbox>
       <KakaoMap position={position} setPosition={setPosition} />
       <Flexbox padding="1rem" width="100%" justify="between">
-        <Button>임시 저장</Button>
+        <Button variant="text" onClick={handleCancelButtonClick}>
+          돌아가기
+        </Button>
         <Flexbox gap="1rem">
-          <Button variant="text" onClick={handleCancelButtonClick}>
-            돌아가기
+          <Button variant="outlined" onClick={handleTempSaveButtonClick}>
+            임시 저장
           </Button>
           <Button
             onClick={() => {
