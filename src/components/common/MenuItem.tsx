@@ -5,9 +5,9 @@ import styled from 'styled-components';
 const Container = styled.li`
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 0.75rem;
+  padding: 0.5rem;
   width: 100%;
+  border-radius: 0.25rem;
   cursor: pointer;
 
   &:hover {
