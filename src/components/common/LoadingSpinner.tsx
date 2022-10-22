@@ -12,9 +12,9 @@ const Container = styled.div`
   .loader {
     position: relative;
     border-top: 0.4rem solid ${theme.primary};
-    border-right: 0.4rem solid rgba(255, 255, 255, 0.2);
-    border-bottom: 0.4rem solid rgba(255, 255, 255, 0.2);
-    border-left: 0.4rem solid #ffffff;
+    border-right: 0.4rem solid ${theme.primary};
+    border-bottom: 0.4rem solid ${theme.primary};
+    border-left: 0.4rem solid white;
     -webkit-transform: translateZ(0);
     -ms-transform: translateZ(0);
     transform: translateZ(0);
