@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import logSlice from '@store/slices/log';
+import logCreateSlice from '@store/slices/logCreate';
 import logDetailSlice from '@store/slices/logDetail';
 import userSlice from '@store/slices/user';
 import {
@@ -10,9 +11,10 @@ import {
 
 export const store = configureStore({
   reducer: {
-    log: logSlice.reducer,
     user: userSlice.reducer,
+    log: logSlice.reducer,
     logDetail: logDetailSlice.reducer,
+    logCreate: logCreateSlice.reducer,
   },
   devTools: process.env.NODE_ENV !== 'production',
 });
