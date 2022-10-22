@@ -34,7 +34,7 @@ const Container = styled.div`
 `;
 
 interface Props {
-  startDate: Date;
+  startDate: Date | null;
   onChange: (
     date: Date | null,
     event?: React.SyntheticEvent<any, Event> | undefined,
@@ -56,7 +56,9 @@ const DatePicker: React.FC<Props> = ({ startDate, onChange }) => {
   return (
     <Container ref={ref}>
       <DatePickerButton onClick={() => setIsOpen((prev) => !prev)}>
-        {format(startDate, 'yyyy년 MM월 dd일')}
+        {startDate === null
+          ? '날짜를 선택하세요'
+          : format(startDate, 'yyyy년 MM월 dd일')}
       </DatePickerButton>
       {isOpen && (
         <div className="date-picker-container">

@@ -34,7 +34,7 @@ const Container = styled.div`
 `;
 
 interface Props {
-  startTime: Date;
+  startTime: Date | null;
   onChange: (
     date: Date | null,
     event?: React.SyntheticEvent<any, Event> | undefined,
@@ -56,7 +56,9 @@ const TimePicker: React.FC<Props> = ({ startTime, onChange }) => {
   return (
     <Container ref={ref}>
       <TimePickerButton onClick={() => setIsOpen((prev) => !prev)}>
-        {format(startTime, 'h:mm aa')}
+        {startTime === null
+          ? '시간을 선택하세요'
+          : format(startTime, 'h:mm aa')}
       </TimePickerButton>
       {isOpen && (
         <div className="time-picker-container">
