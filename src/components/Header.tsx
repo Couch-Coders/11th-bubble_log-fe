@@ -65,10 +65,8 @@ const Header: React.FC = () => {
                 <p style={{ fontSize: '1.25rem' }}>{data.name}</p>
               </Flexbox>
               <Divider />
-              <MenuItem>
-                <Link to="/mypage" onClick={() => setProfileModalOpen(false)}>
-                  마이페이지
-                </Link>
+              <MenuItem onClick={() => setProfileModalOpen(false)}>
+                <Link to="/mypage">마이페이지</Link>
               </MenuItem>
               <Divider />
               <MenuItem onClick={handleLogOutButtonClick}>로그아웃</MenuItem>
