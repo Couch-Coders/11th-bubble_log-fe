@@ -6,9 +6,9 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit';
 
-export const createLog = createAsyncThunk(
+export const postLog = createAsyncThunk(
   'log/post/status',
-  async (body: {
+  async (payload: {
     date: Date;
     diveType: 'FREE' | 'SCUBA';
     enterTime: Date;
@@ -20,8 +20,10 @@ export const createLog = createAsyncThunk(
     minOxygen: string;
     location: string;
     content: string;
-    latitude: number;
-    longitude: number;
+    position: {
+      lat: number;
+      lng: number;
+    };
     imageFileList: File[];
   }) => {
     const {
@@ -36,11 +38,10 @@ export const createLog = createAsyncThunk(
       minOxygen,
       location,
       content,
-      latitude,
-      longitude,
+      position,
       imageFileList,
-    } = body;
-    const createLogBody = {
+    } = payload;
+    const postLogBody = {
       date: date.toISOString().slice(0, -1),
       diveType,
       enterTime: enterTime.toISOString().slice(0, -1),
@@ -52,11 +53,11 @@ export const createLog = createAsyncThunk(
       minOxygen: Number(minOxygen),
       location,
       content,
-      latitude,
-      longitude,
+      latitude: position.lat,
+      longitude: position.lng,
     };
 
-    const createLogResponse = await logAPI.createLog(createLogBody);
+    const createLogResponse = await logAPI.createLog(postLogBody);
 
     if (imageFileList.length === 0) return;
 
@@ -69,7 +70,7 @@ export const createLog = createAsyncThunk(
     await logAPI.createLogImages(formData, String(createLogResponse.id));
   },
 );
-interface LogCreateState {
+interface LogPostState {
   isLoading: boolean;
   error: SerializedError | null;
   date: Date | null;
@@ -88,7 +89,7 @@ interface LogCreateState {
   imageFileList: File[];
 }
 
-const initialState: LogCreateState = {
+const initialState: LogPostState = {
   isLoading: false,
   error: null,
   date: null,
@@ -107,8 +108,8 @@ const initialState: LogCreateState = {
   imageFileList: [],
 };
 
-export const logCreateSlice = createSlice({
-  name: 'logCreate',
+export const postLogSlice = createSlice({
+  name: 'postLog',
   initialState,
   reducers: {
     setDate(state, action: PayloadAction<Date | null>) {
@@ -174,20 +175,20 @@ export const logCreateSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(createLog.pending, (state) => {
+      .addCase(postLog.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(createLog.fulfilled, (state) => {
+      .addCase(postLog.fulfilled, (state) => {
         state.isLoading = false;
         state.error = null;
       })
-      .addCase(createLog.rejected, (state, action) => {
+      .addCase(postLog.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error;
       });
   },
 });
 
-export const logCreateActions = { ...logCreateSlice.actions };
+export const postLogActions = { ...postLogSlice.actions };
 
-export default logCreateSlice;
+export default postLogSlice;

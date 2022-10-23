@@ -1,7 +1,7 @@
 import useTempPost from '@hooks/useTempPost';
 import { theme } from '@lib/styles/theme';
 import { useDispatch, useSelector } from '@store/index';
-import { createLog, logCreateActions } from '@store/slices/logCreate';
+import { postLog, postLogActions } from '@store/slices/postLog';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -25,54 +25,30 @@ import { readFileAsync } from '@utils/readFileAsync';
 import 'react-datepicker/dist/react-datepicker.css';
 
 const WritePage: React.FC = () => {
+  const [date, setDate] = useState<Date | null>(null);
+  const [diveType, setDiveType] = useState<'FREE' | 'SCUBA'>('FREE');
+  const [temperature, setTemperature] = useState('');
+  const [maxDepth, setMaxDepth] = useState('');
+  const [sight, setSight] = useState('');
+  const [enterTime, setEnterTime] = useState<Date | null>(null);
+  const [leaveTime, setLeaveTime] = useState<Date | null>(null);
+  const [minOxygen, setMinOxygen] = useState('');
+  const [maxOxygen, setMaxOxygen] = useState('');
+  const [imageFileList, setImageFileList] = useState<File[]>([]);
+  const [content, setContent] = useState('');
+  const [position, setPosition] = useState({
+    lat: 33.55635,
+    lng: 126.795841,
+  });
+  const [location, setLocation] = useState('서울특별시');
+  console.log(setLocation);
+
   const [imageFileUrlList, setImageFileUrlList] = useState<string[]>([]);
   const [isTempPostPromptModalOpen, setIsTempPostPromptModalOpen] =
     useState(false);
   const [isTempPostSnackbarOpen, setIsTempPostSnackbarOpen] = useState(false);
 
-  const {
-    isLoading,
-    date,
-    enterTime,
-    leaveTime,
-    diveType,
-    sight,
-    temperature,
-    maxDepth,
-    minOxygen,
-    maxOxygen,
-    content,
-    latitude,
-    longitude,
-    location,
-    imageFileList,
-  } = useSelector((state) => state.logCreate);
-
-  const {
-    setDate,
-    setDiveType,
-    setTemperature,
-    setContent,
-    setMinOxygen,
-    setMaxOxygen,
-    setMaxDepth,
-    setSight,
-    setEnterTime,
-    setLeaveTime,
-    setLatitude,
-    setLongitude,
-    clearState,
-  } = logCreateActions;
-
-  const position = {
-    lat: latitude,
-    lng: longitude,
-  };
-
-  const setPosition = (event: kakao.maps.event.MouseEvent) => {
-    dispatch(setLatitude(event.latLng.getLat()));
-    dispatch(setLongitude(event.latLng.getLng()));
-  };
+  const isLoading = useSelector((state) => state.postLog.isLoading);
 
   const dispatch = useDispatch();
 
@@ -112,7 +88,7 @@ const WritePage: React.FC = () => {
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     if (event.target.files === null) return;
-    dispatch(logCreateActions.addImageFileToList(event.target.files[0]));
+    setImageFileList([...imageFileList, event.target.files[0]]);
     const imageFileUrl = await readFileAsync(event.target.files[0]);
     setImageFileUrlList((prev) => [...prev, imageFileUrl as string]);
     event.target.value = '';
@@ -121,11 +97,11 @@ const WritePage: React.FC = () => {
   const handleSubmit = async () => {
     if (date === null || enterTime === null || leaveTime === null) return;
 
-    const createLogBody = {
-      diveType,
+    const postLogPayload = {
       date,
-      leaveTime,
+      diveType,
       enterTime,
+      leaveTime,
       sight,
       maxDepth,
       temperature,
@@ -133,13 +109,12 @@ const WritePage: React.FC = () => {
       minOxygen,
       location,
       content,
-      longitude,
-      latitude,
+      position,
       imageFileList,
     };
 
     try {
-      await dispatch(createLog(createLogBody));
+      await dispatch(postLog(postLogPayload));
       navigate('/logs');
     } catch (error) {
       console.log(error);
@@ -153,14 +128,28 @@ const WritePage: React.FC = () => {
   };
 
   const handleTempSaveButtonClick = () => {
-    createTempPost();
+    createTempPost({
+      diveType,
+      date,
+      leaveTime,
+      enterTime,
+      sight,
+      maxDepth,
+      temperature,
+      maxOxygen,
+      minOxygen,
+      location,
+      content,
+      latitude: position.lat,
+      longitude: position.lng,
+    });
   };
 
   useEffect(() => {
     return () => {
-      dispatch(clearState());
+      dispatch(postLogActions.clearState());
     };
-  }, [dispatch, clearState]);
+  }, [dispatch]);
 
   return (
     <Layout>
@@ -188,14 +177,9 @@ const WritePage: React.FC = () => {
           새 로그 생성
         </h1>
         {isLoading && 'loading...'}
-        <DatePicker
-          startDate={date}
-          onChange={(date) => dispatch(setDate(date))}
-        />
+        <DatePicker startDate={date} onChange={(date) => setDate(date)} />
         <select
-          onChange={(e) =>
-            dispatch(setDiveType(e.target.value as 'FREE' | 'SCUBA'))
-          }
+          onChange={(e) => setDiveType(e.target.value as 'FREE' | 'SCUBA')}
           defaultValue="type"
         >
           <option value="type" disabled>
@@ -210,7 +194,7 @@ const WritePage: React.FC = () => {
           <MeasureInput
             value={temperature}
             measure="°"
-            onChange={(e) => dispatch(setTemperature(e.target.value))}
+            onChange={(e) => setTemperature(e.target.value)}
             placeholder="수온을 입력하세요."
           />
         </Flexbox>
@@ -219,7 +203,7 @@ const WritePage: React.FC = () => {
           <MeasureInput
             value={maxDepth}
             measure="m"
-            onChange={(e) => dispatch(setMaxDepth(e.target.value))}
+            onChange={(e) => setMaxDepth(e.target.value)}
             placeholder="최고 깊이를 입력하세요."
           />
         </Flexbox>
@@ -227,7 +211,7 @@ const WritePage: React.FC = () => {
           <label>시야</label>
           <Input
             value={sight}
-            onChange={(e) => dispatch(setSight(e.target.value))}
+            onChange={(e) => setSight(e.target.value)}
             placeholder="시야를 입력하세요."
           />
         </Flexbox>
@@ -235,21 +219,21 @@ const WritePage: React.FC = () => {
           <label>들어간 시간</label>
           <TimePicker
             startTime={enterTime}
-            onChange={(time) => dispatch(setEnterTime(time))}
+            onChange={(time) => setEnterTime(time)}
           />
         </Flexbox>
         <Flexbox gap="1rem">
           <label>나온 시간</label>
           <TimePicker
             startTime={leaveTime}
-            onChange={(time) => dispatch(setLeaveTime(time))}
+            onChange={(time) => setLeaveTime(time)}
           />
         </Flexbox>
         <Flexbox gap="1rem">
           <label>들어갈 때 탱크량</label>
           <Input
             value={maxOxygen}
-            onChange={(e) => dispatch(setMaxOxygen(e.target.value))}
+            onChange={(e) => setMaxOxygen(e.target.value)}
             placeholder="들어갈 때 탱크량을 입력하세요."
           />
         </Flexbox>
@@ -257,14 +241,14 @@ const WritePage: React.FC = () => {
           <label>나올 때 탱크량</label>
           <Input
             value={minOxygen}
-            onChange={(e) => dispatch(setMinOxygen(e.target.value))}
+            onChange={(e) => setMinOxygen(e.target.value)}
             placeholder="나올 때 탱크량을 입력하세요."
           />
         </Flexbox>
         <label>메모</label>
         <Textarea
           value={content}
-          onChange={(e) => dispatch(setContent(e.target.value))}
+          onChange={(e) => setContent(e.target.value)}
           placeholder="여기에 메모를 입력하세요."
         />
         <FileInput

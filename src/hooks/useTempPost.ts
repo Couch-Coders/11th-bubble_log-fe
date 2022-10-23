@@ -1,26 +1,6 @@
-import { useDispatch, useSelector } from '@store/index';
-import { logCreateActions } from '@store/slices/logCreate';
 import { useCallback } from 'react';
 
 const useTempPost = () => {
-  const dispatch = useDispatch();
-
-  const {
-    diveType,
-    date,
-    leaveTime,
-    enterTime,
-    sight,
-    maxDepth,
-    temperature,
-    minOxygen,
-    maxOxygen,
-    location,
-    content,
-    latitude,
-    longitude,
-  } = useSelector((state) => state.logCreate);
-
   const checkTempPost = () => {
     return localStorage.getItem('temp') !== null;
   };
@@ -31,26 +11,15 @@ const useTempPost = () => {
 
     const tempPostData = JSON.parse(tempPost);
 
-    if (tempPostData.date !== null)
-      dispatch(logCreateActions.setDate(new Date(tempPostData.date)));
-    dispatch(logCreateActions.setDiveType(tempPostData.diveType));
-    if (tempPostData.enterTime !== null)
-      dispatch(logCreateActions.setEnterTime(new Date(tempPostData.enterTime)));
-    if (tempPostData.leaveTime !== null)
-      dispatch(logCreateActions.setLeaveTime(new Date(tempPostData.leaveTime)));
-    dispatch(logCreateActions.setLatitude(tempPostData.latitude));
-    dispatch(logCreateActions.setMaxDepth(tempPostData.maxDepth));
-    dispatch(logCreateActions.setMinOxygen(tempPostData.minOxygen));
-    dispatch(logCreateActions.setSight(tempPostData.sight));
-    dispatch(logCreateActions.setTemperature(tempPostData.temperature));
-  }, [dispatch]);
+    return tempPostData;
+  }, []);
 
   const removeTempPost = useCallback(() => {
     localStorage.removeItem('temp');
   }, []);
 
-  const createTempPost = useCallback(() => {
-    const tempPostData = {
+  const createTempPost = useCallback(
+    ({
       diveType,
       date,
       leaveTime,
@@ -64,24 +33,42 @@ const useTempPost = () => {
       content,
       longitude,
       latitude,
-    };
-
-    localStorage.setItem('temp', JSON.stringify(tempPostData));
-  }, [
-    diveType,
-    date,
-    leaveTime,
-    enterTime,
-    sight,
-    maxDepth,
-    temperature,
-    maxOxygen,
-    minOxygen,
-    location,
-    longitude,
-    latitude,
-    content,
-  ]);
+    }: {
+      diveType: 'FREE' | 'SCUBA';
+      date: Date | null;
+      leaveTime: Date | null;
+      enterTime: Date | null;
+      sight: string;
+      maxDepth: string;
+      temperature: string;
+      maxOxygen: string;
+      minOxygen: string;
+      location: string;
+      content: string;
+      longitude: number;
+      latitude: number;
+    }) => {
+      localStorage.setItem(
+        'temp',
+        JSON.stringify({
+          diveType,
+          date,
+          leaveTime,
+          enterTime,
+          sight,
+          maxDepth,
+          temperature,
+          maxOxygen,
+          minOxygen,
+          location,
+          content,
+          longitude,
+          latitude,
+        }),
+      );
+    },
+    [],
+  );
 
   return { checkTempPost, loadTempPost, removeTempPost, createTempPost };
 };

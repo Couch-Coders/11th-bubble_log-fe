@@ -4,7 +4,7 @@ import { theme } from '@lib/styles/theme';
 import { useSelector } from '@store/index';
 import React, { useRef, useState } from 'react';
 import { MdLogout, MdPermIdentity } from 'react-icons/md';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Avatar from '@components/common/Avatar';
@@ -27,6 +27,8 @@ const Header: React.FC = () => {
   const [profileModalOpen, setProfileModalOpen] = useState(false);
 
   const { logOut } = useAuth();
+
+  const navigate = useNavigate();
 
   const { data } = useSelector((state) => state.user);
 
@@ -66,10 +68,15 @@ const Header: React.FC = () => {
               </Flexbox>
               <Divider />
               <Flexbox flex="col" width="100%">
-                <MenuItem onClick={() => setProfileModalOpen(false)}>
+                <MenuItem
+                  onClick={() => {
+                    setProfileModalOpen(false);
+                    navigate('/mypage');
+                  }}
+                >
                   <Flexbox gap="0.25rem">
                     <MdPermIdentity size="1.5rem" />
-                    <Link to="/mypage">마이페이지</Link>
+                    마이페이지
                   </Flexbox>
                 </MenuItem>
                 <MenuItem onClick={handleLogOutButtonClick}>

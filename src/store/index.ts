@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import logSlice from '@store/slices/log';
-import logCreateSlice from '@store/slices/logCreate';
 import logDetailSlice from '@store/slices/logDetail';
+import postLogSlice from '@store/slices/postLog';
 import userSlice from '@store/slices/user';
 import {
   TypedUseSelectorHook,
@@ -14,7 +14,7 @@ export const store = configureStore({
     user: userSlice.reducer,
     log: logSlice.reducer,
     logDetail: logDetailSlice.reducer,
-    logCreate: logCreateSlice.reducer,
+    postLog: postLogSlice.reducer,
   },
   devTools: process.env.NODE_ENV !== 'production',
 });
