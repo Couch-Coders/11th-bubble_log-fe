@@ -22,8 +22,8 @@ const App: React.FC = () => {
 
   const dispatch = useDispatch();
 
-  const onAuthStateChanged = useCallback(
-    async (user: User | null): Promise<void> => {
+  const handleAuthStateChanged = useCallback(
+    async (user: User | null) => {
       if (user === null) return;
       const token = await user.getIdToken();
       console.log('@token', token);
@@ -34,9 +34,9 @@ const App: React.FC = () => {
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
-      void onAuthStateChanged(user);
+      void handleAuthStateChanged(user);
     });
-  }, [auth, onAuthStateChanged]);
+  }, [auth, handleAuthStateChanged]);
 
   return (
     <>
