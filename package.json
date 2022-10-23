@@ -62,6 +62,7 @@
     "eslint-plugin-preferred-import": "^1.0.13",
     "eslint-plugin-prettier": "^4.2.1",
     "kakao.maps.d.ts": "^0.1.33",
+    "msw": "^0.47.4",
     "prettier": "^2.7.1"
   }
 }

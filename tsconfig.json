@@ -8,7 +8,8 @@
       "@utils/*": ["./utils/*"],
       "@store/*": ["./store/*"],
       "@lib/*": ["./lib/*"],
-      "@hooks/*": ["./hooks/*"]
+      "@hooks/*": ["./hooks/*"],
+      "@mocks/*": ["./mocks/*"]
     },
     "target": "es5",
     "lib": [
