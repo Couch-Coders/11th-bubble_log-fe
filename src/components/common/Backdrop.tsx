@@ -33,4 +33,4 @@ const Backdrop: React.FC<Props> = ({ children, isOpen, onClose }) => {
   return <>{isOpen && <Container onClick={onClose}>{children}</Container>}</>;
 };
 
-export default Backdrop;
+export default React.memo(Backdrop);

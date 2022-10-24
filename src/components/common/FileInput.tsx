@@ -37,4 +37,4 @@ const FileInput: React.FC<Props> = ({ onChange, ...props }) => {
   );
 };
 
-export default FileInput;
+export default React.memo(FileInput);

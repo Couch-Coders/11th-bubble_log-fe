@@ -22,4 +22,4 @@ const DropdownMenuItem: React.FC<Props> = ({ label, ...props }) => {
   return <Container {...props}>{label}</Container>;
 };
 
-export default DropdownMenuItem;
+export default React.memo(DropdownMenuItem);

@@ -64,4 +64,4 @@ const Snackbar: React.FC<Props> = ({
   return <>{isOpen && <Container isOpen={isOpen}>{message}</Container>}</>;
 };
 
-export default Snackbar;
+export default React.memo(Snackbar);

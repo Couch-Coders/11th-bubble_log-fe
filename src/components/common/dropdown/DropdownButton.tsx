@@ -104,4 +104,4 @@ const DropdownButton: React.FC<Props> = ({
   );
 };
 
-export default DropdownButton;
+export default React.memo(DropdownButton);

@@ -23,4 +23,4 @@ const MenuItem: React.FC<Props> = ({ children, ...props }) => {
   return <Container {...props}>{children}</Container>;
 };
 
-export default MenuItem;
+export default React.memo(MenuItem);

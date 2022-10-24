@@ -64,4 +64,4 @@ const Skeleton: React.FC<Props> = ({
   );
 };
 
-export default Skeleton;
+export default React.memo(Skeleton);

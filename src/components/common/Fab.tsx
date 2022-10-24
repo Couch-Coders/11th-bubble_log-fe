@@ -77,4 +77,4 @@ const Fab: React.FC<Props> = ({
   );
 };
 
-export default Fab;
+export default React.memo(Fab);

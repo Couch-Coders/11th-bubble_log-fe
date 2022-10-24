@@ -31,4 +31,4 @@ const DropdownMenu: React.FC<Props> = ({ children, width }) => {
   return <Container width={width}>{children}</Container>;
 };
 
-export default DropdownMenu;
+export default React.memo(DropdownMenu);

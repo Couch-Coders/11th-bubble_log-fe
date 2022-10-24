@@ -16,4 +16,4 @@ const Title: React.FC<Props> = ({ children }) => {
   return <Container>{children}</Container>;
 };
 
-export default Title;
+export default React.memo(Title);

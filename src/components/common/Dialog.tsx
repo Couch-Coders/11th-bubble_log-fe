@@ -15,4 +15,4 @@ const Dialog: React.FC<Props> = ({ children, isOpen }) => {
   return <>{isOpen && <Container>{children}</Container>}</>;
 };
 
-export default Dialog;
+export default React.memo(Dialog);
