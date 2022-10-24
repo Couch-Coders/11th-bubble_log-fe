@@ -9,6 +9,8 @@ const Container = styled.li`
   display: flex;
   justify-content: space-between;
   padding: 1.5rem;
+  transition: 0.1s;
+
   &:hover {
     background-color: ${blue[50]};
   }

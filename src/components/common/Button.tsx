@@ -72,6 +72,7 @@ const Container = styled.button<ContainerProps>`
   font-weight: 500;
   border-radius: 0.5rem;
   border: none;
+  transition: 0.1s;
 
   cursor: pointer;
 

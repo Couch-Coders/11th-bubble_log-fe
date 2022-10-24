@@ -5,14 +5,18 @@ import { fetchLogs, logActions } from '@store/slices/log';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   MdClose,
+  MdCreate,
   MdFilterAlt,
+  MdKeyboardArrowUp,
   MdOutlineKeyboardArrowDown,
 } from 'react-icons/md';
 import { shallowEqual } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
 import Button from '@components/common/Button';
 import Divider from '@components/common/Divider';
+import Fab from '@components/common/Fab';
 import Flexbox from '@components/common/Flexbox';
 import IconButton from '@components/common/IconButton';
 import LoadingSpinner from '@components/common/LoadingSpinner';
@@ -30,6 +34,20 @@ import {
   DIVE_TEMPERATURE,
   DIVE_TYPE,
 } from '@utils/constants';
+import { scrollToTop } from '@utils/scrollToTop';
+
+const FabContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+  position: fixed;
+  right: 2rem;
+  bottom: 2rem;
+
+  .scroll-fab-wrapper {
+  }
+`;
 
 const LogsPage: React.FC = () => {
   const [diveTypeFilterValue, setDiveTypeFilterValue] = useState('');
@@ -63,6 +81,8 @@ const LogsPage: React.FC = () => {
   const { isLoggedIn } = useAuth();
 
   const dispatch = useDispatch();
+
+  const navigate = useNavigate();
 
   const fetchLogsWithQuery = useCallback(async () => {
     if (!isLoggedIn) return;
@@ -140,6 +160,14 @@ const LogsPage: React.FC = () => {
 
   return (
     <Layout>
+      <FabContainer>
+        <Fab size="small" shape="rounded" onClick={scrollToTop}>
+          <MdKeyboardArrowUp size="1.5rem" />
+        </Fab>
+        <Fab onClick={() => navigate('/write')}>
+          <MdCreate size="1.5rem" />
+        </Fab>
+      </FabContainer>
       <Stack spacing={2} p={2}>
         <Flexbox justify="between">
           <Title>다이빙 기록</Title>

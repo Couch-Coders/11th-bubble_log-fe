@@ -11,7 +11,7 @@ const HeaderLogoStyle = styled.div`
 const HeaderLogo: React.FC = () => {
   return (
     <HeaderLogoStyle>
-      <Link to="/">다이빙 버블 로그</Link>
+      <Link to="/">버블 로그</Link>
     </HeaderLogoStyle>
   );
 };

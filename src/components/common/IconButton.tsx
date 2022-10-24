@@ -45,6 +45,7 @@ const Container = styled.button<ContainerProps>`
   height: 2.5rem;
   border-radius: 50%;
   border: none;
+  transition: 0.1s;
   cursor: pointer;
 
   &:hover {

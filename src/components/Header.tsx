@@ -13,23 +13,24 @@ import Flexbox from '@components/common/Flexbox';
 import MenuItem from '@components/common/MenuItem';
 import Modal from '@components/common/Modal';
 import HeaderLogo from '@components/HeaderLogo';
+import { HEADER_HEIGHT } from '@utils/constants';
 
-const HeaderLayout = styled.header`
+const HeaderLayout = styled.div`
   display: flex;
   justify-content: center;
   background-color: ${gray[100]};
 `;
 
-const Container = styled.div`
+const Container = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 1rem;
   background-color: ${theme.primary};
-  border-radius: 0.5rem;
-  height: 3.5rem;
+  height: ${HEADER_HEIGHT};
   width: 480px;
-  margin: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   position: relative;
 `;
 
