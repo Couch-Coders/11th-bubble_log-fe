@@ -1,8 +1,8 @@
 import useAuth from '@hooks/useAuth';
 import useDebounce from '@hooks/useDebounce';
 import { useDispatch, useSelector } from '@store/index';
-import { fetchLogs, logActions } from '@store/slices/log';
-import React, { useCallback, useEffect, useState } from 'react';
+import { fetchLogs, fetchMoreLogs, logActions } from '@store/slices/log';
+import React, { useEffect, useState } from 'react';
 import {
   MdClose,
   MdCreate,
@@ -58,7 +58,12 @@ const LogsPage: React.FC = () => {
 
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
-  const { data, logList, isLoading, error } = useSelector((state) => state.log);
+  const {
+    response,
+    data: logListData,
+    isLoading,
+    error,
+  } = useSelector((state) => state.log);
 
   const query = useSelector((state) => state.log.query, shallowEqual);
 
@@ -74,9 +79,9 @@ const LogsPage: React.FC = () => {
     depthFilterValue === '' ? '전체' : depthFilterValue;
 
   const fetchMoreLogButtonDisabled =
-    data === null || error !== null || isLoading || data.last;
+    response === null || error !== null || isLoading || response.last;
 
-  console.log('@logList', logList);
+  console.log('@logList', logListData);
 
   const { isLoggedIn } = useAuth();
 
@@ -84,18 +89,14 @@ const LogsPage: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const fetchLogsWithQuery = useCallback(async () => {
-    if (!isLoggedIn) return;
-    await dispatch(fetchLogs(query));
-  }, [dispatch, isLoggedIn, query]);
-
   useEffect(() => {
-    void fetchLogsWithQuery();
+    if (!isLoggedIn) return;
+    void dispatch(fetchLogs());
 
     return () => {
       dispatch(logActions.clearState());
     };
-  }, [dispatch, fetchLogsWithQuery]);
+  }, [isLoggedIn, dispatch]);
 
   const handleSearchInputChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -105,17 +106,20 @@ const LogsPage: React.FC = () => {
 
   useEffect(() => {
     dispatch(logActions.setQueryKeyword(debouncedSearchInputValue));
+    void dispatch(fetchLogs());
   }, [debouncedSearchInputValue, dispatch]);
 
   const handleDiveTypeFilterOptionClick = (filterOption: string) => {
     console.log(filterOption);
     setDiveTypeFilterValue(filterOption);
     dispatch(logActions.setQueryDiveType(filterOption));
+    void dispatch(fetchLogs());
   };
 
   const handleLocationFilterOptionClick = (filterOption: string) => {
     setLocationFilterValue(filterOption);
     dispatch(logActions.setQueryLocation(filterOption));
+    void dispatch(fetchLogs());
   };
 
   const splitFilterOptionValue = (filterOption: string) => {
@@ -131,6 +135,7 @@ const LogsPage: React.FC = () => {
       splitFilterOptionValue(filterOption);
     dispatch(logActions.setQueryMinTemperature(minTemperature));
     dispatch(logActions.setQueryMaxTemperature(maxTemperature));
+    void dispatch(fetchLogs());
   };
 
   const handleDepthFilterOptionClick = (filterOption: string) => {
@@ -138,16 +143,12 @@ const LogsPage: React.FC = () => {
     const [minDepth, maxDepth] = splitFilterOptionValue(filterOption);
     dispatch(logActions.setQueryMinDepth(minDepth));
     dispatch(logActions.setQueryMaxDepth(maxDepth));
+    void dispatch(fetchLogs());
   };
 
-  const fetchMoreLog = () => {
-    const queryWithNextPage = {
-      ...query,
-      page: String(parseInt(query.page) + 1),
-    };
-
-    void dispatch(fetchLogs(queryWithNextPage));
+  const handleFetchMoreLogsButtonClick = () => {
     dispatch(logActions.setQueryPage(String(parseInt(query.page) + 1)));
+    void dispatch(fetchMoreLogs());
   };
 
   // const observerRef = useRef<HTMLDivElement | null>(null);
@@ -239,12 +240,12 @@ const LogsPage: React.FC = () => {
       </Stack>
       <ul>
         <Divider />
-        {logList.map((data, index) => (
+        {logListData.map((log, index) => (
           <LogListItem
             key={index}
-            logId={String(data.id)}
-            location={data.location}
-            date={data.date}
+            logId={String(log.id)}
+            location={log.location}
+            date={log.date}
           />
         ))}
       </ul>
@@ -256,7 +257,10 @@ const LogsPage: React.FC = () => {
         </div> */}
       {!fetchMoreLogButtonDisabled && (
         <Flexbox padding="1rem">
-          <IconButton variant="outlined" onClick={fetchMoreLog}>
+          <IconButton
+            variant="outlined"
+            onClick={handleFetchMoreLogsButtonClick}
+          >
             <MdOutlineKeyboardArrowDown size="2rem" />
           </IconButton>
         </Flexbox>
