@@ -12,9 +12,9 @@ interface Props {
 
 const SearchFilter: React.FC<Props> = ({ name, label, onClick, options }) => {
   return (
-    <Flexbox gap="1rem">
+    <Flexbox gap="1rem" justify="between" width="100%">
       <label>{name}</label>
-      <Dropdown.Button label={label}>
+      <Dropdown.Button width="6rem" label={label}>
         <Dropdown.Menu>
           <Dropdown.MenuItem label="전체" onClick={() => onClick('')} />
           {options.map((option, index) => (

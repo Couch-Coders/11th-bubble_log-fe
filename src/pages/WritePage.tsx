@@ -3,7 +3,9 @@ import { theme } from '@lib/styles/theme';
 import { useDispatch, useSelector } from '@store/index';
 import { postLog, postLogActions } from '@store/slices/postLog';
 import React, { useEffect, useState } from 'react';
+import { MdCheck } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
 import Button from '@components/common/Button';
 import FileInput from '@components/common/FileInput';
@@ -11,6 +13,7 @@ import Flexbox from '@components/common/Flexbox';
 import Input from '@components/common/Input';
 import Snackbar from '@components/common/Snackbar';
 import Textarea from '@components/common/Textarea';
+import Title from '@components/common/Title';
 import DatePicker from '@components/DatePicker';
 import ImagePreview from '@components/ImagePreview';
 import KakaoMap from '@components/KakaoMap';
@@ -23,6 +26,22 @@ import { DIVE_TYPE } from '@utils/constants';
 import { readFileAsync } from '@utils/readFileAsync';
 
 import 'react-datepicker/dist/react-datepicker.css';
+
+const SubTitle = styled.h2`
+  font-size: 1.25rem;
+  font-weight: 600;
+`;
+
+const SuccessIcon = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2rem;
+  height: 2rem;
+  background-color: ${theme.success};
+  color: white;
+  border-radius: 50%;
+`;
 
 const WritePage: React.FC = () => {
   const [date, setDate] = useState<Date | null>(null);
@@ -47,6 +66,7 @@ const WritePage: React.FC = () => {
   const [isTempPostPromptModalOpen, setIsTempPostPromptModalOpen] =
     useState(false);
   const [isTempPostSnackbarOpen, setIsTempPostSnackbarOpen] = useState(false);
+  const [isTempSaveSuccess, setIsTempSaveSuccess] = useState(false);
 
   const isLoading = useSelector((state) => state.postLog.isLoading);
 
@@ -87,12 +107,15 @@ const WritePage: React.FC = () => {
   const handleImageFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
+    console.log('handleImageFileChange');
     if (event.target.files === null) return;
     setImageFileList([...imageFileList, event.target.files[0]]);
     const imageFileUrl = await readFileAsync(event.target.files[0]);
     setImageFileUrlList((prev) => [...prev, imageFileUrl as string]);
     event.target.value = '';
+    console.log('@imageFileUrl', imageFileUrl);
   };
+  console.log('@imageFileUrlList', imageFileUrlList);
 
   const handleSubmit = async () => {
     if (date === null || enterTime === null || leaveTime === null) return;
@@ -143,6 +166,12 @@ const WritePage: React.FC = () => {
       latitude: position.lat,
       longitude: position.lng,
     });
+
+    setIsTempSaveSuccess(true);
+
+    setTimeout(() => {
+      setIsTempSaveSuccess(false);
+    }, 3000);
   };
 
   useEffect(() => {
@@ -165,18 +194,9 @@ const WritePage: React.FC = () => {
         message="임시 저장된 글을 불러왔습니다."
       />
       <Flexbox padding="1rem" flex="col" items="start" gap="1rem">
-        <h1
-          style={{
-            color: theme.primary,
-            fontSize: '3rem',
-            fontWeight: 600,
-            marginTop: '2rem',
-            marginBottom: '1rem',
-          }}
-        >
-          새 로그 생성
-        </h1>
+        <Title>새 로그 생성</Title>
         {isLoading && 'loading...'}
+        <SubTitle>필수 입력 항목</SubTitle>
         <DatePicker startDate={date} onChange={(date) => setDate(date)} />
         <select
           onChange={(e) => setDiveType(e.target.value as 'FREE' | 'SCUBA')}
@@ -248,24 +268,21 @@ const WritePage: React.FC = () => {
         <label>메모</label>
         <Textarea
           value={content}
+          height="8rem"
           onChange={(e) => setContent(e.target.value)}
           placeholder="여기에 메모를 입력하세요."
         />
+        <SubTitle>이미지 추가</SubTitle>
         <FileInput
-          onChange={() => {
-            void handleImageFileChange;
+          onChange={(event) => {
+            void handleImageFileChange(event);
           }}
         />
-        <Flexbox justify="start" gap="1rem" flexWrap>
-          {imageFileUrlList.map((imageFileUrl, index) => (
-            <ImagePreview
-              key={index}
-              imageFileUrl={imageFileUrl}
-              imageFileIndex={index}
-              onRemoveButtonClick={() => removeImageFileUrl(index)}
-            />
-          ))}
-        </Flexbox>
+        <ImagePreview
+          imageFileUrlList={imageFileUrlList}
+          onRemoveButtonClick={removeImageFileUrl}
+        />
+        <SubTitle>위치</SubTitle>
       </Flexbox>
       <KakaoMap position={position} setPosition={setPosition} />
       <Flexbox padding="1rem" width="100%" justify="between">
@@ -273,9 +290,16 @@ const WritePage: React.FC = () => {
           돌아가기
         </Button>
         <Flexbox gap="1rem">
-          <Button variant="outlined" onClick={handleTempSaveButtonClick}>
-            임시 저장
-          </Button>
+          {isTempSaveSuccess && (
+            <SuccessIcon>
+              <MdCheck size="1.25rem" />
+            </SuccessIcon>
+          )}
+          {!isTempSaveSuccess && (
+            <Button variant="outlined" onClick={handleTempSaveButtonClick}>
+              임시 저장
+            </Button>
+          )}
           <Button
             onClick={() => {
               void handleSubmit();

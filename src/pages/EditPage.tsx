@@ -171,8 +171,8 @@ const EditPage: React.FC = () => {
   };
 
   const handleRemovePrieviewImageButtonClick = (
-    imageFileUrl: string,
     imageFileIndex: number,
+    imageFileUrl: string,
   ) => {
     removeImageFileUrlFromList(imageFileIndex);
 
@@ -266,16 +266,10 @@ const EditPage: React.FC = () => {
 
         <FileInput onChange={handleImageFileChange} />
         <Flexbox justify="start" gap="1rem" flexWrap>
-          {imageFileUrlList.map((imageFileUrl, index) => (
-            <ImagePreview
-              key={index}
-              imageFileUrl={imageFileUrl}
-              imageFileIndex={index}
-              onRemoveButtonClick={() =>
-                handleRemovePrieviewImageButtonClick(imageFileUrl, index)
-              }
-            />
-          ))}
+          <ImagePreview
+            imageFileUrlList={imageFileUrlList}
+            onRemoveButtonClick={handleRemovePrieviewImageButtonClick}
+          />
         </Flexbox>
         <label>노트</label>
         <Textarea

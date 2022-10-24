@@ -11,22 +11,6 @@ import Layout from '@components/Layout';
 import UnregisterButton from '@components/UnregisterButton';
 
 const Base = styled.div`
-  .title {
-    font-size: 2rem;
-    font-weight: 600;
-    margin-top: 1rem;
-  }
-
-  .subtitle {
-    font-size: 1.25rem;
-  }
-
-  .mypage-content-box {
-    border: 1px solid ${gray[300]};
-    width: 100%;
-    padding: 1rem;
-  }
-
   .mypage-button {
     background-color: ${gray[100]};
     padding: 0.75rem 1.25rem;
@@ -47,9 +31,29 @@ const Base = styled.div`
   }
 
   .mypage-description {
-    font-size: 0.875rem;
-    color: ${gray[500]};
   }
+`;
+
+const Title = styled.h1`
+  font-size: 2rem;
+  font-weight: 600;
+  margin-top: 1rem;
+`;
+
+const SubTitle = styled.h2`
+  font-size: 1.25rem;
+`;
+
+const Box = styled.div`
+  border: 1px solid ${gray[300]};
+  width: 100%;
+  padding: 1rem;
+`;
+
+const Description = styled.p`
+  font-size: 0.875rem;
+  line-height: 1rem;
+  color: ${gray[500]};
 `;
 
 const MyPage: React.FC = () => {
@@ -73,17 +77,17 @@ const MyPage: React.FC = () => {
     <Layout>
       <Base>
         <Flexbox flex="col" items="start" padding="1rem" gap="4rem">
-          <h1 className="title">마이페이지</h1>
+          <Title>마이페이지</Title>
           <Flexbox flex="col" gap="1rem" width="100%" items="start">
-            <h2 className="subtitle">프로필 사진</h2>
-            <div className="mypage-content-box">
+            <SubTitle>프로필 사진</SubTitle>
+            <Box>
               <Flexbox justify="start" gap="2rem">
                 <Avatar
                   size="6rem"
                   src={data.profileImage}
                   alt="profile-image"
                 />
-                <Flexbox flex="col" gap="1rem" items="start">
+                <Flexbox flex="col" gap="1rem" items="start" width="60%">
                   <a
                     href="https://www.google.com"
                     target="_blank"
@@ -91,37 +95,35 @@ const MyPage: React.FC = () => {
                   >
                     <div className="mypage-button">프로필 사진 업데이트</div>
                   </a>
-                  <p className="mypage-description">
+                  <Description>
                     프로필 사진은 구글 계정 설정에서 업데이트 할 수 있습니다.
-                  </p>
+                  </Description>
                 </Flexbox>
               </Flexbox>
-            </div>
+            </Box>
           </Flexbox>
           <Flexbox flex="col" gap="1rem" width="100%" items="start">
             <h2 className="subtitle">프로필 정보</h2>
-            <div className="mypage-content-box">
-              <Flexbox items="stretch" justify="between" gap="4rem">
+            <Box>
+              <Flexbox items="stretch" justify="between">
                 <p style={{ padding: '0.75rem 0' }}>닉네임</p>
                 <Flexbox flex="col" gap="1rem" items="start" width="80%">
                   <div className="mypage-input">{data.name}</div>
-                  <p className="mypage-description">
+                  <Description>
                     닉네임은 구글 계정 설정에서 변경하실 수 있습니다.
-                  </p>
+                  </Description>
                 </Flexbox>
               </Flexbox>
-            </div>
-            <div className="mypage-content-box">
-              <Flexbox items="stretch" justify="between" gap="4rem">
+            </Box>
+            <Box>
+              <Flexbox items="stretch" justify="between">
                 <p style={{ padding: '0.75rem 0' }}>이메일</p>
                 <Flexbox flex="col" gap="1rem" items="start" width="80%">
                   <div className="mypage-input">{data.email}</div>
-                  <p className="mypage-description">
-                    게정에 등록된 이메일입니다.
-                  </p>
+                  <Description>게정에 등록된 이메일입니다.</Description>
                 </Flexbox>
               </Flexbox>
-            </div>
+            </Box>
           </Flexbox>
           <Flexbox width="100%" justify="end">
             <UnregisterButton

@@ -1,8 +1,8 @@
 import useAuth from '@hooks/useAuth';
-import useOutsideClick from '@hooks/useOutsideClick';
+import { gray } from '@lib/styles/palette';
 import { theme } from '@lib/styles/theme';
 import { useSelector } from '@store/index';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { MdLogout, MdPermIdentity } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -11,16 +11,26 @@ import Avatar from '@components/common/Avatar';
 import Divider from '@components/common/Divider';
 import Flexbox from '@components/common/Flexbox';
 import MenuItem from '@components/common/MenuItem';
+import Modal from '@components/common/Modal';
 import HeaderLogo from '@components/HeaderLogo';
-import ProfileModal from '@components/ProfileModal';
 
-const HeaderStyle = styled.header`
+const HeaderLayout = styled.header`
+  display: flex;
+  justify-content: center;
+  background-color: ${gray[100]};
+`;
+
+const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 1rem;
   background-color: ${theme.primary};
+  border-radius: 0.5rem;
   height: 3.5rem;
+  width: 480px;
+  margin: 1rem;
+  position: relative;
 `;
 
 const Header: React.FC = () => {
@@ -32,10 +42,6 @@ const Header: React.FC = () => {
 
   const { data } = useSelector((state) => state.user);
 
-  const ref = useRef<HTMLDivElement | null>(null);
-
-  useOutsideClick(ref, () => setProfileModalOpen(false));
-
   const handleAvatarClick = () => {
     setProfileModalOpen((prev) => !prev);
   };
@@ -46,9 +52,9 @@ const Header: React.FC = () => {
   };
 
   return (
-    <HeaderStyle>
-      <HeaderLogo />
-      <div ref={ref}>
+    <HeaderLayout>
+      <Container>
+        <HeaderLogo />
         <Flexbox gap="1rem">
           <Avatar
             src={data.profileImage}
@@ -56,7 +62,11 @@ const Header: React.FC = () => {
             onClick={handleAvatarClick}
             clickable
           />
-          <ProfileModal isOpen={profileModalOpen}>
+          <Modal
+            width="16rem"
+            isOpen={profileModalOpen}
+            onClose={() => setProfileModalOpen(false)}
+          >
             <Flexbox flex="col" width="100%" padding="1rem" gap="1rem">
               <Flexbox flex="col" gap="1rem">
                 <Avatar
@@ -87,10 +97,10 @@ const Header: React.FC = () => {
                 </MenuItem>
               </Flexbox>
             </Flexbox>
-          </ProfileModal>
+          </Modal>
         </Flexbox>
-      </div>
-    </HeaderStyle>
+      </Container>
+    </HeaderLayout>
   );
 };
 

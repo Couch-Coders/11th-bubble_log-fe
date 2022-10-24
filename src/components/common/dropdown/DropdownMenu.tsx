@@ -14,8 +14,8 @@ const Container = styled.ul<ContainerProps>`
     rgb(0 0 0 / 14%) 0px 4px 5px 0px, rgb(0 0 0 / 12%) 0px 1px 10px 0px;
 
   border-radius: 0.25rem;
-  width: ${({ width }) => width};
   width: calc(100% + 2px);
+  width: ${({ width }) => width};
 
   overflow: hidden;
 

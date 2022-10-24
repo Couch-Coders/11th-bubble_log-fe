@@ -3,7 +3,12 @@ import useDebounce from '@hooks/useDebounce';
 import { useDispatch, useSelector } from '@store/index';
 import { fetchLogs, logActions } from '@store/slices/log';
 import React, { useCallback, useEffect, useState } from 'react';
-import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
+import {
+  MdClose,
+  MdFilterAlt,
+  MdOutlineKeyboardArrowDown,
+} from 'react-icons/md';
+import { shallowEqual } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import Button from '@components/common/Button';
@@ -11,7 +16,9 @@ import Divider from '@components/common/Divider';
 import Flexbox from '@components/common/Flexbox';
 import IconButton from '@components/common/IconButton';
 import LoadingSpinner from '@components/common/LoadingSpinner';
+import Modal from '@components/common/Modal';
 import Stack from '@components/common/Stack';
+import Title from '@components/common/Title';
 import FavoriteToggleButton from '@components/FavoriteToggleButton';
 import Layout from '@components/Layout';
 import LogListItem from '@components/LogListItem';
@@ -31,9 +38,11 @@ const LogsPage: React.FC = () => {
   const [depthFilterValue, setDepthFilterValue] = useState('');
   const [searchInputValue, setSearchInputValue] = useState('');
 
-  const { data, logList, isLoading, error, query } = useSelector(
-    (state) => state.log,
-  );
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+
+  const { data, logList, isLoading, error } = useSelector((state) => state.log);
+
+  const query = useSelector((state) => state.log.query, shallowEqual);
 
   const debouncedSearchInputValue = useDebounce(searchInputValue, 166);
 
@@ -55,11 +64,10 @@ const LogsPage: React.FC = () => {
 
   const dispatch = useDispatch();
 
-  // adding query as dependency array causes infinite loop
   const fetchLogsWithQuery = useCallback(async () => {
     if (!isLoggedIn) return;
     await dispatch(fetchLogs(query));
-  }, [dispatch, isLoggedIn]);
+  }, [dispatch, isLoggedIn, query]);
 
   useEffect(() => {
     void fetchLogsWithQuery();
@@ -133,44 +141,67 @@ const LogsPage: React.FC = () => {
   return (
     <Layout>
       <Stack spacing={2} p={2}>
-        <Flexbox justify="end">
+        <Flexbox justify="between">
+          <Title>다이빙 기록</Title>
           <Link to="/write">
             <Button>로그 작성</Button>
           </Link>
         </Flexbox>
-        <Flexbox justify="end">
+        <Flexbox justify="end" gap="1rem" style={{ position: 'relative' }}>
           <SearchInput
             value={searchInputValue}
             onChange={handleSearchInputChange}
             onClearButtonClick={() => setSearchInputValue('')}
           />
-        </Flexbox>
-        <Flexbox justify="start" gap="1rem" flexWrap>
-          <SearchFilter
-            name="다이브 종류"
-            label={diveTypeFilterButtonLabel}
-            onClick={handleDiveTypeFilterOptionClick}
-            options={DIVE_TYPE}
-          />
-          <SearchFilter
-            name="위치"
-            label={locationFilterButtonLabel}
-            onClick={handleLocationFilterOptionClick}
-            options={DIVE_LOCATION}
-          />
-          <SearchFilter
-            name="수온"
-            label={temperatureFilterButtonLabel}
-            onClick={handleTemperatureFilterOptionClick}
-            options={DIVE_TEMPERATURE}
-          />
-          <SearchFilter
-            name="깊이"
-            label={depthFilterButtonLabel}
-            onClick={handleDepthFilterOptionClick}
-            options={DIVE_DEPTH}
-          />
           <FavoriteToggleButton isFavorite={false} onClick={() => {}} />
+          <IconButton onClick={() => setIsFilterModalOpen((prev) => !prev)}>
+            <MdFilterAlt size="1.5rem" />
+          </IconButton>
+          <Modal
+            isOpen={isFilterModalOpen}
+            onClose={() => setIsFilterModalOpen(false)}
+          >
+            <Flexbox
+              flex="col"
+              items="start"
+              gap="1rem"
+              padding="1rem"
+              flexWrap
+            >
+              <Flexbox width="100%" justify="between">
+                <p style={{ fontSize: '1.25rem', fontWeight: 600 }}>필터</p>
+                <MdClose
+                  size="1.5rem"
+                  cursor="pointer"
+                  onClick={() => setIsFilterModalOpen(false)}
+                />
+              </Flexbox>
+              <SearchFilter
+                name="다이브 종류"
+                label={diveTypeFilterButtonLabel}
+                onClick={handleDiveTypeFilterOptionClick}
+                options={DIVE_TYPE}
+              />
+              <SearchFilter
+                name="위치"
+                label={locationFilterButtonLabel}
+                onClick={handleLocationFilterOptionClick}
+                options={DIVE_LOCATION}
+              />
+              <SearchFilter
+                name="수온"
+                label={temperatureFilterButtonLabel}
+                onClick={handleTemperatureFilterOptionClick}
+                options={DIVE_TEMPERATURE}
+              />
+              <SearchFilter
+                name="깊이"
+                label={depthFilterButtonLabel}
+                onClick={handleDepthFilterOptionClick}
+                options={DIVE_DEPTH}
+              />
+            </Flexbox>
+          </Modal>
         </Flexbox>
         {isLoading && (
           <Flexbox height="32rem">
@@ -181,15 +212,12 @@ const LogsPage: React.FC = () => {
       <ul>
         <Divider />
         {logList.map((data, index) => (
-          <>
-            <LogListItem
-              key={index}
-              logId={String(data.id)}
-              location={data.location}
-              date={data.date}
-            />
-            <Divider />
-          </>
+          <LogListItem
+            key={index}
+            logId={String(data.id)}
+            location={data.location}
+            date={data.date}
+          />
         ))}
       </ul>
       {/* <div

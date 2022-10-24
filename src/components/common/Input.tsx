@@ -6,6 +6,7 @@ interface ContainerProps {
   startIcon: boolean;
   endIcon: boolean;
   width?: string;
+  height?: string;
   fullWidth: boolean;
 }
 
@@ -23,6 +24,7 @@ const Container = styled.input<ContainerProps>`
   }
 
   width: ${({ width }) => width};
+  height: ${({ height }) => height};
 
   ${({ startIcon }) =>
     startIcon &&
@@ -48,6 +50,7 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   endIcon?: boolean;
   fullWidth?: boolean;
   width?: string;
+  height?: string;
 }
 
 const Input: React.FC<Props> = ({
@@ -55,6 +58,7 @@ const Input: React.FC<Props> = ({
   endIcon = false,
   fullWidth = false,
   width,
+  height,
   ...props
 }) => {
   return (
@@ -62,6 +66,7 @@ const Input: React.FC<Props> = ({
       startIcon={startIcon}
       endIcon={endIcon}
       width={width}
+      height={height}
       fullWidth={fullWidth}
       {...props}
     />

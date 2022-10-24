@@ -9,8 +9,11 @@ const Container = styled.main`
   min-height: calc(100vh - 3.5rem);
 
   .contents {
+    border-radius: 0.5rem;
     background-color: white;
-    width: 1024px;
+    width: 480px;
+    margin: 1rem;
+    margin-top: 0;
   }
 `;
 

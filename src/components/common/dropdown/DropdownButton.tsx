@@ -30,6 +30,7 @@ const dropdownButtonStyle = {
 interface ContainerProps {
   size: DropdownButtonSize;
   open: boolean;
+  width?: string;
 }
 
 const Container = styled.button<ContainerProps>`
@@ -51,6 +52,8 @@ const Container = styled.button<ContainerProps>`
     background-color: ${gray[100]};
   }
 
+  width: ${({ width }) => width};
+
   ${({ size }) => dropdownButtonStyle[size]};
 
   ${({ open }) =>
@@ -65,11 +68,13 @@ const Container = styled.button<ContainerProps>`
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   label?: string;
   size?: DropdownButtonSize;
+  width?: string;
 }
 
 const DropdownButton: React.FC<Props> = ({
   children,
   label,
+  width,
   size = 'medium',
   ...props
 }) => {
@@ -81,6 +86,7 @@ const DropdownButton: React.FC<Props> = ({
 
   return (
     <Container
+      width={width}
       size={size}
       open={open}
       onClick={() => setOpen((prev) => !prev)}

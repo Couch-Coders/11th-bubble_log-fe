@@ -1,9 +1,9 @@
 import { useCallback } from 'react';
 
 const useTempPost = () => {
-  const checkTempPost = () => {
+  const checkTempPost = useCallback(() => {
     return localStorage.getItem('temp') !== null;
-  };
+  }, []);
 
   const loadTempPost = useCallback(() => {
     const tempPost = localStorage.getItem('temp');

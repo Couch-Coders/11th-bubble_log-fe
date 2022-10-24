@@ -4,18 +4,35 @@ import React from 'react';
 import { MdClose } from 'react-icons/md';
 import styled from 'styled-components';
 
-const Container = styled.div`
+import Flexbox from './common/Flexbox';
+
+const Container = styled.ul`
   display: flex;
-  justify-content: center;
-  position: relative;
-  width: 8rem;
-  height: 8rem;
-  overflow: hidden;
+  align-items: center;
+  gap: 1rem;
+  height: 154px;
+  border: 1px solid ${gray[300]};
+  padding: 0.75rem;
   border-radius: 0.5rem;
-  border: 1px solid ${gray[200]};
+  width: 100%;
+  overflow-x: scroll;
+
+  .image-item {
+    position: relative;
+    height: 8rem;
+    min-width: 8rem;
+    max-width: 8rem;
+    border-radius: 0.5rem;
+    border: 1px solid ${gray[200]};
+    overflow: hidden;
+  }
 
   .uploaded-image {
     height: 100%;
+  }
+
+  .file-input-description {
+    color: ${gray[300]};
   }
 
   .remove-button {
@@ -43,25 +60,32 @@ const Container = styled.div`
 `;
 
 interface Props {
-  imageFileUrl: string;
-  imageFileIndex: number;
-  onRemoveButtonClick: (imageFileIndex: number) => void;
+  imageFileUrlList: string[];
+  onRemoveButtonClick: (imageFileIndex: number, imageFileUrl: string) => void;
 }
 
 const ImagePreview: React.FC<Props> = ({
-  imageFileUrl,
-  imageFileIndex,
+  imageFileUrlList,
   onRemoveButtonClick,
 }) => {
   return (
     <Container>
-      <img className="uploaded-image" src={imageFileUrl} alt="image" />
-      <button
-        className="remove-button"
-        onClick={() => onRemoveButtonClick(imageFileIndex)}
-      >
-        <MdClose className="close-icon" />
-      </button>
+      {imageFileUrlList.length === 0 && (
+        <Flexbox width="100%">
+          <p className="file-input-description">추가된 이미지가 없습니다.</p>
+        </Flexbox>
+      )}
+      {imageFileUrlList.map((imageFileUrl, index) => (
+        <li className="image-item" key={index}>
+          <img className="uploaded-image" src={imageFileUrl} alt="image" />
+          <button
+            className="remove-button"
+            onClick={() => onRemoveButtonClick(index, imageFileUrl)}
+          >
+            <MdClose className="close-icon" />
+          </button>
+        </li>
+      ))}
     </Container>
   );
 };

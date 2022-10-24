@@ -8,7 +8,7 @@ import Input from '@components/common/Input';
 const Container = styled.div`
   display: flex;
   position: relative;
-  width: 12rem;
+  width: 100%;
 
   .search-icon {
     position: absolute;
@@ -54,7 +54,14 @@ const SearchInput: React.FC<Props> = ({
   return (
     <Container>
       <MdSearch className="search-icon" />
-      <Input startIcon endIcon fullWidth value={value} onChange={onChange} />
+      <Input
+        startIcon
+        endIcon
+        width="18rem"
+        height="3rem"
+        value={value}
+        onChange={onChange}
+      />
       {value !== '' && (
         <SearchInputClearButton onClick={onClearButtonClick}>
           <MdClose className="close-icon" />

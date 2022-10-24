@@ -24,13 +24,15 @@ const Container = styled.label`
   }
 `;
 
-interface Props extends React.HTMLAttributes<HTMLInputElement> {}
+interface Props extends React.HTMLAttributes<HTMLInputElement> {
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
 
-const FileInput: React.FC<Props> = ({ ...props }) => {
+const FileInput: React.FC<Props> = ({ onChange, ...props }) => {
   return (
     <Container>
       <MdFileUpload className="file-upload-icon" />
-      <input type="file" accept="image" hidden {...props} />
+      <input type="file" accept="image" hidden onChange={onChange} {...props} />
     </Container>
   );
 };
