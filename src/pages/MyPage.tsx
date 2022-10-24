@@ -7,6 +7,7 @@ import styled from 'styled-components';
 
 import Avatar from '@components/common/Avatar';
 import Flexbox from '@components/common/Flexbox';
+import Title from '@components/common/Title';
 import Layout from '@components/Layout';
 import UnregisterButton from '@components/UnregisterButton';
 
@@ -32,12 +33,6 @@ const Base = styled.div`
 
   .mypage-description {
   }
-`;
-
-const Title = styled.h1`
-  font-size: 2rem;
-  font-weight: 600;
-  margin-top: 1rem;
 `;
 
 const SubTitle = styled.h2`
@@ -76,7 +71,7 @@ const MyPage: React.FC = () => {
   return (
     <Layout>
       <Base>
-        <Flexbox flex="col" items="start" padding="1rem" gap="4rem">
+        <Flexbox flex="col" items="start" padding="1rem" gap="3rem">
           <Title>마이페이지</Title>
           <Flexbox flex="col" gap="1rem" width="100%" items="start">
             <SubTitle>프로필 사진</SubTitle>

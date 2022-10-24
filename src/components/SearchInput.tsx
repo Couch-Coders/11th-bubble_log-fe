@@ -8,7 +8,7 @@ import Input from '@components/common/Input';
 const Container = styled.div`
   display: flex;
   position: relative;
-  width: 100%;
+  width: 18rem;
 
   .search-icon {
     position: absolute;
@@ -57,7 +57,7 @@ const SearchInput: React.FC<Props> = ({
       <Input
         startIcon
         endIcon
-        width="18rem"
+        fullWidth
         height="3rem"
         value={value}
         onChange={onChange}

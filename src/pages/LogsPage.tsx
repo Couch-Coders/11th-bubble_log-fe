@@ -44,9 +44,6 @@ const FabContainer = styled.div`
   position: fixed;
   right: 2rem;
   bottom: 2rem;
-
-  .scroll-fab-wrapper {
-  }
 `;
 
 const LogsPage: React.FC = () => {
@@ -110,7 +107,6 @@ const LogsPage: React.FC = () => {
   }, [debouncedSearchInputValue, dispatch]);
 
   const handleDiveTypeFilterOptionClick = (filterOption: string) => {
-    console.log(filterOption);
     setDiveTypeFilterValue(filterOption);
     dispatch(logActions.setQueryDiveType(filterOption));
     void dispatch(fetchLogs());
@@ -176,16 +172,18 @@ const LogsPage: React.FC = () => {
             <Button>로그 작성</Button>
           </Link>
         </Flexbox>
-        <Flexbox justify="end" gap="1rem" style={{ position: 'relative' }}>
+        <Flexbox justify="between" style={{ position: 'relative' }}>
           <SearchInput
             value={searchInputValue}
             onChange={handleSearchInputChange}
             onClearButtonClick={() => setSearchInputValue('')}
           />
-          <FavoriteToggleButton isFavorite={false} onClick={() => {}} />
-          <IconButton onClick={() => setIsFilterModalOpen((prev) => !prev)}>
-            <MdFilterAlt size="1.5rem" />
-          </IconButton>
+          <Flexbox gap="1rem">
+            <FavoriteToggleButton isFavorite={false} onClick={() => {}} />
+            <IconButton onClick={() => setIsFilterModalOpen((prev) => !prev)}>
+              <MdFilterAlt size="1.5rem" />
+            </IconButton>
+          </Flexbox>
           <Modal
             isOpen={isFilterModalOpen}
             onClose={() => setIsFilterModalOpen(false)}

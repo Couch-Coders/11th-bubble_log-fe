@@ -8,7 +8,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   background-color: ${gray[100]};
-  min-height: calc(100vh - ${HEADER_HEIGHT});
+  min-height: calc(100vh - ${HEADER_HEIGHT} - 2rem);
 
   .main {
     border-radius: 0.5rem;
