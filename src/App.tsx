@@ -1,7 +1,7 @@
 import { useDispatch } from '@stores/index';
 import { fetchUser } from '@stores/slices/user';
 import { User } from 'firebase/auth';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 
 import Header from '@components/Header';
@@ -22,18 +22,21 @@ const App: React.FC = () => {
 
   const dispatch = useDispatch();
 
-  const onAuthStateChanged = async (user: User | null): Promise<void> => {
-    if (user === null) return;
-    const token = await user.getIdToken();
-    console.log('@token', token);
-    await dispatch(fetchUser(token));
-  };
+  const onAuthStateChanged = useCallback(
+    async (user: User | null): Promise<void> => {
+      if (user === null) return;
+      const token = await user.getIdToken();
+      console.log('@token', token);
+      await dispatch(fetchUser(token));
+    },
+    [dispatch],
+  );
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       void onAuthStateChanged(user);
     });
-  }, []);
+  }, [auth, onAuthStateChanged]);
 
   return (
     <>

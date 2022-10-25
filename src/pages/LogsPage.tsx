@@ -32,6 +32,7 @@ const LogsPage: React.FC = () => {
   const fetchLogsWithQuery = useCallback(async () => {
     if (!isLoggedIn) return;
     await dispatch(fetchLogs(query));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, isLoggedIn]);
 
   const handleSearchInputChange = (
