@@ -20,6 +20,8 @@ jobs:
           node-version: '16'
       
       - name: build frontend
+        env:
+          CI: false
         run: |
           npm install
           npm run build
