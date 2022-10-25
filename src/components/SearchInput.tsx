@@ -58,6 +58,7 @@ const SearchInput: React.FC<Props> = ({
         startIcon
         endIcon
         fullWidth
+        placeholder="메모 내용으로 검색..."
         height="3rem"
         value={value}
         onChange={onChange}

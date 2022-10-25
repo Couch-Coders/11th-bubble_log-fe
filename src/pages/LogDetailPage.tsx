@@ -7,6 +7,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import Button from '@components/common/Button';
 import Flexbox from '@components/common/Flexbox';
 import LoadingSpinner from '@components/common/LoadingSpinner';
+import Title from '@components/common/Title';
 import FavoriteToggleButton from '@components/FavoriteToggleButton';
 import Layout from '@components/Layout';
 import { BASE_URL } from '@utils/constants';
@@ -57,23 +58,28 @@ const LogDetailPage: React.FC = () => {
     };
   }, [logId, dispatch]);
 
+  if (isLoading || data === null) {
+    return (
+      <Layout>
+        <Flexbox width="100%" height="26rem">
+          <LoadingSpinner />
+        </Flexbox>
+      </Layout>
+    );
+  }
+
   return (
     <Layout>
       <Flexbox flex="col" padding="1rem" gap="1rem" items="start">
-        {data !== null && (
+        <Flexbox gap="1rem">
+          <Title>다이빙 로그 #{data.id}</Title>
           <FavoriteToggleButton
             isFavorite={isFavorite}
             onClick={() => {
               void handleFavoriteToggleButtonClick();
             }}
           />
-        )}
-        {isLoading && (
-          <Flexbox width="100%" height="26rem">
-            <LoadingSpinner />
-          </Flexbox>
-        )}
-        {data !== null && <p>id: {data.id}</p>}
+        </Flexbox>
         {data !== null && <p>노트: {data.content}</p>}
         {data !== null && <p>다이브 종류: {data.diveType}</p>}
         {data !== null && <p>들어간 시간: {data.enterTime}</p>}
@@ -93,18 +99,14 @@ const LogDetailPage: React.FC = () => {
             alt="image"
           />
         ))}
-
         <Flexbox justify="between" width="100%">
           <Link to="/logs">
             <Button>목록으로 돌아가기</Button>
           </Link>
           <Flexbox gap="1rem">
-            {data !== null && (
-              <Link to={`/logs/${data.id}/edit`}>
-                <Button>수정하기</Button>
-              </Link>
-            )}
-
+            <Link to={`/logs/${data.id}/edit`}>
+              <Button>수정하기</Button>
+            </Link>
             <Button
               onClick={() => {
                 void handleDeleteButtonClick();
