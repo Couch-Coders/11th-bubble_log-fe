@@ -15,8 +15,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Button from '@components/common/Button';
+import Card from '@components/common/Card';
 import Chip from '@components/common/Chip';
-import Divider from '@components/common/Divider';
 import Fab from '@components/common/Fab';
 import Flexbox from '@components/common/Flexbox';
 import IconButton from '@components/common/IconButton';
@@ -158,115 +158,118 @@ const LogsPage: React.FC = () => {
 
   return (
     <Layout>
-      <FabContainer>
-        <Fab size="small" shape="rounded" onClick={scrollToTop}>
-          <MdKeyboardArrowUp size="1.5rem" />
-        </Fab>
-        <Fab onClick={() => navigate('/write')}>
-          <MdCreate size="1.5rem" />
-        </Fab>
-      </FabContainer>
-      <Stack spacing={2} p={2}>
-        <Flexbox justify="between">
-          <Title>다이빙 기록</Title>
-          <Link to="/write">
-            <Button>로그 작성</Button>
-          </Link>
-        </Flexbox>
-        <Flexbox justify="between" style={{ position: 'relative' }}>
-          <SearchInput
-            value={searchInputValue}
-            onChange={handleSearchInputChange}
-            onClearButtonClick={() => setSearchInputValue('')}
-          />
-          <Flexbox gap="1rem">
-            <FavoriteToggleButton isFavorite={false} onClick={() => {}} />
-            <IconButton onClick={() => setIsFilterModalOpen((prev) => !prev)}>
-              <MdFilterAlt size="1.5rem" />
-            </IconButton>
+      <Card>
+        <FabContainer>
+          <Fab size="small" shape="rounded" onClick={scrollToTop}>
+            <MdKeyboardArrowUp size="1.5rem" />
+          </Fab>
+          <Fab onClick={() => navigate('/write')}>
+            <MdCreate size="1.5rem" />
+          </Fab>
+        </FabContainer>
+        <Stack spacing={2} p={2}>
+          <Flexbox justify="between">
+            <Title>다이빙 기록</Title>
+            <Link to="/write">
+              <Button>로그 작성</Button>
+            </Link>
           </Flexbox>
-          <Modal
-            isOpen={isFilterModalOpen}
-            onClose={() => setIsFilterModalOpen(false)}
-          >
-            <Flexbox
-              flex="col"
-              items="start"
-              gap="1rem"
-              padding="1rem"
-              flexWrap
+          <Flexbox justify="between" style={{ position: 'relative' }}>
+            <SearchInput
+              value={searchInputValue}
+              onChange={handleSearchInputChange}
+              onClearButtonClick={() => setSearchInputValue('')}
+            />
+            <Flexbox gap="1rem">
+              <FavoriteToggleButton isFavorite={false} onClick={() => {}} />
+              <IconButton onClick={() => setIsFilterModalOpen((prev) => !prev)}>
+                <MdFilterAlt size="1.5rem" />
+              </IconButton>
+            </Flexbox>
+            <Modal
+              isOpen={isFilterModalOpen}
+              onClose={() => setIsFilterModalOpen(false)}
             >
-              <Flexbox width="100%" justify="between">
-                <p style={{ fontSize: '1.25rem', fontWeight: 600 }}>필터</p>
-                <MdClose
-                  size="1.5rem"
-                  cursor="pointer"
-                  onClick={() => setIsFilterModalOpen(false)}
+              <Flexbox
+                flex="col"
+                items="start"
+                gap="1rem"
+                padding="1rem"
+                flexWrap
+              >
+                <Flexbox width="100%" justify="between">
+                  <p style={{ fontSize: '1.25rem', fontWeight: 600 }}>필터</p>
+                  <MdClose
+                    size="1.5rem"
+                    cursor="pointer"
+                    onClick={() => setIsFilterModalOpen(false)}
+                  />
+                </Flexbox>
+                <SearchFilter
+                  name="다이브 종류"
+                  label={diveTypeFilterButtonLabel}
+                  onClick={handleDiveTypeFilterOptionClick}
+                  options={DIVE_TYPE}
+                />
+                <SearchFilter
+                  name="위치"
+                  label={locationFilterButtonLabel}
+                  onClick={handleLocationFilterOptionClick}
+                  options={DIVE_LOCATION}
+                />
+                <SearchFilter
+                  name="수온"
+                  label={temperatureFilterButtonLabel}
+                  onClick={handleTemperatureFilterOptionClick}
+                  options={DIVE_TEMPERATURE}
+                />
+                <SearchFilter
+                  name="깊이"
+                  label={depthFilterButtonLabel}
+                  onClick={handleDepthFilterOptionClick}
+                  options={DIVE_DEPTH}
                 />
               </Flexbox>
-              <SearchFilter
-                name="다이브 종류"
-                label={diveTypeFilterButtonLabel}
-                onClick={handleDiveTypeFilterOptionClick}
-                options={DIVE_TYPE}
-              />
-              <SearchFilter
-                name="위치"
-                label={locationFilterButtonLabel}
-                onClick={handleLocationFilterOptionClick}
-                options={DIVE_LOCATION}
-              />
-              <SearchFilter
-                name="수온"
-                label={temperatureFilterButtonLabel}
-                onClick={handleTemperatureFilterOptionClick}
-                options={DIVE_TEMPERATURE}
-              />
-              <SearchFilter
-                name="깊이"
-                label={depthFilterButtonLabel}
-                onClick={handleDepthFilterOptionClick}
-                options={DIVE_DEPTH}
-              />
-            </Flexbox>
-          </Modal>
-        </Flexbox>
+            </Modal>
+          </Flexbox>
+          <Flexbox justify="start" gap="1rem">
+            <Chip label="수온: 15-20" />
+          </Flexbox>
+        </Stack>
+      </Card>
+      <Card margin="1rem 0">
+        <ul>
+          {logListData.map((log, index) => (
+            <LogListItem
+              key={index}
+              logId={String(log.id)}
+              location={log.location}
+              date={log.date}
+            />
+          ))}
+        </ul>
         {isLoading && (
           <Flexbox height="32rem">
             <LoadingSpinner />
           </Flexbox>
         )}
-        <Flexbox justify="start" gap="1rem">
-          <Chip label="수온: 15-20" />
-        </Flexbox>
-      </Stack>
-      <Divider />
-      <ul>
-        {logListData.map((log, index) => (
-          <LogListItem
-            key={index}
-            logId={String(log.id)}
-            location={log.location}
-            date={log.date}
-          />
-        ))}
-      </ul>
-      {/* <div
+        {/* <div
           style={{ height: '2rem', border: '1px solid red' }}
           ref={observerRef}
           >
           옵저버
         </div> */}
-      {!fetchMoreLogButtonDisabled && (
-        <Flexbox padding="1rem">
-          <IconButton
-            variant="outlined"
-            onClick={handleFetchMoreLogsButtonClick}
-          >
-            <MdOutlineKeyboardArrowDown size="2rem" />
-          </IconButton>
-        </Flexbox>
-      )}
+        {!fetchMoreLogButtonDisabled && (
+          <Flexbox padding="1rem">
+            <IconButton
+              variant="outlined"
+              onClick={handleFetchMoreLogsButtonClick}
+            >
+              <MdOutlineKeyboardArrowDown size="2rem" />
+            </IconButton>
+          </Flexbox>
+        )}
+      </Card>
     </Layout>
   );
 };

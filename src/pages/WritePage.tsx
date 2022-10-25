@@ -1,5 +1,6 @@
 import useTempPost from '@hooks/useTempPost';
 import { theme } from '@lib/styles/theme';
+import { DiveType } from '@lib/types/log';
 import { useDispatch, useSelector } from '@store/index';
 import { postLog, postLogActions } from '@store/slices/postLog';
 import React, { useEffect, useState } from 'react';
@@ -8,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Button from '@components/common/Button';
+import Card from '@components/common/Card';
 import FileInput from '@components/common/FileInput';
 import Flexbox from '@components/common/Flexbox';
 import Input from '@components/common/Input';
@@ -45,7 +47,7 @@ const SuccessIcon = styled.div`
 
 const WritePage: React.FC = () => {
   const [date, setDate] = useState<Date | null>(null);
-  const [diveType, setDiveType] = useState<'FREE' | 'SCUBA'>('FREE');
+  const [diveType, setDiveType] = useState<DiveType>('FREE');
   const [temperature, setTemperature] = useState('');
   const [maxDepth, setMaxDepth] = useState('');
   const [sight, setSight] = useState('');
@@ -182,134 +184,136 @@ const WritePage: React.FC = () => {
 
   return (
     <Layout>
-      <LoadingBackdrop isOpen={isLoading} />
-      <TempPostPromptModal
-        isOpen={isTempPostPromptModalOpen}
-        onConfirm={handleTempPostPromptModalConfirm}
-        onClose={handleTempPostPromptModalClose}
-      />
-      <Snackbar
-        isOpen={isTempPostSnackbarOpen}
-        onClose={() => setIsTempPostSnackbarOpen(false)}
-        message="임시 저장된 글을 불러왔습니다."
-      />
-      <Flexbox padding="1rem" flex="col" items="start" gap="1rem">
-        <Title>새 로그 생성</Title>
-        {isLoading && 'loading...'}
-        <SubTitle>필수 입력 항목</SubTitle>
-        <DatePicker startDate={date} onChange={(date) => setDate(date)} />
-        <select
-          onChange={(e) => setDiveType(e.target.value as 'FREE' | 'SCUBA')}
-          defaultValue="type"
-        >
-          <option value="type" disabled>
-            다이브 종류
-          </option>
-          {DIVE_TYPE.map((option, index) => (
-            <option key={index}>{option}</option>
-          ))}
-        </select>
-        <Flexbox gap="1rem">
-          <label>수온</label>
-          <MeasureInput
-            value={temperature}
-            measure="°"
-            onChange={(e) => setTemperature(e.target.value)}
-            placeholder="수온을 입력하세요."
-          />
-        </Flexbox>
-        <Flexbox gap="1rem">
-          <label>최고 깊이</label>
-          <MeasureInput
-            value={maxDepth}
-            measure="m"
-            onChange={(e) => setMaxDepth(e.target.value)}
-            placeholder="최고 깊이를 입력하세요."
-          />
-        </Flexbox>
-        <Flexbox gap="1rem">
-          <label>시야</label>
-          <Input
-            value={sight}
-            onChange={(e) => setSight(e.target.value)}
-            placeholder="시야를 입력하세요."
-          />
-        </Flexbox>
-        <Flexbox gap="1rem">
-          <label>들어간 시간</label>
-          <TimePicker
-            startTime={enterTime}
-            onChange={(time) => setEnterTime(time)}
-          />
-        </Flexbox>
-        <Flexbox gap="1rem">
-          <label>나온 시간</label>
-          <TimePicker
-            startTime={leaveTime}
-            onChange={(time) => setLeaveTime(time)}
-          />
-        </Flexbox>
-        <Flexbox gap="1rem">
-          <label>들어갈 때 탱크량</label>
-          <Input
-            value={maxOxygen}
-            onChange={(e) => setMaxOxygen(e.target.value)}
-            placeholder="들어갈 때 탱크량을 입력하세요."
-          />
-        </Flexbox>
-        <Flexbox gap="1rem">
-          <label>나올 때 탱크량</label>
-          <Input
-            value={minOxygen}
-            onChange={(e) => setMinOxygen(e.target.value)}
-            placeholder="나올 때 탱크량을 입력하세요."
-          />
-        </Flexbox>
-        <label>메모</label>
-        <Textarea
-          value={content}
-          height="8rem"
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="여기에 메모를 입력하세요."
+      <Card margin="0 0 1rem 0">
+        <LoadingBackdrop isOpen={isLoading} />
+        <TempPostPromptModal
+          isOpen={isTempPostPromptModalOpen}
+          onConfirm={handleTempPostPromptModalConfirm}
+          onClose={handleTempPostPromptModalClose}
         />
-        <SubTitle>이미지 추가</SubTitle>
-        <FileInput
-          onChange={(event) => {
-            void handleImageFileChange(event);
-          }}
+        <Snackbar
+          isOpen={isTempPostSnackbarOpen}
+          onClose={() => setIsTempPostSnackbarOpen(false)}
+          message="임시 저장된 글을 불러왔습니다."
         />
-        <ImagePreview
-          imageFileUrlList={imageFileUrlList}
-          onRemoveButtonClick={removeImageFileUrl}
-        />
-        <SubTitle>위치</SubTitle>
-      </Flexbox>
-      <KakaoMap position={position} setPosition={setPosition} />
-      <Flexbox padding="1rem" width="100%" justify="between">
-        <Button variant="text" onClick={() => navigate(-1)}>
-          돌아가기
-        </Button>
-        <Flexbox gap="1rem">
-          {isTempSaveSuccess && (
-            <SuccessIcon>
-              <MdCheck size="1.25rem" />
-            </SuccessIcon>
-          )}
-          {!isTempSaveSuccess && (
-            <Button variant="outlined" onClick={handleTempSaveButtonClick}>
-              임시 저장
-            </Button>
-          )}
-          <Button
-            onClick={() => {
-              void handleSubmit();
-            }}
-            disabled={!isValidated}
+        <Flexbox padding="1rem" flex="col" items="start" gap="1rem">
+          <Title>새 로그 생성</Title>
+          {isLoading && 'loading...'}
+          <SubTitle>필수 입력 항목</SubTitle>
+          <DatePicker startDate={date} onChange={(date) => setDate(date)} />
+          <select
+            onChange={(e) => setDiveType(e.target.value as DiveType)}
+            defaultValue="type"
           >
-            생성하기
-          </Button>
+            <option value="type" disabled>
+              다이브 종류
+            </option>
+            {DIVE_TYPE.map((option, index) => (
+              <option key={index}>{option}</option>
+            ))}
+          </select>
+          <Flexbox gap="1rem">
+            <label>수온</label>
+            <MeasureInput
+              value={temperature}
+              measure="°"
+              onChange={(e) => setTemperature(e.target.value)}
+              placeholder="수온을 입력하세요."
+            />
+          </Flexbox>
+          <Flexbox gap="1rem">
+            <label>최고 깊이</label>
+            <MeasureInput
+              value={maxDepth}
+              measure="m"
+              onChange={(e) => setMaxDepth(e.target.value)}
+              placeholder="최고 깊이를 입력하세요."
+            />
+          </Flexbox>
+          <Flexbox gap="1rem">
+            <label>시야</label>
+            <Input
+              value={sight}
+              onChange={(e) => setSight(e.target.value)}
+              placeholder="시야를 입력하세요."
+            />
+          </Flexbox>
+          <Flexbox gap="1rem">
+            <label>들어간 시간</label>
+            <TimePicker
+              startTime={enterTime}
+              onChange={(time) => setEnterTime(time)}
+            />
+          </Flexbox>
+          <Flexbox gap="1rem">
+            <label>나온 시간</label>
+            <TimePicker
+              startTime={leaveTime}
+              onChange={(time) => setLeaveTime(time)}
+            />
+          </Flexbox>
+          <Flexbox gap="1rem">
+            <label>들어갈 때 탱크량</label>
+            <Input
+              value={maxOxygen}
+              onChange={(e) => setMaxOxygen(e.target.value)}
+              placeholder="들어갈 때 탱크량을 입력하세요."
+            />
+          </Flexbox>
+          <Flexbox gap="1rem">
+            <label>나올 때 탱크량</label>
+            <Input
+              value={minOxygen}
+              onChange={(e) => setMinOxygen(e.target.value)}
+              placeholder="나올 때 탱크량을 입력하세요."
+            />
+          </Flexbox>
+          <label>메모</label>
+          <Textarea
+            value={content}
+            height="8rem"
+            onChange={(e) => setContent(e.target.value)}
+            placeholder="여기에 메모를 입력하세요."
+          />
+          <SubTitle>이미지 추가</SubTitle>
+          <FileInput
+            onChange={(event) => {
+              void handleImageFileChange(event);
+            }}
+          />
+          <ImagePreview
+            imageFileUrlList={imageFileUrlList}
+            onRemoveButtonClick={removeImageFileUrl}
+          />
+          <SubTitle>위치</SubTitle>
         </Flexbox>
-      </Flexbox>
+        <KakaoMap position={position} setPosition={setPosition} />
+        <Flexbox padding="1rem" width="100%" justify="between">
+          <Button variant="text" onClick={() => navigate(-1)}>
+            돌아가기
+          </Button>
+          <Flexbox gap="1rem">
+            {isTempSaveSuccess && (
+              <SuccessIcon>
+                <MdCheck size="1.25rem" />
+              </SuccessIcon>
+            )}
+            {!isTempSaveSuccess && (
+              <Button variant="outlined" onClick={handleTempSaveButtonClick}>
+                임시 저장
+              </Button>
+            )}
+            <Button
+              onClick={() => {
+                void handleSubmit();
+              }}
+              disabled={!isValidated}
+            >
+              생성하기
+            </Button>
+          </Flexbox>
+        </Flexbox>
+      </Card>
     </Layout>
   );
 };

@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Avatar from '@components/common/Avatar';
+import Card from '@components/common/Card';
 import Flexbox from '@components/common/Flexbox';
 import Title from '@components/common/Title';
 import Layout from '@components/Layout';
@@ -29,9 +30,6 @@ const Base = styled.div`
     padding: 0.75rem;
     border-radius: 0.5rem;
     color: ${gray[400]};
-  }
-
-  .mypage-description {
   }
 `;
 
@@ -71,63 +69,65 @@ const MyPage: React.FC = () => {
   return (
     <Layout>
       <Base>
-        <Flexbox flex="col" items="start" padding="1rem" gap="3rem">
-          <Title>마이페이지</Title>
-          <Flexbox flex="col" gap="1rem" width="100%" items="start">
-            <SubTitle>프로필 사진</SubTitle>
-            <Box>
-              <Flexbox justify="start" gap="2rem">
-                <Avatar
-                  size="6rem"
-                  src={data.profileImage}
-                  alt="profile-image"
-                />
-                <Flexbox flex="col" gap="1rem" items="start" width="60%">
-                  <a
-                    href="https://www.google.com"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <div className="mypage-button">프로필 사진 업데이트</div>
-                  </a>
-                  <Description>
-                    프로필 사진은 구글 계정 설정에서 업데이트 할 수 있습니다.
-                  </Description>
+        <Card>
+          <Flexbox flex="col" items="start" padding="1rem" gap="3rem">
+            <Title>마이페이지</Title>
+            <Flexbox flex="col" gap="1rem" width="100%" items="start">
+              <SubTitle>프로필 사진</SubTitle>
+              <Box>
+                <Flexbox justify="start" gap="2rem">
+                  <Avatar
+                    size="6rem"
+                    src={data.profileImage}
+                    alt="profile-image"
+                  />
+                  <Flexbox flex="col" gap="1rem" items="start" width="60%">
+                    <a
+                      href="https://www.google.com"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <div className="mypage-button">프로필 사진 업데이트</div>
+                    </a>
+                    <Description>
+                      프로필 사진은 구글 계정 설정에서 업데이트 할 수 있습니다.
+                    </Description>
+                  </Flexbox>
                 </Flexbox>
-              </Flexbox>
-            </Box>
-          </Flexbox>
-          <Flexbox flex="col" gap="1rem" width="100%" items="start">
-            <h2 className="subtitle">프로필 정보</h2>
-            <Box>
-              <Flexbox items="stretch" justify="between">
-                <p style={{ padding: '0.75rem 0' }}>닉네임</p>
-                <Flexbox flex="col" gap="1rem" items="start" width="80%">
-                  <div className="mypage-input">{data.name}</div>
-                  <Description>
-                    닉네임은 구글 계정 설정에서 변경하실 수 있습니다.
-                  </Description>
+              </Box>
+            </Flexbox>
+            <Flexbox flex="col" gap="1rem" width="100%" items="start">
+              <h2 className="subtitle">프로필 정보</h2>
+              <Box>
+                <Flexbox items="stretch" justify="between">
+                  <p style={{ padding: '0.75rem 0' }}>닉네임</p>
+                  <Flexbox flex="col" gap="1rem" items="start" width="80%">
+                    <div className="mypage-input">{data.name}</div>
+                    <Description>
+                      닉네임은 구글 계정 설정에서 변경하실 수 있습니다.
+                    </Description>
+                  </Flexbox>
                 </Flexbox>
-              </Flexbox>
-            </Box>
-            <Box>
-              <Flexbox items="stretch" justify="between">
-                <p style={{ padding: '0.75rem 0' }}>이메일</p>
-                <Flexbox flex="col" gap="1rem" items="start" width="80%">
-                  <div className="mypage-input">{data.email}</div>
-                  <Description>게정에 등록된 이메일입니다.</Description>
+              </Box>
+              <Box>
+                <Flexbox items="stretch" justify="between">
+                  <p style={{ padding: '0.75rem 0' }}>이메일</p>
+                  <Flexbox flex="col" gap="1rem" items="start" width="80%">
+                    <div className="mypage-input">{data.email}</div>
+                    <Description>게정에 등록된 이메일입니다.</Description>
+                  </Flexbox>
                 </Flexbox>
-              </Flexbox>
-            </Box>
+              </Box>
+            </Flexbox>
+            <Flexbox width="100%" justify="end">
+              <UnregisterButton
+                onClick={() => {
+                  void handleUnregisterButtonClick;
+                }}
+              />
+            </Flexbox>
           </Flexbox>
-          <Flexbox width="100%" justify="end">
-            <UnregisterButton
-              onClick={() => {
-                void handleUnregisterButtonClick;
-              }}
-            />
-          </Flexbox>
-        </Flexbox>
+        </Card>
       </Base>
     </Layout>
   );

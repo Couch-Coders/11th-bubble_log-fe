@@ -1,4 +1,5 @@
 import { logAPI } from '@lib/apis/log';
+import { DiveType } from '@lib/types/log';
 import {
   createSlice,
   createAsyncThunk,
@@ -10,7 +11,7 @@ export const postLog = createAsyncThunk(
   'log/post/status',
   async (payload: {
     date: Date;
-    diveType: 'FREE' | 'SCUBA';
+    diveType: DiveType;
     enterTime: Date;
     leaveTime: Date;
     sight: string;
@@ -121,7 +122,7 @@ export const postLogSlice = createSlice({
     setLeaveTime(state, action: PayloadAction<Date | null>) {
       state.leaveTime = action.payload;
     },
-    setDiveType(state, action: PayloadAction<'FREE' | 'SCUBA'>) {
+    setDiveType(state, action: PayloadAction<DiveType>) {
       state.diveType = action.payload;
     },
     setSight(state, action: PayloadAction<string>) {

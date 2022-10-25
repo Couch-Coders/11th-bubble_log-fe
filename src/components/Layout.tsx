@@ -11,8 +11,6 @@ const Container = styled.div`
   min-height: calc(100vh - ${HEADER_HEIGHT} - 2rem);
 
   .main {
-    border-radius: 0.5rem;
-    background-color: white;
     width: 480px;
     position: relative;
   }

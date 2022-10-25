@@ -1,3 +1,4 @@
+import { DiveType } from '@lib/types/log';
 import { useCallback } from 'react';
 
 const useTempPost = () => {
@@ -34,7 +35,7 @@ const useTempPost = () => {
       longitude,
       latitude,
     }: {
-      diveType: 'FREE' | 'SCUBA';
+      diveType: DiveType;
       date: Date | null;
       leaveTime: Date | null;
       enterTime: Date | null;

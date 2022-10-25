@@ -104,3 +104,5 @@ export interface ToggleLogFavoriteRepsonse extends LogResponse {
 export interface CreateLogImagesResponse extends LogResponse {
   user: User;
 }
+
+export type DiveType = 'FREE' | 'SCUBA';

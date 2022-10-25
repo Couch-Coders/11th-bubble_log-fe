@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import Button from '@components/common/Button';
+import Card from '@components/common/Card';
 import FileInput from '@components/common/FileInput';
 import Flexbox from '@components/common/Flexbox';
 import Input from '@components/common/Input';
@@ -192,107 +193,109 @@ const EditPage: React.FC = () => {
 
   return (
     <Layout>
-      <Flexbox padding="1rem" flex="col" items="start" gap="1rem">
-        <h1
-          style={{
-            color: theme.primary,
-            fontSize: '3rem',
-            fontWeight: 600,
-            marginTop: '2rem',
-            marginBottom: '1rem',
-          }}
-        >
-          로그 수정
-        </h1>
-        {isLoading && 'loading...'}
-        <DatePicker startDate={date} onChange={(date) => setDate(date)} />
-        <select
-          onChange={(e) => setDiveType(e.target.value)}
-          defaultValue="type"
-        >
-          <option value="type" disabled>
-            다이브 종류
-          </option>
-          {DIVE_TYPE.map((option, index) => (
-            <option key={index}>{option}</option>
-          ))}
-        </select>
-        <Flexbox gap="1rem">
-          <label>수온</label>
-          <Input
-            value={temperature}
-            onChange={(e) => setTemperature(e.target.value)}
-          />
-        </Flexbox>
-        <Flexbox gap="1rem">
-          <label>최고 깊이</label>
-          <Input
-            value={maxDepth}
-            onChange={(e) => setMaxDepth(e.target.value)}
-          />
-        </Flexbox>
-        <Flexbox gap="1rem">
-          <label>시야</label>
-          <Input value={sight} onChange={(e) => setSight(e.target.value)} />
-        </Flexbox>
-        <Flexbox gap="1rem">
-          <label>들어간 시간</label>
-          <TimePicker
-            startTime={enterTime}
-            onChange={(date) => setEnterTime(date)}
-          />
-        </Flexbox>
-        <Flexbox gap="1rem">
-          <label>나온 시간</label>
-          <TimePicker
-            startTime={leaveTime}
-            onChange={(time) => setLeaveTime(time)}
-          />
-        </Flexbox>
-        <Flexbox gap="1rem">
-          <label>들어갈 때 탱크량</label>
-          <Input
-            value={maxOxygen}
-            onChange={(e) => setMaxOxygen(e.target.value)}
-          />
-        </Flexbox>
-        <Flexbox gap="1rem">
-          <label>나올 때 탱크량</label>
-          <Input
-            value={minOxygen}
-            onChange={(e) => setMinOxygen(e.target.value)}
-          />
-        </Flexbox>
-
-        <FileInput onChange={handleImageFileChange} />
-        <Flexbox justify="start" gap="1rem" flexWrap>
-          <ImagePreview
-            imageFileUrlList={imageFileUrlList}
-            onRemoveButtonClick={handleRemovePrieviewImageButtonClick}
-          />
-        </Flexbox>
-        <label>노트</label>
-        <Textarea
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-        />
-      </Flexbox>
-      <KakaoMap position={position} setPosition={setPosition} />
-      <Flexbox padding="1rem" width="100%" justify="end">
-        <Flexbox gap="1rem">
-          <Button variant="text" onClick={() => navigate(-1)}>
-            돌아가기
-          </Button>
-          <Button
-            onClick={() => {
-              void handleSubmit();
+      <Card>
+        <Flexbox padding="1rem" flex="col" items="start" gap="1rem">
+          <h1
+            style={{
+              color: theme.primary,
+              fontSize: '3rem',
+              fontWeight: 600,
+              marginTop: '2rem',
+              marginBottom: '1rem',
             }}
-            disabled={!isValidated}
           >
-            수정하기
-          </Button>
+            로그 수정
+          </h1>
+          {isLoading && 'loading...'}
+          <DatePicker startDate={date} onChange={(date) => setDate(date)} />
+          <select
+            onChange={(e) => setDiveType(e.target.value)}
+            defaultValue="type"
+          >
+            <option value="type" disabled>
+              다이브 종류
+            </option>
+            {DIVE_TYPE.map((option, index) => (
+              <option key={index}>{option}</option>
+            ))}
+          </select>
+          <Flexbox gap="1rem">
+            <label>수온</label>
+            <Input
+              value={temperature}
+              onChange={(e) => setTemperature(e.target.value)}
+            />
+          </Flexbox>
+          <Flexbox gap="1rem">
+            <label>최고 깊이</label>
+            <Input
+              value={maxDepth}
+              onChange={(e) => setMaxDepth(e.target.value)}
+            />
+          </Flexbox>
+          <Flexbox gap="1rem">
+            <label>시야</label>
+            <Input value={sight} onChange={(e) => setSight(e.target.value)} />
+          </Flexbox>
+          <Flexbox gap="1rem">
+            <label>들어간 시간</label>
+            <TimePicker
+              startTime={enterTime}
+              onChange={(date) => setEnterTime(date)}
+            />
+          </Flexbox>
+          <Flexbox gap="1rem">
+            <label>나온 시간</label>
+            <TimePicker
+              startTime={leaveTime}
+              onChange={(time) => setLeaveTime(time)}
+            />
+          </Flexbox>
+          <Flexbox gap="1rem">
+            <label>들어갈 때 탱크량</label>
+            <Input
+              value={maxOxygen}
+              onChange={(e) => setMaxOxygen(e.target.value)}
+            />
+          </Flexbox>
+          <Flexbox gap="1rem">
+            <label>나올 때 탱크량</label>
+            <Input
+              value={minOxygen}
+              onChange={(e) => setMinOxygen(e.target.value)}
+            />
+          </Flexbox>
+
+          <FileInput onChange={handleImageFileChange} />
+          <Flexbox justify="start" gap="1rem" flexWrap>
+            <ImagePreview
+              imageFileUrlList={imageFileUrlList}
+              onRemoveButtonClick={handleRemovePrieviewImageButtonClick}
+            />
+          </Flexbox>
+          <label>노트</label>
+          <Textarea
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+          />
         </Flexbox>
-      </Flexbox>
+        <KakaoMap position={position} setPosition={setPosition} />
+        <Flexbox padding="1rem" width="100%" justify="end">
+          <Flexbox gap="1rem">
+            <Button variant="text" onClick={() => navigate(-1)}>
+              돌아가기
+            </Button>
+            <Button
+              onClick={() => {
+                void handleSubmit();
+              }}
+              disabled={!isValidated}
+            >
+              수정하기
+            </Button>
+          </Flexbox>
+        </Flexbox>
+      </Card>
     </Layout>
   );
 };
