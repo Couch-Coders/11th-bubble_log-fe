@@ -15,6 +15,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Button from '@components/common/Button';
+import Chip from '@components/common/Chip';
 import Divider from '@components/common/Divider';
 import Fab from '@components/common/Fab';
 import Flexbox from '@components/common/Flexbox';
@@ -67,11 +68,11 @@ const LogsPage: React.FC = () => {
   const debouncedSearchInputValue = useDebounce(searchInputValue, 166);
 
   const diveTypeFilterButtonLabel =
-    temperatureFilterValue === '' ? '전체' : temperatureFilterValue;
+    diveTypeFilterValue === '' ? '전체' : diveTypeFilterValue;
   const locationFilterButtonLabel =
     locationFilterValue === '' ? '전체' : locationFilterValue;
   const temperatureFilterButtonLabel =
-    diveTypeFilterValue === '' ? '전체' : diveTypeFilterValue;
+    temperatureFilterValue === '' ? '전체' : temperatureFilterValue;
   const depthFilterButtonLabel =
     depthFilterValue === '' ? '전체' : depthFilterValue;
 
@@ -235,9 +236,12 @@ const LogsPage: React.FC = () => {
             <LoadingSpinner />
           </Flexbox>
         )}
+        <Flexbox justify="start" gap="1rem">
+          <Chip label="수온: 15-20" />
+        </Flexbox>
       </Stack>
+      <Divider />
       <ul>
-        <Divider />
         {logListData.map((log, index) => (
           <LogListItem
             key={index}
