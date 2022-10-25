@@ -1,0 +1,32 @@
+name: deploy
+
+on:
+  push:
+    branches: main
+
+jobs:
+  build:
+    # 해당 동작들을 돌릴 OS
+    runs-on: ubuntu-latest
+    steps:
+      # checkout 하기
+      # backend
+      - name: checkout backend
+        uses: actions/checkout@v3
+
+      # node 설치
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      
+      - name: build frontend
+        run: |
+          npm install
+          npm run build
+      
+      - name: Deploy hosting to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
