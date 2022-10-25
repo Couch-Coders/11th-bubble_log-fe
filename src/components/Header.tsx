@@ -26,6 +26,7 @@ const Container = styled.header`
   justify-content: space-between;
   align-items: center;
   padding: 0 1rem;
+  border-radius: 0.5rem;
   background-color: ${theme.primary};
   height: ${HEADER_HEIGHT};
   width: 480px;
