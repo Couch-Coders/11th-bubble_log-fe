@@ -29,3 +29,8 @@ export const DIVE_TEMPERATURE = [
 export const DIVE_DEPTH = ['0-5', '6-10', '11-15', '16-20', '21-25', '26-30'];
 
 export const HEADER_HEIGHT = '4.5rem';
+
+export const DIVE_TYPE_KOR = {
+  FREE: '자유 다이빙',
+  SCUBA: '스쿠버 다이빙',
+};
