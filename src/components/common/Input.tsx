@@ -12,9 +12,9 @@ interface ContainerProps {
 
 const Container = styled.input<ContainerProps>`
   border-radius: 0.25rem;
-  height: 1.5rem;
+  height: 3rem;
   font-size: 1rem;
-  padding: 1rem;
+  padding: 0.75rem;
   outline: none;
   border: 1px solid ${gray[400]};
   color: ${gray[600]};
