@@ -6,12 +6,14 @@ import ReactDatePicker from 'react-datepicker';
 import styled from 'styled-components';
 
 const TimePickerButton = styled.button`
+  text-align: start;
   border-radius: 0.25rem;
   border: 1px solid ${gray[400]};
   background-color: white;
-  color: ${gray[600]};
-  font-size: 1.25rem;
-  padding: 0.5rem;
+  color: ${gray[300]};
+  font-size: 1rem;
+  height: 3rem;
+  padding: 0.75rem;
   cursor: pointer;
 
   &:hover {
@@ -21,7 +23,7 @@ const TimePickerButton = styled.button`
 
 const Container = styled.div`
   display: flex;
-  width: 12rem;
+  width: 100%;
   flex-direction: column;
   gap: 1rem;
   position: relative;
