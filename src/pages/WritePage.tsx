@@ -1,4 +1,5 @@
 import useTempPost from '@hooks/useTempPost';
+import { gray } from '@lib/styles/palette';
 import { theme } from '@lib/styles/theme';
 import { DiveType } from '@lib/types/log';
 import { useDispatch, useSelector } from '@store/index';
@@ -12,8 +13,8 @@ import Button from '@components/common/Button';
 import Card from '@components/common/Card';
 import FileInput from '@components/common/FileInput';
 import Flexbox from '@components/common/Flexbox';
-import Input from '@components/common/Input';
 import Snackbar from '@components/common/Snackbar';
+import Subtitle from '@components/common/Subtitle';
 import Textarea from '@components/common/Textarea';
 import Title from '@components/common/Title';
 import DatePicker from '@components/DatePicker';
@@ -29,9 +30,8 @@ import { readFileAsync } from '@utils/readFileAsync';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
-const SubTitle = styled.h2`
-  font-size: 1.25rem;
-  font-weight: 600;
+const Spacer = styled.div`
+  height: 1rem;
 `;
 
 const SuccessIcon = styled.div`
@@ -43,6 +43,18 @@ const SuccessIcon = styled.div`
   background-color: ${theme.success};
   color: white;
   border-radius: 50%;
+`;
+
+const InputLabel = styled.label`
+  color: ${gray[500]};
+  font-size: 0.875rem;
+`;
+
+const GridContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  width: 100%;
 `;
 
 const WritePage: React.FC = () => {
@@ -199,83 +211,93 @@ const WritePage: React.FC = () => {
         <Flexbox padding="1rem" flex="col" items="start" gap="1rem">
           <Title>새 로그 생성</Title>
           {isLoading && 'loading...'}
-          <SubTitle>필수 입력 항목</SubTitle>
+          <Subtitle>필수 입력 항목</Subtitle>
           <DatePicker startDate={date} onChange={(date) => setDate(date)} />
-          <select
-            onChange={(e) => setDiveType(e.target.value as DiveType)}
-            defaultValue="type"
-          >
-            <option value="type" disabled>
-              다이브 종류
-            </option>
-            {DIVE_TYPE.map((option, index) => (
-              <option key={index}>{option}</option>
-            ))}
-          </select>
-          <Flexbox gap="1rem">
-            <label>수온</label>
-            <MeasureInput
-              value={temperature}
-              measure="°"
-              onChange={(e) => setTemperature(e.target.value)}
-              placeholder="수온을 입력하세요."
-            />
-          </Flexbox>
-          <Flexbox gap="1rem">
-            <label>최고 깊이</label>
-            <MeasureInput
-              value={maxDepth}
-              measure="m"
-              onChange={(e) => setMaxDepth(e.target.value)}
-              placeholder="최고 깊이를 입력하세요."
-            />
-          </Flexbox>
-          <Flexbox gap="1rem">
-            <label>시야</label>
-            <Input
-              value={sight}
-              onChange={(e) => setSight(e.target.value)}
-              placeholder="시야를 입력하세요."
-            />
-          </Flexbox>
-          <Flexbox gap="1rem">
-            <label>들어간 시간</label>
-            <TimePicker
-              startTime={enterTime}
-              onChange={(time) => setEnterTime(time)}
-            />
-          </Flexbox>
-          <Flexbox gap="1rem">
-            <label>나온 시간</label>
-            <TimePicker
-              startTime={leaveTime}
-              onChange={(time) => setLeaveTime(time)}
-            />
-          </Flexbox>
-          <Flexbox gap="1rem">
-            <label>들어갈 때 탱크량</label>
-            <Input
-              value={maxOxygen}
-              onChange={(e) => setMaxOxygen(e.target.value)}
-              placeholder="들어갈 때 탱크량을 입력하세요."
-            />
-          </Flexbox>
-          <Flexbox gap="1rem">
-            <label>나올 때 탱크량</label>
-            <Input
-              value={minOxygen}
-              onChange={(e) => setMinOxygen(e.target.value)}
-              placeholder="나올 때 탱크량을 입력하세요."
-            />
-          </Flexbox>
-          <label>메모</label>
+          <GridContainer>
+            <Flexbox flex="col" items="start" gap="0.5rem">
+              <InputLabel>다이브 종류</InputLabel>
+              <select
+                onChange={(e) => setDiveType(e.target.value as DiveType)}
+                defaultValue="type"
+              >
+                <option value="type" disabled>
+                  다이브 종류
+                </option>
+                {DIVE_TYPE.map((option, index) => (
+                  <option key={index}>{option}</option>
+                ))}
+              </select>
+            </Flexbox>
+            <Flexbox flex="col" items="start" gap="0.5rem">
+              <InputLabel>들어간 시간</InputLabel>
+              <TimePicker
+                startTime={enterTime}
+                onChange={(time) => setEnterTime(time)}
+              />
+            </Flexbox>
+            <Flexbox flex="col" items="start" gap="0.5rem">
+              <InputLabel>나온 시간</InputLabel>
+              <TimePicker
+                startTime={leaveTime}
+                onChange={(time) => setLeaveTime(time)}
+              />
+            </Flexbox>
+            <Flexbox flex="col" items="start" gap="0.5rem">
+              <InputLabel>들어갈 때 탱크량</InputLabel>
+              <MeasureInput
+                value={maxOxygen}
+                measure="L"
+                onChange={(e) => setMaxOxygen(e.target.value)}
+                placeholder="0~100L 사이"
+              />
+            </Flexbox>
+            <Flexbox flex="col" items="start" gap="0.5rem">
+              <InputLabel>나올 때 탱크량</InputLabel>
+              <MeasureInput
+                value={minOxygen}
+                measure="L"
+                onChange={(e) => setMinOxygen(e.target.value)}
+                placeholder="0~100L 사이"
+              />
+            </Flexbox>
+            <Flexbox flex="col" items="start" gap="0.5rem">
+              <InputLabel>수온</InputLabel>
+              <MeasureInput
+                value={temperature}
+                measure="°"
+                onChange={(e) => setTemperature(e.target.value)}
+                placeholder="0~30°C 사이"
+              />
+            </Flexbox>
+            <Flexbox flex="col" items="start" gap="0.5rem">
+              <InputLabel>최고 깊이</InputLabel>
+              <MeasureInput
+                value={maxDepth}
+                measure="m"
+                onChange={(e) => setMaxDepth(e.target.value)}
+                placeholder="0~100m 사이"
+              />
+            </Flexbox>
+            <Flexbox flex="col" items="start" gap="0.5rem">
+              <InputLabel>시야</InputLabel>
+              <MeasureInput
+                value={sight}
+                measure="m"
+                onChange={(e) => setSight(e.target.value)}
+                placeholder="0~100m 사이"
+              />
+            </Flexbox>
+          </GridContainer>
+          <Spacer />
+          <Subtitle>메모</Subtitle>
           <Textarea
             value={content}
             height="8rem"
             onChange={(e) => setContent(e.target.value)}
             placeholder="여기에 메모를 입력하세요."
           />
-          <SubTitle>이미지 추가</SubTitle>
+          <Spacer />
+          <Subtitle>이미지 추가</Subtitle>
           <FileInput
             onChange={(event) => {
               void handleImageFileChange(event);
@@ -285,7 +307,8 @@ const WritePage: React.FC = () => {
             imageFileUrlList={imageFileUrlList}
             onRemoveButtonClick={removeImageFileUrl}
           />
-          <SubTitle>위치</SubTitle>
+          <Spacer />
+          <Subtitle>위치</Subtitle>
         </Flexbox>
         <KakaoMap position={position} setPosition={setPosition} />
         <Flexbox padding="1rem" width="100%" justify="between">
