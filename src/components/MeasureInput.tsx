@@ -13,7 +13,7 @@ const Container = styled.div<ContainerProps>`
   width: ${({ width }) => width};
 
   .floating-measure {
-    font-size: 1.25rem;
+    font-size: 1rem;
     color: ${gray[300]};
     position: absolute;
     top: 50%;
@@ -32,7 +32,7 @@ interface Props extends React.HTMLAttributes<HTMLInputElement> {
 const MeasureInput: React.FC<Props> = ({
   value,
   measure,
-  width = '12rem',
+  width = '100%',
   onChange,
   ...props
 }) => {
