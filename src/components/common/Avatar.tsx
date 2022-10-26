@@ -66,7 +66,7 @@ const Avatar: React.FC<Props> = ({
 }) => {
   return (
     <Container size={size} shape={shape} clickable={clickable} {...props}>
-      {src !== undefined && (
+      {src !== '' && src !== undefined && (
         <img className="image" src={src} alt={alt} width={size} height={size} />
       )}
     </Container>

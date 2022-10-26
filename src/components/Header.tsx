@@ -60,7 +60,7 @@ const Header: React.FC = () => {
         <Flexbox gap="1rem">
           <Avatar
             src={data.profileImage}
-            alt="profile image"
+            alt="profile-image"
             onClick={handleAvatarClick}
             clickable
           />
