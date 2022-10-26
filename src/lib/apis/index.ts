@@ -1,5 +1,7 @@
 import axiosInstance from 'axios';
 
+import { BASE_URL } from '@utils/constants';
+
 export const axios = axiosInstance.create({
-  baseURL: 'https://umqzvoxbkl.us09.qoddiapp.com',
+  baseURL: BASE_URL,
 });

@@ -101,10 +101,8 @@ export interface ToggleLogFavoriteRepsonse extends LogResponse {
   user: User;
 }
 
-export interface CreateLogImagesBody {
-  formData: FormData;
-}
-
 export interface CreateLogImagesResponse extends LogResponse {
   user: User;
 }
+
+export type DiveType = 'FREE' | 'SCUBA';

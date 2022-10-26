@@ -1,3 +1,5 @@
+import { logAPI } from '@lib/apis/log';
+import { GetLogDetailResponse } from '@lib/types/log';
 import {
   createSlice,
   createAsyncThunk,
@@ -5,9 +7,6 @@ import {
   PayloadAction,
   AnyAction,
 } from '@reduxjs/toolkit';
-import { GetLogDetailResponse } from 'types/log';
-
-import { logAPI } from '@apis/log';
 
 export const fetchLogDetail = createAsyncThunk<GetLogDetailResponse, string>(
   'logDetail/fetchStatus',
@@ -22,7 +21,7 @@ interface LogState {
 
 const initialState: LogState = {
   data: null,
-  isLoading: false,
+  isLoading: true,
   error: null,
 };
 
@@ -30,8 +29,10 @@ export const logDetailSlice = createSlice({
   name: 'logDetail',
   initialState,
   reducers: {
-    clearData(state) {
+    clearState(state) {
       state.data = null;
+      state.isLoading = false;
+      state.error = null;
     },
   },
   extraReducers: (builder) => {

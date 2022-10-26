@@ -1,27 +1,23 @@
+import { gray } from '@lib/styles/palette';
 import React from 'react';
 import { MdClose, MdSearch } from 'react-icons/md';
 import styled from 'styled-components';
 
 import Input from '@components/common/Input';
-import { gray } from '@styles/palette';
 
 const Container = styled.div`
   display: flex;
   position: relative;
-
-  .close-icon {
-    width: 1.25rem;
-    height: 1.25rem;
-  }
+  width: 18rem;
 
   .search-icon {
     position: absolute;
     top: 50%;
     left: 0.5rem;
     transform: translateY(-50%);
-    width: 1.5rem;
-    height: 1.5rem;
-    color: ${gray[400]};
+    width: 1.25rem;
+    height: 1.25rem;
+    color: ${gray[500]};
   }
 `;
 
@@ -34,8 +30,14 @@ const SearchInputClearButton = styled.button`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  right: 0.5rem;
+  right: 0.25rem;
   cursor: pointer;
+
+  .close-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: ${gray[500]};
+  }
 `;
 
 interface Props {
@@ -52,7 +54,15 @@ const SearchInput: React.FC<Props> = ({
   return (
     <Container>
       <MdSearch className="search-icon" />
-      <Input startIcon endIcon fullWidth value={value} onChange={onChange} />
+      <Input
+        startIcon
+        endIcon
+        fullWidth
+        placeholder="메모 내용으로 검색..."
+        height="3rem"
+        value={value}
+        onChange={onChange}
+      />
       {value !== '' && (
         <SearchInputClearButton onClick={onClearButtonClick}>
           <MdClose className="close-icon" />

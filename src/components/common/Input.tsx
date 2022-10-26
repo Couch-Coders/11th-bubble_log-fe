@@ -1,36 +1,45 @@
+import { gray } from '@lib/styles/palette';
 import React from 'react';
 import styled, { css } from 'styled-components';
 
-import { gray } from '@styles/palette';
-
 interface ContainerProps {
-  startIcon?: boolean;
-  endIcon?: boolean;
-  fullWidth?: boolean;
+  startIcon: boolean;
+  endIcon: boolean;
+  width?: string;
+  height?: string;
+  fullWidth: boolean;
 }
 
 const Container = styled.input<ContainerProps>`
   border-radius: 0.25rem;
   height: 1.5rem;
   font-size: 1rem;
-  padding: 0.5rem;
+  padding: 1rem;
   outline: none;
-  border: 1px solid ${gray[500]};
+  border: 1px solid ${gray[400]};
+  color: ${gray[600]};
+
+  ::placeholder {
+    color: ${gray[300]};
+  }
+
+  width: ${({ width }) => width};
+  height: ${({ height }) => height};
 
   ${({ startIcon }) =>
-    startIcon === true &&
+    startIcon &&
     css`
       padding-left: 2.5rem;
     `}
 
   ${({ endIcon }) =>
-    endIcon !== true &&
+    endIcon &&
     css`
       padding-right: 2rem;
     `}
 
   ${({ fullWidth }) =>
-    fullWidth === true &&
+    fullWidth &&
     css`
       width: 100%;
     `}
@@ -40,10 +49,28 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   startIcon?: boolean;
   endIcon?: boolean;
   fullWidth?: boolean;
+  width?: string;
+  height?: string;
 }
 
-const Input: React.FC<Props> = ({ ...props }) => {
-  return <Container {...props} />;
+const Input: React.FC<Props> = ({
+  startIcon = false,
+  endIcon = false,
+  fullWidth = false,
+  width,
+  height,
+  ...props
+}) => {
+  return (
+    <Container
+      startIcon={startIcon}
+      endIcon={endIcon}
+      width={width}
+      height={height}
+      fullWidth={fullWidth}
+      {...props}
+    />
+  );
 };
 
 export default React.memo(Input);

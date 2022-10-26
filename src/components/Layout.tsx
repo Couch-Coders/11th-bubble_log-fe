@@ -1,16 +1,18 @@
+import { gray } from '@lib/styles/palette';
 import React from 'react';
 import styled from 'styled-components';
 
-import { gray } from '@styles/palette';
+import { HEADER_HEIGHT } from '@utils/constants';
 
-const Container = styled.main`
+const Container = styled.div`
   display: flex;
   justify-content: center;
   background-color: ${gray[100]};
+  min-height: calc(100vh - ${HEADER_HEIGHT} - 2rem);
 
-  .contents {
-    background-color: white;
-    width: 1024px;
+  .main {
+    width: 480px;
+    position: relative;
   }
 `;
 
@@ -21,7 +23,7 @@ interface Props {
 const Layout: React.FC<Props> = ({ children }) => {
   return (
     <Container>
-      <div className="contents">{children}</div>
+      <main className="main">{children}</main>
     </Container>
   );
 };

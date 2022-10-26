@@ -1,13 +1,12 @@
+import { authAPI } from '@lib/apis/auth';
+import { LoginResponse } from '@lib/types/auth';
+import { User } from '@lib/types/log';
 import {
   createSlice,
   createAsyncThunk,
   SerializedError,
   PayloadAction,
 } from '@reduxjs/toolkit';
-import { LoginResponse } from 'types/auth';
-import { User } from 'types/log';
-
-import { authAPI } from '@apis/auth';
 
 export const fetchUser = createAsyncThunk<LoginResponse, string>(
   'user/fetchStatus',

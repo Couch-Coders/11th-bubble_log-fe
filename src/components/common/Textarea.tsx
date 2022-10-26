@@ -1,7 +1,6 @@
+import { gray } from '@lib/styles/palette';
 import React from 'react';
 import styled from 'styled-components';
-
-import { gray } from '@styles/palette';
 
 interface ContainerProps {
   height?: string;
@@ -11,7 +10,7 @@ const Container = styled.textarea<ContainerProps>`
   width: 100%;
   border: none;
   outline: none;
-  background-color: ${gray[100]};
+  border: 0.5px solid ${gray[500]};
   border-radius: 0.25rem;
   padding: 1rem;
   resize: none;

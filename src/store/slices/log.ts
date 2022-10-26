@@ -1,30 +1,46 @@
+import { logAPI } from '@lib/apis/log';
+import { GetLogsQuery, GetLogsResponse, LogResponse } from '@lib/types/log';
 import {
   createSlice,
   createAsyncThunk,
   SerializedError,
   PayloadAction,
 } from '@reduxjs/toolkit';
-import { GetLogsQuery, GetLogsResponse, LogResponse } from 'types/log';
 
-import { logAPI } from '@apis/log';
 import { filterQueryObject } from '@utils/filterQueryObject';
 
-export const fetchLogs = createAsyncThunk<GetLogsResponse, GetLogsQuery>(
+export const fetchLogs = createAsyncThunk<GetLogsResponse, void>(
   'log/get/fetchStatus',
-  async (query) => await logAPI.getLogs(filterQueryObject(query)),
+  async (_, thunkAPI: any) => {
+    const state = thunkAPI.getState();
+    const query = state.log.query;
+
+    return await logAPI.getLogs(filterQueryObject(query));
+  },
 );
+
+export const fetchMoreLogs = createAsyncThunk<GetLogsResponse, void>(
+  'log/get/fetchMoreStatus',
+  async (_, thunkAPI: any) => {
+    const state = thunkAPI.getState();
+    const query = state.log.query;
+
+    return await logAPI.getLogs(filterQueryObject(query));
+  },
+);
+
 interface LogState {
-  data: GetLogsResponse | null;
-  logList: LogResponse[];
+  response: GetLogsResponse | null;
+  data: LogResponse[];
   isLoading: boolean;
   error: SerializedError | null;
   query: GetLogsQuery;
 }
 
 const initialState: LogState = {
-  data: null,
-  logList: [],
-  isLoading: false,
+  response: null,
+  data: [],
+  isLoading: true,
   error: null,
   query: {
     startDate: '',
@@ -80,8 +96,8 @@ export const logSlice = createSlice({
       state.query.page = action.payload;
     },
     clearState: (state) => {
-      state.data = null;
-      state.logList = [];
+      state.response = null;
+      state.data = [];
       state.isLoading = false;
       state.error = null;
       state.query = {
@@ -107,11 +123,26 @@ export const logSlice = createSlice({
       })
       .addCase(fetchLogs.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.data = action.payload;
-        state.logList.push(...action.payload.content);
+        state.response = action.payload;
+        state.data = action.payload.content;
         state.error = null;
       })
       .addCase(fetchLogs.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error;
+      });
+
+    builder
+      .addCase(fetchMoreLogs.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchMoreLogs.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.response = action.payload;
+        state.data.push(...action.payload.content);
+        state.error = null;
+      })
+      .addCase(fetchMoreLogs.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error;
       });

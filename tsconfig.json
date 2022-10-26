@@ -6,10 +6,10 @@
       "@pages/*": ["./pages/*"],
       "@services/*": ["./services/*"],
       "@utils/*": ["./utils/*"],
-      "@stores/*": ["./stores/*"],
-      "@styles/*": ["./styles/*"],
-      "@apis/*": ["./apis/*"],
-      "@hooks/*": ["./hooks/*"]
+      "@store/*": ["./store/*"],
+      "@lib/*": ["./lib/*"],
+      "@hooks/*": ["./hooks/*"],
+      "@mocks/*": ["./mocks/*"]
     },
     "target": "es5",
     "lib": [

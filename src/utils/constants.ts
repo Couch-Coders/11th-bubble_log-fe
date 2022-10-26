@@ -1,3 +1,4 @@
+export const BASE_URL = 'https://umqzvoxbkl.us09.qoddiapp.com';
 export const DIVE_TYPE = ['FREE', 'SCUBA'];
 export const DIVE_LOCATION = [
   '서울특별시',
@@ -26,3 +27,5 @@ export const DIVE_TEMPERATURE = [
   '26-30',
 ];
 export const DIVE_DEPTH = ['0-5', '6-10', '11-15', '16-20', '21-25', '26-30'];
+
+export const HEADER_HEIGHT = '4.5rem';
