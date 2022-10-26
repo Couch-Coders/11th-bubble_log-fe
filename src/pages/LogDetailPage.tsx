@@ -1,17 +1,36 @@
 import { logAPI } from '@lib/apis/log';
+import { gray } from '@lib/styles/palette';
+import { theme } from '@lib/styles/theme';
 import { useDispatch, useSelector } from '@store/index';
 import { fetchLogDetail, logDetailActions } from '@store/slices/logDetail';
 import React, { useEffect, useState } from 'react';
+import { MdKeyboardArrowLeft } from 'react-icons/md';
+import { StaticMap } from 'react-kakao-maps-sdk';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import styled from 'styled-components';
 
 import Button from '@components/common/Button';
 import Card from '@components/common/Card';
 import Flexbox from '@components/common/Flexbox';
 import LoadingSpinner from '@components/common/LoadingSpinner';
+import Subtitle from '@components/common/Subtitle';
 import Title from '@components/common/Title';
 import FavoriteToggleButton from '@components/FavoriteToggleButton';
 import Layout from '@components/Layout';
-import { BASE_URL } from '@utils/constants';
+import LogDetailImageView from '@components/LogDetailImageView';
+import LogDetailMemo from '@components/LogDetailMemo';
+import LogDetailMetricsItem from '@components/LogDetailMetricsItem';
+import { DIVE_TYPE_KOR } from '@utils/constants';
+
+const GridContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  width: 100%;
+  height: 12rem;
+  background-color: ${gray[50]};
+  border-radius: 0.5rem;
+`;
 
 const LogDetailPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -72,7 +91,25 @@ const LogDetailPage: React.FC = () => {
   return (
     <Layout>
       <Card>
-        <Flexbox flex="col" padding="1rem" gap="1rem" items="start">
+        <Flexbox padding="0.5rem" justify="start">
+          <Link to="/logs">
+            <Flexbox items="center">
+              <MdKeyboardArrowLeft size="1.5rem" color={theme.primary} />
+              <p
+                style={{
+                  color: gray[600],
+                  fontSize: '0.875rem',
+                  fontWeight: 600,
+                }}
+              >
+                목록으로 돌아가기
+              </p>
+            </Flexbox>
+          </Link>
+        </Flexbox>
+      </Card>
+      <Card margin="1rem 0">
+        <Flexbox flex="col" gap="1rem" padding="1rem" items="start">
           <Flexbox gap="1rem">
             <Title>다이빙 로그 #{data.id}</Title>
             <FavoriteToggleButton
@@ -82,29 +119,10 @@ const LogDetailPage: React.FC = () => {
               }}
             />
           </Flexbox>
-          {data !== null && <p>노트: {data.content}</p>}
-          {data !== null && <p>다이브 종류: {data.diveType}</p>}
-          {data !== null && <p>들어간 시간: {data.enterTime}</p>}
-          {data !== null && <p>장소: {data.location}</p>}
-          {data !== null && <p>위도: {data.latitude}</p>}
-          {data !== null && <p>경도: {data.longitude}</p>}
-          {data !== null && <p>최대 깊이: {data.maxDepth}</p>}
-          {data !== null && <p>들어갈 때 산소량: {data.maxOxygen}</p>}
-          {data !== null && <p>나올 때 산소량: {data.minOxygen}</p>}
-          {data !== null && <p>수온: {data.temperature}</p>}
-          {data !== null && <p>시야 정도: {data.sight}</p>}
-          {data?.images.map((image, index) => (
-            <img
-              style={{ width: '200px', height: '200px' }}
-              key={index}
-              src={`${BASE_URL}${image}`}
-              alt="image"
-            />
-          ))}
-          <Flexbox justify="between" width="100%">
-            <Link to="/logs">
-              <Button>목록으로 돌아가기</Button>
-            </Link>
+          <p style={{ fontWeight: 600, fontSize: '1.25rem' }}>
+            {data.location}
+          </p>
+          <Flexbox justify="end" width="100%">
             <Flexbox gap="1rem">
               <Link to={`/logs/${data.id}/edit`}>
                 <Button>수정하기</Button>
@@ -118,6 +136,76 @@ const LogDetailPage: React.FC = () => {
               </Button>
             </Flexbox>
           </Flexbox>
+        </Flexbox>
+      </Card>
+      <Card margin="1rem 0">
+        <Flexbox flex="col" gap="1rem" padding="1rem" items="start">
+          <Subtitle>업로드한 사진</Subtitle>
+          <LogDetailImageView images={data.images} />
+        </Flexbox>
+      </Card>
+      <Card margin="1rem 0">
+        <Flexbox flex="col" gap="1rem" padding="1rem" items="start">
+          <Subtitle>다이브 지표</Subtitle>
+          <GridContainer>
+            <LogDetailMetricsItem
+              label="다이브 종류"
+              value={DIVE_TYPE_KOR[data.diveType as 'FREE' | 'SCUBA']}
+            />
+            <LogDetailMetricsItem
+              label="수온"
+              value={`${data.temperature}°C`}
+            />
+            <LogDetailMetricsItem label="시야" value={`${data.sight}m`} />
+            <LogDetailMetricsItem
+              label="최대 깊이"
+              value={`${data.maxDepth}m`}
+            />
+            <LogDetailMetricsItem
+              label="최대 산소량"
+              value={`${data.maxOxygen}L`}
+            />
+            <LogDetailMetricsItem
+              label="최소 산소량"
+              value={`${data.minOxygen}L`}
+            />
+          </GridContainer>
+        </Flexbox>
+      </Card>
+      <Card margin="1rem 0">
+        <Flexbox flex="col" gap="1rem" padding="1rem" items="start">
+          <Subtitle>남긴 메모</Subtitle>
+          <LogDetailMemo memo={data.content} />
+        </Flexbox>
+      </Card>
+      <Card margin="1rem 0">
+        <Flexbox flex="col" gap="1rem" padding="1rem" items="start">
+          <Subtitle>위치</Subtitle>
+          <StaticMap
+            center={{
+              lat: data.latitude,
+              lng: data.longitude,
+            }}
+            style={{
+              width: '100%',
+              height: '450px',
+              borderRadius: '0.5rem',
+            }}
+            marker={{
+              position: {
+                lat: data.latitude,
+                lng: data.longitude,
+              },
+            }}
+            level={3}
+          />
+        </Flexbox>
+      </Card>
+      <Card margin="1rem 0">
+        <Flexbox flex="col" gap="1rem" padding="1rem" items="end">
+          <Link to="/logs">
+            <Button>목록으로 돌아가기</Button>
+          </Link>
         </Flexbox>
       </Card>
     </Layout>
