@@ -1,3 +1,4 @@
+import useAuth from '@hooks/useAuth';
 import { logAPI } from '@lib/apis/log';
 import { gray } from '@lib/styles/palette';
 import { theme } from '@lib/styles/theme';
@@ -33,6 +34,8 @@ const GridContainer = styled.div`
 `;
 
 const LogDetailPage: React.FC = () => {
+  const { isLoggedIn } = useAuth();
+
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -70,13 +73,15 @@ const LogDetailPage: React.FC = () => {
   };
 
   useEffect(() => {
+    if (!isLoggedIn) return;
+
     const promise = dispatch(fetchLogDetail(logId as string));
 
     return () => {
       promise.abort();
       dispatch(logDetailActions.clearState());
     };
-  }, [logId, dispatch]);
+  }, [logId, dispatch, isLoggedIn]);
 
   if (isLoading || data === null) {
     return (
