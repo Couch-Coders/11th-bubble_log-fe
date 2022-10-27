@@ -25,7 +25,7 @@ const Container = styled.div`
 
 interface Props {
   isFavorite: boolean;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const FavoriteToggleButton: React.FC<Props> = ({ isFavorite, onClick }) => {
