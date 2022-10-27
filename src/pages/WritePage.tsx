@@ -38,11 +38,11 @@ const SuccessIcon = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 2rem;
-  height: 2rem;
+  width: 86.34px;
+  height: 2.5rem;
   background-color: ${theme.success};
   color: white;
-  border-radius: 50%;
+  border-radius: 0.5rem;
 `;
 
 const InputLabel = styled.label`
@@ -383,7 +383,10 @@ const WritePage: React.FC = () => {
           <Flexbox gap="1rem">
             {isTempSaveSuccess && (
               <SuccessIcon>
-                <MdCheck size="1.25rem" />
+                <Flexbox gap="0.25rem">
+                  <MdCheck size="1.25rem" />
+                  <p style={{ fontSize: '0.875rem' }}>저장됨</p>
+                </Flexbox>
               </SuccessIcon>
             )}
             {!isTempSaveSuccess && (
