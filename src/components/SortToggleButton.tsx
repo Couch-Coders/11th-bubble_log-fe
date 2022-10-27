@@ -3,7 +3,7 @@ import { theme } from '@lib/styles/theme';
 import React from 'react';
 import styled, { css } from 'styled-components';
 
-const BORDER_RADIUS = '0.25rem';
+const BORDER_RADIUS = '0.5rem';
 
 interface ContainerProps {
   active: boolean;
@@ -18,12 +18,11 @@ const Container = styled.button<ContainerProps>`
   padding: 0.5rem;
   border: none;
   cursor: pointer;
-  background-color: white;
-  border: 1px solid ${theme.primary};
+  background-color: ${gray[100]};
   color: ${gray[600]};
 
   &:hover {
-    background-color: ${theme.primaryLight};
+    background-color: ${gray[200]};
     transition: 0.1s;
   }
 
