@@ -29,6 +29,7 @@ import Layout from '@components/Layout';
 import LogListItem from '@components/LogListItem';
 import SearchFilter from '@components/SearchFilter';
 import SearchInput from '@components/SearchInput';
+import SortToggleButton from '@components/SortToggleButton';
 import {
   DIVE_DEPTH,
   DIVE_LOCATION,
@@ -54,6 +55,9 @@ const LogsPage: React.FC = () => {
   const [depthFilterValue, setDepthFilterValue] = useState('');
   const [searchInputValue, setSearchInputValue] = useState('');
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [sortToggleButtonValue, setSortToggleButtonValue] = useState<
+    '등록순' | '최신순'
+  >('등록순');
 
   const {
     response,
@@ -105,6 +109,15 @@ const LogsPage: React.FC = () => {
     dispatch(logActions.setQueryKeyword(debouncedSearchInputValue));
     void dispatch(fetchLogs());
   }, [debouncedSearchInputValue, dispatch]);
+
+  useEffect(() => {
+    if (sortToggleButtonValue === '등록순')
+      dispatch(logActions.setQuerySort('id,asc'));
+    if (sortToggleButtonValue === '최신순')
+      dispatch(logActions.setQuerySort('id,desc'));
+
+    void dispatch(fetchLogs());
+  }, [sortToggleButtonValue, dispatch]);
 
   const handleDiveTypeFilterOptionClick = (filterOption: string) => {
     setDiveTypeFilterValue(filterOption);
@@ -179,11 +192,6 @@ const LogsPage: React.FC = () => {
               onChange={handleSearchInputChange}
               onClearButtonClick={() => setSearchInputValue('')}
             />
-            <Flexbox gap="1rem">
-              <IconButton onClick={() => setIsFilterModalOpen((prev) => !prev)}>
-                <MdFilterAlt size="1.5rem" />
-              </IconButton>
-            </Flexbox>
             <Modal
               isOpen={isFilterModalOpen}
               onClose={() => setIsFilterModalOpen(false)}
@@ -256,8 +264,30 @@ const LogsPage: React.FC = () => {
               />
             )}
           </Flexbox>
+          <Flexbox justify="between">
+            <Flexbox gap="1rem">
+              <SortToggleButton
+                active={sortToggleButtonValue === '등록순'}
+                onClick={() => setSortToggleButtonValue('등록순')}
+              >
+                등록순
+              </SortToggleButton>
+              <SortToggleButton
+                active={sortToggleButtonValue === '최신순'}
+                onClick={() => setSortToggleButtonValue('최신순')}
+              >
+                최신순
+              </SortToggleButton>
+            </Flexbox>
+            <Flexbox gap="1rem">
+              <IconButton onClick={() => setIsFilterModalOpen((prev) => !prev)}>
+                <MdFilterAlt size="1.5rem" />
+              </IconButton>
+            </Flexbox>
+          </Flexbox>
         </Stack>
       </Card>
+
       <ul>
         {logListData.map((log, index) => (
           <LogListItem

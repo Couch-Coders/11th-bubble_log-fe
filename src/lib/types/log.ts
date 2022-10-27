@@ -94,7 +94,7 @@ export interface GetLogsQuery {
   keyword: string;
   page: string;
   size: string;
-  orderBy: string;
+  sort: string;
 }
 
 export interface ToggleLogFavoriteRepsonse extends LogResponse {
