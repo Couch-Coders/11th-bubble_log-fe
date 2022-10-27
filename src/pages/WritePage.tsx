@@ -154,7 +154,12 @@ const WritePage: React.FC = () => {
     content !== '' &&
     enterTime !== null &&
     leaveTime !== null &&
-    date !== null;
+    date !== null &&
+    isMaxDepthInputValid &&
+    isMaxOxygenInputValid &&
+    isMinOxygenInputValid &&
+    isSightInputValid &&
+    isTemperatureInputValid;
 
   const handleImageFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
