@@ -55,6 +55,7 @@ const GridContainer = styled.div`
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
   width: 100%;
+  row-gap: 2rem;
 `;
 
 const WritePage: React.FC = () => {
@@ -82,6 +83,18 @@ const WritePage: React.FC = () => {
   const [isTempPostSnackbarOpen, setIsTempPostSnackbarOpen] = useState(false);
   const [isTempSaveSuccess, setIsTempSaveSuccess] = useState(false);
 
+  const isMaxOxygenInputValid =
+    maxOxygen === '' || (Number(maxOxygen) >= 0 && Number(maxOxygen) <= 30);
+  const isMinOxygenInputValid =
+    minOxygen === '' || (Number(minOxygen) >= 0 && Number(minOxygen) <= 30);
+  const isTemperatureInputValid =
+    temperature === '' ||
+    (Number(temperature) >= 0 && Number(temperature) <= 30);
+  const isMaxDepthInputValid =
+    maxDepth === '' || (Number(maxDepth) >= 0 && Number(maxDepth) <= 30);
+  const isSightInputValid =
+    sight === '' || (Number(sight) >= 0 && Number(sight) <= 30);
+
   const isLoading = useSelector((state) => state.postLog.isLoading);
 
   const dispatch = useDispatch();
@@ -90,6 +103,36 @@ const WritePage: React.FC = () => {
 
   const { checkTempPost, loadTempPost, removeTempPost, createTempPost } =
     useTempPost();
+
+  const handleMaxOxygenInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setMaxOxygen(event.target.value.replace(/\D/g, ''));
+  };
+
+  const handleMinOxygenInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setMinOxygen(event.target.value.replace(/\D/g, ''));
+  };
+
+  const handleTemperatureInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setTemperature(event.target.value.replace(/\D/g, ''));
+  };
+
+  const handleMaxDepthInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setMaxDepth(event.target.value.replace(/\D/g, ''));
+  };
+
+  const handleSightInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setSight(event.target.value.replace(/\D/g, ''));
+  };
 
   const handleTempPostPromptModalConfirm = () => {
     loadTempPost();
@@ -107,7 +150,7 @@ const WritePage: React.FC = () => {
     if (tempPostExist) setIsTempPostPromptModalOpen(true);
   }, [checkTempPost]);
 
-  const isValidated =
+  const isFormValidated =
     temperature !== '' &&
     maxDepth !== '' &&
     sight !== '' &&
@@ -247,8 +290,10 @@ const WritePage: React.FC = () => {
               <MeasureInput
                 value={maxOxygen}
                 measure="L"
-                onChange={(e) => setMaxOxygen(e.target.value)}
+                onChange={handleMaxOxygenInputChange}
                 placeholder="0~100L 사이"
+                isValid={isMaxOxygenInputValid}
+                errorMessage="0~100 사이의 값을 입력해주세요."
               />
             </Flexbox>
             <Flexbox flex="col" items="start" gap="0.5rem">
@@ -256,8 +301,10 @@ const WritePage: React.FC = () => {
               <MeasureInput
                 value={minOxygen}
                 measure="L"
-                onChange={(e) => setMinOxygen(e.target.value)}
+                onChange={handleMinOxygenInputChange}
                 placeholder="0~100L 사이"
+                isValid={isMinOxygenInputValid}
+                errorMessage="0~100 사이의 값을 입력해주세요."
               />
             </Flexbox>
             <Flexbox flex="col" items="start" gap="0.5rem">
@@ -265,8 +312,10 @@ const WritePage: React.FC = () => {
               <MeasureInput
                 value={temperature}
                 measure="°"
-                onChange={(e) => setTemperature(e.target.value)}
+                onChange={handleTemperatureInputChange}
                 placeholder="0~30°C 사이"
+                isValid={isTemperatureInputValid}
+                errorMessage="0~30 사이의 값을 입력해주세요."
               />
             </Flexbox>
             <Flexbox flex="col" items="start" gap="0.5rem">
@@ -274,8 +323,10 @@ const WritePage: React.FC = () => {
               <MeasureInput
                 value={maxDepth}
                 measure="m"
-                onChange={(e) => setMaxDepth(e.target.value)}
+                onChange={handleMaxDepthInputChange}
                 placeholder="0~100m 사이"
+                isValid={isMaxDepthInputValid}
+                errorMessage="0~100 사이의 값을 입력해주세요."
               />
             </Flexbox>
             <Flexbox flex="col" items="start" gap="0.5rem">
@@ -283,8 +334,10 @@ const WritePage: React.FC = () => {
               <MeasureInput
                 value={sight}
                 measure="m"
-                onChange={(e) => setSight(e.target.value)}
+                onChange={handleSightInputChange}
                 placeholder="0~100m 사이"
+                isValid={isSightInputValid}
+                errorMessage="0~100 사이의 값을 입력해주세요."
               />
             </Flexbox>
           </GridContainer>
@@ -330,7 +383,7 @@ const WritePage: React.FC = () => {
               onClick={() => {
                 void handleSubmit();
               }}
-              disabled={!isValidated}
+              disabled={!isFormValidated}
             >
               생성하기
             </Button>
