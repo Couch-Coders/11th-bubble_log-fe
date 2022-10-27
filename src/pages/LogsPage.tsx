@@ -57,7 +57,7 @@ const LogsPage: React.FC = () => {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [sortToggleButtonValue, setSortToggleButtonValue] = useState<
     '등록순' | '최신순'
-  >('등록순');
+  >('최신순');
 
   const {
     response,
@@ -267,16 +267,16 @@ const LogsPage: React.FC = () => {
           <Flexbox justify="between">
             <Flexbox gap="1rem">
               <SortToggleButton
-                active={sortToggleButtonValue === '등록순'}
-                onClick={() => setSortToggleButtonValue('등록순')}
-              >
-                등록순
-              </SortToggleButton>
-              <SortToggleButton
                 active={sortToggleButtonValue === '최신순'}
                 onClick={() => setSortToggleButtonValue('최신순')}
               >
                 최신순
+              </SortToggleButton>
+              <SortToggleButton
+                active={sortToggleButtonValue === '등록순'}
+                onClick={() => setSortToggleButtonValue('등록순')}
+              >
+                등록순
               </SortToggleButton>
             </Flexbox>
             <Flexbox gap="1rem">

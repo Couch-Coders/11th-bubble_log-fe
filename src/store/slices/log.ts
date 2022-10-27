@@ -112,7 +112,7 @@ export const logSlice = createSlice({
         keyword: '',
         page: '0',
         size: '',
-        sort: '',
+        sort: 'id,desc',
       };
     },
   },
