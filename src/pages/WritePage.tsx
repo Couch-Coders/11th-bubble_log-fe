@@ -14,6 +14,7 @@ import Card from '@components/common/Card';
 import FileInput from '@components/common/FileInput';
 import Flexbox from '@components/common/Flexbox';
 import Snackbar from '@components/common/Snackbar';
+import Spacer from '@components/common/Spacer';
 import Subtitle from '@components/common/Subtitle';
 import Textarea from '@components/common/Textarea';
 import Title from '@components/common/Title';
@@ -29,10 +30,6 @@ import { DIVE_LOCATION, DIVE_TYPE } from '@utils/constants';
 import { readFileAsync } from '@utils/readFileAsync';
 
 import 'react-datepicker/dist/react-datepicker.css';
-
-const Spacer = styled.div`
-  height: 1rem;
-`;
 
 const SuccessIcon = styled.div`
   display: flex;

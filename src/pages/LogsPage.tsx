@@ -22,6 +22,7 @@ import Flexbox from '@components/common/Flexbox';
 import IconButton from '@components/common/IconButton';
 import Modal from '@components/common/Modal';
 import Skeleton from '@components/common/Skeleton';
+import Spacer from '@components/common/Spacer';
 import Stack from '@components/common/Stack';
 import Title from '@components/common/Title';
 import Layout from '@components/Layout';
@@ -257,38 +258,48 @@ const LogsPage: React.FC = () => {
           </Flexbox>
         </Stack>
       </Card>
-      <Card margin="1rem 0" style={{ minHeight: '100vh' }}>
-        <ul>
-          {logListData.map((log, index) => (
-            <LogListItem
-              key={index}
-              logId={String(log.id)}
-              location={log.location}
-              date={log.date}
-            />
-          ))}
-        </ul>
-        {isLoading && (
-          <Flexbox flex="col" gap="1rem" padding="1rem">
+      <ul>
+        {logListData.map((log, index) => (
+          <LogListItem
+            key={index}
+            logId={String(log.id)}
+            location={log.location}
+            date={log.date}
+            isFavorite={log.isFavorite}
+          />
+        ))}
+      </ul>
+      {isLoading && (
+        <>
+          <Spacer />
+          <Flexbox flex="col" gap="1rem" width="100%">
             {Array(10)
               .fill(0)
               .map((_, index) => (
-                <Skeleton
-                  key={index}
-                  variant="rounded"
-                  width="100%"
-                  height="4rem"
-                />
+                <Card key={index}>
+                  <Flexbox
+                    flex="col"
+                    gap="0.5rem"
+                    padding="1rem"
+                    width="100%"
+                    items="start"
+                  >
+                    <Skeleton variant="rounded" width="40%" height="0.8rem" />
+                    <Skeleton variant="rounded" width="100%" height="2.5rem" />
+                  </Flexbox>
+                </Card>
               ))}
           </Flexbox>
-        )}
-        {/* <div
+        </>
+      )}
+      {/* <div
           style={{ height: '2rem', border: '1px solid red' }}
           ref={observerRef}
           >
           옵저버
         </div> */}
-        {!fetchMoreLogButtonDisabled && (
+      {!fetchMoreLogButtonDisabled && (
+        <Card margin="1rem 0">
           <Flexbox padding="1rem">
             <IconButton
               variant="outlined"
@@ -297,8 +308,8 @@ const LogsPage: React.FC = () => {
               <MdOutlineKeyboardArrowDown size="2rem" />
             </IconButton>
           </Flexbox>
-        )}
-      </Card>
+        </Card>
+      )}
     </Layout>
   );
 };
