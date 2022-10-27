@@ -20,8 +20,8 @@ import Chip from '@components/common/Chip';
 import Fab from '@components/common/Fab';
 import Flexbox from '@components/common/Flexbox';
 import IconButton from '@components/common/IconButton';
-import LoadingSpinner from '@components/common/LoadingSpinner';
 import Modal from '@components/common/Modal';
+import Skeleton from '@components/common/Skeleton';
 import Stack from '@components/common/Stack';
 import Title from '@components/common/Title';
 import Layout from '@components/Layout';
@@ -257,7 +257,7 @@ const LogsPage: React.FC = () => {
           </Flexbox>
         </Stack>
       </Card>
-      <Card margin="1rem 0">
+      <Card margin="1rem 0" style={{ minHeight: '100vh' }}>
         <ul>
           {logListData.map((log, index) => (
             <LogListItem
@@ -269,8 +269,17 @@ const LogsPage: React.FC = () => {
           ))}
         </ul>
         {isLoading && (
-          <Flexbox height="32rem">
-            <LoadingSpinner />
+          <Flexbox flex="col" gap="1rem" padding="1rem">
+            {Array(10)
+              .fill(0)
+              .map((_, index) => (
+                <Skeleton
+                  key={index}
+                  variant="rounded"
+                  width="100%"
+                  height="4rem"
+                />
+              ))}
           </Flexbox>
         )}
         {/* <div
