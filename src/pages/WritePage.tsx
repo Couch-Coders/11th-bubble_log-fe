@@ -11,6 +11,7 @@ import styled from 'styled-components';
 
 import Button from '@components/common/Button';
 import Card from '@components/common/Card';
+import Dropdown from '@components/common/dropdown';
 import FileInput from '@components/common/FileInput';
 import Flexbox from '@components/common/Flexbox';
 import Snackbar from '@components/common/Snackbar';
@@ -259,31 +260,31 @@ const WritePage: React.FC = () => {
           <GridContainer>
             <Flexbox flex="col" items="start" gap="0.5rem">
               <InputLabel>다이브 종류</InputLabel>
-              <select
-                onChange={(e) => setDiveType(e.target.value as DiveType)}
-                defaultValue="type"
-              >
-                <option value="type" disabled>
-                  다이브 종류
-                </option>
-                {DIVE_TYPE.map((option, index) => (
-                  <option key={index}>{option}</option>
-                ))}
-              </select>
+              <Dropdown.Button label={diveType}>
+                <Dropdown.Menu>
+                  {DIVE_TYPE.map((option, index) => (
+                    <Dropdown.MenuItem
+                      key={index}
+                      label={option}
+                      onClick={() => setDiveType(option as DiveType)}
+                    />
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown.Button>
             </Flexbox>
             <Flexbox flex="col" items="start" gap="0.5rem">
               <InputLabel>장소</InputLabel>
-              <select
-                onChange={(e) => setLocation(e.target.value as DiveLocation)}
-                defaultValue="type"
-              >
-                <option value="type" disabled>
-                  장소
-                </option>
-                {DIVE_LOCATION.map((option, index) => (
-                  <option key={index}>{option}</option>
-                ))}
-              </select>
+              <Dropdown.Button label={location}>
+                <Dropdown.Menu>
+                  {DIVE_LOCATION.map((option, index) => (
+                    <Dropdown.MenuItem
+                      key={index}
+                      label={option}
+                      onClick={() => setLocation(option as DiveLocation)}
+                    />
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown.Button>
             </Flexbox>
             <Flexbox flex="col" items="start" gap="0.5rem">
               <InputLabel>들어간 시간</InputLabel>
