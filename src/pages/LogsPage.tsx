@@ -24,7 +24,6 @@ import LoadingSpinner from '@components/common/LoadingSpinner';
 import Modal from '@components/common/Modal';
 import Stack from '@components/common/Stack';
 import Title from '@components/common/Title';
-import FavoriteToggleButton from '@components/FavoriteToggleButton';
 import Layout from '@components/Layout';
 import LogListItem from '@components/LogListItem';
 import SearchFilter from '@components/SearchFilter';
@@ -53,7 +52,6 @@ const LogsPage: React.FC = () => {
   const [temperatureFilterValue, setTemperatureFilterValue] = useState('');
   const [depthFilterValue, setDepthFilterValue] = useState('');
   const [searchInputValue, setSearchInputValue] = useState('');
-
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
   const {
@@ -181,7 +179,6 @@ const LogsPage: React.FC = () => {
               onClearButtonClick={() => setSearchInputValue('')}
             />
             <Flexbox gap="1rem">
-              <FavoriteToggleButton isFavorite={false} onClick={() => {}} />
               <IconButton onClick={() => setIsFilterModalOpen((prev) => !prev)}>
                 <MdFilterAlt size="1.5rem" />
               </IconButton>
@@ -232,8 +229,31 @@ const LogsPage: React.FC = () => {
               </Flexbox>
             </Modal>
           </Flexbox>
-          <Flexbox justify="start" gap="1rem">
-            <Chip label="수온: 15-20" />
+          <Flexbox justify="start" gap="1rem" flexWrap>
+            {diveTypeFilterValue !== '' && (
+              <Chip
+                label={`타입: ${diveTypeFilterValue}`}
+                onDelete={() => handleDiveTypeFilterOptionClick('')}
+              />
+            )}
+            {locationFilterValue !== '' && (
+              <Chip
+                label={`위치: ${locationFilterValue}`}
+                onDelete={() => handleLocationFilterOptionClick('')}
+              />
+            )}
+            {temperatureFilterValue !== '' && (
+              <Chip
+                label={`수온: ${temperatureFilterValue}`}
+                onDelete={() => handleTemperatureFilterOptionClick('')}
+              />
+            )}
+            {depthFilterValue !== '' && (
+              <Chip
+                label={`깊이: ${depthFilterValue}`}
+                onDelete={() => handleDepthFilterOptionClick('')}
+              />
+            )}
           </Flexbox>
         </Stack>
       </Card>
