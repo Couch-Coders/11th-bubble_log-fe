@@ -265,15 +265,17 @@ const LogsPage: React.FC = () => {
             )}
           </Flexbox>
           <Flexbox justify="between">
-            <Flexbox gap="1rem">
+            <Flexbox>
               <SortToggleButton
                 active={sortToggleButtonValue === '최신순'}
+                position="left"
                 onClick={() => setSortToggleButtonValue('최신순')}
               >
                 최신순
               </SortToggleButton>
               <SortToggleButton
                 active={sortToggleButtonValue === '등록순'}
+                position="right"
                 onClick={() => setSortToggleButtonValue('등록순')}
               >
                 등록순
