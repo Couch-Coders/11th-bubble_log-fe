@@ -1,7 +1,7 @@
 import useTempPost from '@hooks/useTempPost';
 import { gray } from '@lib/styles/palette';
 import { theme } from '@lib/styles/theme';
-import { DiveType } from '@lib/types/log';
+import { DiveLocation, DiveType } from '@lib/types/log';
 import { useDispatch, useSelector } from '@store/index';
 import { postLog, postLogActions } from '@store/slices/postLog';
 import React, { useEffect, useState } from 'react';
@@ -25,7 +25,7 @@ import LoadingBackdrop from '@components/LoadingBackdrop';
 import MeasureInput from '@components/MeasureInput';
 import TempPostPromptModal from '@components/TempPostPromptModal';
 import TimePicker from '@components/TimePicker';
-import { DIVE_TYPE } from '@utils/constants';
+import { DIVE_LOCATION, DIVE_TYPE } from '@utils/constants';
 import { readFileAsync } from '@utils/readFileAsync';
 
 import 'react-datepicker/dist/react-datepicker.css';
@@ -74,9 +74,7 @@ const WritePage: React.FC = () => {
     lat: 33.55635,
     lng: 126.795841,
   });
-  const [location, setLocation] = useState('서울특별시');
-  console.log(setLocation);
-
+  const [location, setLocation] = useState<DiveLocation>('서울특별시');
   const [imageFileUrlList, setImageFileUrlList] = useState<string[]>([]);
   const [isTempPostPromptModalOpen, setIsTempPostPromptModalOpen] =
     useState(false);
@@ -267,6 +265,20 @@ const WritePage: React.FC = () => {
                   다이브 종류
                 </option>
                 {DIVE_TYPE.map((option, index) => (
+                  <option key={index}>{option}</option>
+                ))}
+              </select>
+            </Flexbox>
+            <Flexbox flex="col" items="start" gap="0.5rem">
+              <InputLabel>장소</InputLabel>
+              <select
+                onChange={(e) => setLocation(e.target.value as DiveLocation)}
+                defaultValue="type"
+              >
+                <option value="type" disabled>
+                  장소
+                </option>
+                {DIVE_LOCATION.map((option, index) => (
                   <option key={index}>{option}</option>
                 ))}
               </select>
