@@ -1,8 +1,8 @@
-import { useDispatch, useSelector } from '@stores/index';
-import { fetchUser, userActions } from '@stores/slices/user';
+import { authAPI } from '@lib/apis/auth';
+import { useDispatch, useSelector } from '@store/index';
+import { fetchUser, userActions } from '@store/slices/user';
 import { useNavigate } from 'react-router-dom';
 
-import { authAPI } from '@apis/auth';
 import { FirebaseService } from '@services/firebase';
 
 const useAuth = () => {
@@ -12,7 +12,7 @@ const useAuth = () => {
 
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
-  const login = async () => {
+  const logIn = async () => {
     const token = await signInWithGoogle();
     await dispatch(fetchUser(token));
   };
@@ -26,7 +26,7 @@ const useAuth = () => {
     dispatch(userActions.setIsLoggedIn(false));
   };
 
-  return { isLoggedIn, login, logOut };
+  return { isLoggedIn, logIn, logOut };
 };
 
 export default useAuth;

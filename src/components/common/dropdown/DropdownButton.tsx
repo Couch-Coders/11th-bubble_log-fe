@@ -1,11 +1,10 @@
 import useOutsideClick from '@hooks/useOutsideClick';
+import { gray } from '@lib/styles/palette';
 import React, { useRef, useState } from 'react';
 import { MdArrowDropDown } from 'react-icons/md';
 import styled, { css } from 'styled-components';
 
-import { gray } from '@styles/palette';
-
-type DropdownButtonSizeType = 'small' | 'medium' | 'large';
+type DropdownButtonSize = 'small' | 'medium' | 'large';
 
 const dropdownButtonStyle = {
   small: css`
@@ -29,8 +28,9 @@ const dropdownButtonStyle = {
 };
 
 interface ContainerProps {
-  size?: DropdownButtonSizeType;
+  size: DropdownButtonSize;
   open: boolean;
+  width?: string;
 }
 
 const Container = styled.button<ContainerProps>`
@@ -42,8 +42,8 @@ const Container = styled.button<ContainerProps>`
   gap: 0.5rem;
 
   font-weight: 500;
-  border-radius: 0.5rem;
-  border: 1px solid ${gray[300]};
+  border-radius: 0.25rem;
+  border: 1px solid ${gray[400]};
   background-color: white;
 
   cursor: pointer;
@@ -52,7 +52,9 @@ const Container = styled.button<ContainerProps>`
     background-color: ${gray[100]};
   }
 
-  ${({ size }) => size !== undefined && dropdownButtonStyle[size]};
+  width: ${({ width }) => width};
+
+  ${({ size }) => dropdownButtonStyle[size]};
 
   ${({ open }) =>
     open &&
@@ -65,12 +67,14 @@ const Container = styled.button<ContainerProps>`
 
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   label?: string;
-  size?: DropdownButtonSizeType;
+  size?: DropdownButtonSize;
+  width?: string;
 }
 
 const DropdownButton: React.FC<Props> = ({
   children,
   label,
+  width,
   size = 'medium',
   ...props
 }) => {
@@ -80,15 +84,12 @@ const DropdownButton: React.FC<Props> = ({
 
   useOutsideClick(dropdownRef, () => setOpen(false));
 
-  const handleDropdownButtonClick = () => {
-    setOpen((prev) => !prev);
-  };
-
   return (
     <Container
+      width={width}
       size={size}
       open={open}
-      onClick={handleDropdownButtonClick}
+      onClick={() => setOpen((prev) => !prev)}
       {...props}
       ref={dropdownRef}
     >
@@ -103,4 +104,4 @@ const DropdownButton: React.FC<Props> = ({
   );
 };
 
-export default DropdownButton;
+export default React.memo(DropdownButton);

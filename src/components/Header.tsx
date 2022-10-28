@@ -1,60 +1,108 @@
-import useOutsideClick from '@hooks/useOutsideClick';
-import { useSelector } from '@stores/index';
-import React, { useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import useAuth from '@hooks/useAuth';
+import { gray } from '@lib/styles/palette';
+import { theme } from '@lib/styles/theme';
+import { useSelector } from '@store/index';
+import React, { useState } from 'react';
+import { MdLogout, MdPermIdentity } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Avatar from '@components/common/Avatar';
+import Divider from '@components/common/Divider';
+import Flexbox from '@components/common/Flexbox';
+import MenuItem from '@components/common/MenuItem';
+import Modal from '@components/common/Modal';
 import HeaderLogo from '@components/HeaderLogo';
-import ProfileModal from '@components/ProfileModal';
-import { theme } from '@styles/theme';
+import { HEADER_HEIGHT } from '@utils/constants';
 
-const HeaderStyle = styled.header`
+const HeaderLayout = styled.div`
+  display: flex;
+  justify-content: center;
+  background-color: ${gray[100]};
+`;
+
+const Container = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 1rem;
+  border-radius: 0.5rem;
   background-color: ${theme.primary};
-  height: 3.5rem;
-
-  .flex {
-    display: flex;
-    gap: 1rem;
-  }
+  height: ${HEADER_HEIGHT};
+  width: 480px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  position: relative;
 `;
 
 const Header: React.FC = () => {
   const [profileModalOpen, setProfileModalOpen] = useState(false);
 
+  const { logOut } = useAuth();
+
+  const navigate = useNavigate();
+
   const { data } = useSelector((state) => state.user);
-
-  const ref = useRef<HTMLDivElement | null>(null);
-
-  useOutsideClick(ref, () => setProfileModalOpen(false));
 
   const handleAvatarClick = () => {
     setProfileModalOpen((prev) => !prev);
   };
 
+  const handleLogOutButtonClick = () => {
+    void logOut();
+    setProfileModalOpen(false);
+  };
+
   return (
-    <HeaderStyle>
-      <Link to="/logs">
+    <HeaderLayout>
+      <Container>
         <HeaderLogo />
-      </Link>
-      <div className="flex" ref={ref}>
-        <Avatar
-          src={data.profileImage}
-          alt="profile image"
-          onClick={handleAvatarClick}
-          clickable
-        />
-        <ProfileModal
-          data={data}
-          open={profileModalOpen}
-          onClose={() => setProfileModalOpen(false)}
-        />
-      </div>
-    </HeaderStyle>
+        <Flexbox gap="1rem">
+          <Avatar
+            src={data.profileImage}
+            alt="profile-image"
+            onClick={handleAvatarClick}
+            clickable
+          />
+          <Modal
+            width="16rem"
+            isOpen={profileModalOpen}
+            onClose={() => setProfileModalOpen(false)}
+          >
+            <Flexbox flex="col" width="100%" padding="1rem" gap="1rem">
+              <Flexbox flex="col" gap="1rem">
+                <Avatar
+                  size="6rem"
+                  src={data.profileImage}
+                  alt="profile-image"
+                />
+                <p style={{ fontSize: '1.25rem' }}>{data.name}</p>
+              </Flexbox>
+              <Divider />
+              <Flexbox flex="col" width="100%">
+                <MenuItem
+                  onClick={() => {
+                    setProfileModalOpen(false);
+                    navigate('/mypage');
+                  }}
+                >
+                  <Flexbox gap="0.25rem">
+                    <MdPermIdentity size="1.5rem" />
+                    마이페이지
+                  </Flexbox>
+                </MenuItem>
+                <MenuItem onClick={handleLogOutButtonClick}>
+                  <Flexbox gap="0.25rem">
+                    <MdLogout size="1.5rem" />
+                    로그아웃
+                  </Flexbox>
+                </MenuItem>
+              </Flexbox>
+            </Flexbox>
+          </Modal>
+        </Flexbox>
+      </Container>
+    </HeaderLayout>
   );
 };
 

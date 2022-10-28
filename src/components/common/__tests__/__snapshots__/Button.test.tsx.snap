@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Button 컴포넌트가 올바르게 렌더링되어야 합니다. 1`] = `
+<div>
+  <button
+    class="sc-bcXHqe cVPIeu"
+  >
+    버튼
+  </button>
+</div>
+`;

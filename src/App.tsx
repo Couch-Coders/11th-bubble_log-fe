@@ -1,5 +1,6 @@
-import { useDispatch } from '@stores/index';
-import { fetchUser } from '@stores/slices/user';
+import GlobalStyle from '@lib/styles/globalStyle';
+import { useDispatch } from '@store/index';
+import { fetchUser } from '@store/slices/user';
 import { User } from 'firebase/auth';
 import React, { useCallback, useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
@@ -12,7 +13,6 @@ import LogsPage from '@pages/LogsPage';
 import MyPage from '@pages/MyPage';
 import WritePage from '@pages/WritePage';
 import { FirebaseService } from '@services/firebase';
-import GlobalStyle from '@styles/globalStyle';
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -22,8 +22,8 @@ const App: React.FC = () => {
 
   const dispatch = useDispatch();
 
-  const onAuthStateChanged = useCallback(
-    async (user: User | null): Promise<void> => {
+  const handleAuthStateChanged = useCallback(
+    async (user: User | null) => {
       if (user === null) return;
       const token = await user.getIdToken();
       console.log('@token', token);
@@ -34,9 +34,9 @@ const App: React.FC = () => {
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
-      void onAuthStateChanged(user);
+      void handleAuthStateChanged(user);
     });
-  }, [auth, onAuthStateChanged]);
+  }, [auth, handleAuthStateChanged]);
 
   return (
     <>
@@ -46,8 +46,8 @@ const App: React.FC = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/logs" element={<LogsPage />} />
         <Route path="/write" element={<WritePage />} />
-        <Route path="/log/:logId" element={<LogDetailPage />} />
-        <Route path="/log/:logId/edit" element={<EditPage />} />
+        <Route path="/logs/:logId" element={<LogDetailPage />} />
+        <Route path="/logs/:logId/edit" element={<EditPage />} />
         <Route path="/mypage" element={<MyPage />} />
       </Routes>
     </>

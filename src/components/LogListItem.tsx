@@ -1,52 +1,65 @@
-import React, { useState } from 'react';
+import { gray } from '@lib/styles/palette';
+import { theme } from '@lib/styles/theme';
+import { format } from 'date-fns';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { LogResponse } from 'types/log';
 
-import { logAPI } from '@apis/log';
+import Card from '@components/common/Card';
+import Flexbox from '@components/common/Flexbox';
 import FavoriteToggleButton from '@components/FavoriteToggleButton';
-import { blue } from '@styles/palette';
 
 const Container = styled.li`
-  display: flex;
-  justify-content: space-between;
-  padding: 1rem;
+  margin-top: 1rem;
+  border-radius: 0.25rem;
+  border-left: 6px solid ${theme.primary};
+
   &:hover {
-    background-color: ${blue[50]};
+    box-shadow: ${theme.elevation2};
+    transform: translateY(-2px);
+    transition: 0.1s;
+  }
+
+  .log-id {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: ${gray[500]};
+  }
+
+  .log-date-location {
+    color: ${gray[400]};
   }
 `;
 
 interface Props {
-  data: LogResponse;
+  logId: string;
+  location: string;
+  date: string;
+  isFavorite: boolean;
 }
 
-const LogListItem: React.FC<Props> = ({ data }) => {
-  const [isFavorite, setIsFavorite] = useState(data.isFavorite);
-
-  const handleFavoriteToggleButtonClick = async () => {
-    if (data?.id === undefined) return;
-    setIsFavorite((prev) => !prev);
-    try {
-      await logAPI.toggleLogFavorite(String(data.id));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
+const LogListItem: React.FC<Props> = ({
+  logId,
+  location,
+  date,
+  isFavorite,
+}) => {
   return (
-    <Link to={`/log/${String(data.id)}`}>
+    <Link to={`/logs/${logId}`}>
       <Container>
-        <div style={{ display: 'flex', gap: '1rem' }}>
-          <FavoriteToggleButton
-            checked={isFavorite}
-            onClick={() => {
-              void handleFavoriteToggleButtonClick;
-            }}
-          />
-          <p>#{data.id}</p>
-          <p>{data.location}</p>
-        </div>
-        <p>{data.date}</p>
+        <Card>
+          <Flexbox flex="col" gap="1rem" items="start" padding="1rem">
+            <Flexbox gap="1rem">
+              <p className="log-id">
+                <span style={{ color: theme.primary }}>#</span> {logId}번째 로그
+              </p>
+              <FavoriteToggleButton isFavorite={isFavorite} />
+            </Flexbox>
+            <p className="log-date-location">
+              {format(new Date(date), 'yyyy년 MM월 dd일')}, {location}
+            </p>
+          </Flexbox>
+        </Card>
       </Container>
     </Link>
   );

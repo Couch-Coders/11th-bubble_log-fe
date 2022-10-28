@@ -27,6 +27,7 @@ module.exports = {
   },
   plugins: ['react', 'import', 'preferred-import', 'react-hooks'],
   rules: {
+    '@typescript-eslint/no-invalid-void-type': 'off',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
     'import/order': [

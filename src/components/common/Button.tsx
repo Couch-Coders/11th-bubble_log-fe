@@ -1,8 +1,7 @@
+import { blue } from '@lib/styles/palette';
+import { theme } from '@lib/styles/theme';
 import React from 'react';
 import styled, { css } from 'styled-components';
-
-import { blue } from '@styles/palette';
-import { theme } from '@styles/theme';
 
 type ButtonVariant = 'text' | 'contained' | 'outlined';
 type ButtonSize = 'small' | 'medium' | 'large';
@@ -54,9 +53,9 @@ const buttonSizeStyle = {
 };
 
 interface ContainerProps {
-  variant?: ButtonVariant;
-  size?: ButtonSize;
-  disabled?: boolean;
+  variant: ButtonVariant;
+  size: ButtonSize;
+  disabled: boolean;
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
   width?: string;
@@ -73,6 +72,7 @@ const Container = styled.button<ContainerProps>`
   font-weight: 500;
   border-radius: 0.5rem;
   border: none;
+  transition: 0.1s;
 
   cursor: pointer;
 
@@ -92,12 +92,12 @@ const Container = styled.button<ContainerProps>`
       padding-right: 1rem;
     `};
 
-  ${({ variant }) => variant !== undefined && buttonVariantStyle[variant]};
+  ${({ variant }) => buttonVariantStyle[variant]};
 
-  ${({ size }) => size !== undefined && buttonSizeStyle[size]};
+  ${({ size }) => buttonSizeStyle[size]};
 
   ${({ disabled }) =>
-    disabled === true &&
+    disabled &&
     css`
       opacity: 0.38;
       pointer-events: none;
@@ -122,7 +122,7 @@ const Button: React.FC<Props> = ({
   children = '버튼',
   variant = 'contained',
   size = 'medium',
-  disabled,
+  disabled = false,
   startIcon,
   endIcon,
   width,

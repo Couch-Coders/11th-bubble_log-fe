@@ -1,7 +1,6 @@
+import { gray } from '@lib/styles/palette';
 import React from 'react';
 import styled, { css } from 'styled-components';
-
-import { gray } from '@styles/palette';
 
 const avatarShapeStyle = {
   rounded: css`
@@ -21,7 +20,7 @@ const avatarShapeStyle = {
 };
 
 interface ContainerProps {
-  size?: string;
+  size: string;
   shape: 'rounded' | 'boxier';
   clickable: boolean;
 }
@@ -67,7 +66,7 @@ const Avatar: React.FC<Props> = ({
 }) => {
   return (
     <Container size={size} shape={shape} clickable={clickable} {...props}>
-      {src !== undefined && (
+      {src !== '' && src !== undefined && (
         <img className="image" src={src} alt={alt} width={size} height={size} />
       )}
     </Container>

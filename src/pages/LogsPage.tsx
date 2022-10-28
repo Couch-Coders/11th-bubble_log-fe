@@ -1,39 +1,103 @@
 import useAuth from '@hooks/useAuth';
 import useDebounce from '@hooks/useDebounce';
-import { useDispatch, useSelector } from '@stores/index';
-import { fetchLogs, logActions } from '@stores/slices/log';
-import React, { useCallback, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from '@store/index';
+import { fetchLogs, fetchMoreLogs, logActions } from '@store/slices/log';
+import React, { useEffect, useState } from 'react';
+import {
+  MdClose,
+  MdCreate,
+  MdFilterAlt,
+  MdKeyboardArrowUp,
+  MdOutlineKeyboardArrowDown,
+} from 'react-icons/md';
+import { shallowEqual } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
 import Button from '@components/common/Button';
-import Dropdown from '@components/common/dropdown';
+import Card from '@components/common/Card';
+import Chip from '@components/common/Chip';
+import Fab from '@components/common/Fab';
+import Flexbox from '@components/common/Flexbox';
+import IconButton from '@components/common/IconButton';
+import Modal from '@components/common/Modal';
+import Skeleton from '@components/common/Skeleton';
+import Spacer from '@components/common/Spacer';
 import Stack from '@components/common/Stack';
+import Title from '@components/common/Title';
 import Layout from '@components/Layout';
-import LogList from '@components/LogList';
+import LogListItem from '@components/LogListItem';
+import SearchFilter from '@components/SearchFilter';
 import SearchInput from '@components/SearchInput';
-import { DIVE_TYPE } from '@utils/constants';
+import SortToggleButton from '@components/SortToggleButton';
+import {
+  DIVE_DEPTH,
+  DIVE_LOCATION,
+  DIVE_TEMPERATURE,
+  DIVE_TYPE,
+} from '@utils/constants';
+import { scrollToTop } from '@utils/scrollToTop';
+
+const FabContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+  position: fixed;
+  right: 2rem;
+  bottom: 2rem;
+`;
 
 const LogsPage: React.FC = () => {
-  const [diveTypeFilterValue, setDiveTypeFilterValue] = useState('전체');
-  const [locationFilterValue, setLocationFilterValue] = useState('전체');
-  const [temperatureFilterValue, setTemperatureFilterValue] = useState('전체');
-  const [depthFilterValue, setDepthFilterValue] = useState('전체');
+  const [diveTypeFilterValue, setDiveTypeFilterValue] = useState('');
+  const [locationFilterValue, setLocationFilterValue] = useState('');
+  const [temperatureFilterValue, setTemperatureFilterValue] = useState('');
+  const [depthFilterValue, setDepthFilterValue] = useState('');
   const [searchInputValue, setSearchInputValue] = useState('');
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [sortToggleButtonValue, setSortToggleButtonValue] = useState<
+    '등록순' | '최신순'
+  >('최신순');
+
+  const {
+    response,
+    data: logListData,
+    isLoading,
+    error,
+  } = useSelector((state) => state.log);
+
+  const query = useSelector((state) => state.log.query, shallowEqual);
 
   const debouncedSearchInputValue = useDebounce(searchInputValue, 166);
 
-  const { data, isLoading, error, query } = useSelector((state) => state.log);
+  const diveTypeFilterButtonLabel =
+    diveTypeFilterValue === '' ? '전체' : diveTypeFilterValue;
+  const locationFilterButtonLabel =
+    locationFilterValue === '' ? '전체' : locationFilterValue;
+  const temperatureFilterButtonLabel =
+    temperatureFilterValue === '' ? '전체' : temperatureFilterValue;
+  const depthFilterButtonLabel =
+    depthFilterValue === '' ? '전체' : depthFilterValue;
+
+  const fetchMoreLogButtonDisabled =
+    response === null || error !== null || isLoading || response.last;
+
+  console.log('@logList', logListData);
 
   const { isLoggedIn } = useAuth();
 
   const dispatch = useDispatch();
 
-  // adding query as dependency array causes infinite loop
-  const fetchLogsWithQuery = useCallback(async () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
     if (!isLoggedIn) return;
-    await dispatch(fetchLogs(query));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, isLoggedIn]);
+    void dispatch(fetchLogs());
+
+    return () => {
+      dispatch(logActions.clearState());
+    };
+  }, [isLoggedIn, dispatch]);
 
   const handleSearchInputChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -43,178 +107,239 @@ const LogsPage: React.FC = () => {
 
   useEffect(() => {
     dispatch(logActions.setQueryKeyword(debouncedSearchInputValue));
+    dispatch(logActions.setQueryPage('0'));
+    void dispatch(fetchLogs());
   }, [debouncedSearchInputValue, dispatch]);
 
-  const handleSearchInputClearButtonClick = () => {};
+  useEffect(() => {
+    if (sortToggleButtonValue === '등록순')
+      dispatch(logActions.setQuerySort('id,asc'));
+    if (sortToggleButtonValue === '최신순')
+      dispatch(logActions.setQuerySort('id,desc'));
+
+    dispatch(logActions.setQueryPage('0'));
+
+    void dispatch(fetchLogs());
+  }, [sortToggleButtonValue, dispatch]);
 
   const handleDiveTypeFilterOptionClick = (filterOption: string) => {
     setDiveTypeFilterValue(filterOption);
-    const optionValue = filterOption === '전체' ? '' : filterOption;
-    dispatch(logActions.setQueryDiveType(optionValue));
+    dispatch(logActions.setQueryDiveType(filterOption));
+    dispatch(logActions.setQueryPage('0'));
+
+    void dispatch(fetchLogs());
   };
 
   const handleLocationFilterOptionClick = (filterOption: string) => {
     setLocationFilterValue(filterOption);
-    const optionValue = filterOption === '전체' ? '' : filterOption;
-    dispatch(logActions.setQueryLocation(optionValue));
+    dispatch(logActions.setQueryLocation(filterOption));
+    dispatch(logActions.setQueryPage('0'));
+
+    void dispatch(fetchLogs());
+  };
+
+  const splitFilterOptionValue = (filterOption: string) => {
+    const minValue = filterOption.split('-')[0];
+    const maxValue = filterOption.split('-')[1];
+
+    return [minValue, maxValue];
   };
 
   const handleTemperatureFilterOptionClick = (filterOption: string) => {
     setTemperatureFilterValue(filterOption);
-    const minTemperature = filterOption.split('-')[0];
-    const minTemperatureOptionValue =
-      filterOption === '전체' ? '' : minTemperature;
-    const maxTemperature = filterOption.split('-')[1];
-    const maxTemperatureOptionValue =
-      filterOption === '전체' ? '' : maxTemperature;
-    dispatch(logActions.setQueryMinTemperature(minTemperatureOptionValue));
-    dispatch(logActions.setQueryMaxTemperature(maxTemperatureOptionValue));
+    const [minTemperature, maxTemperature] =
+      splitFilterOptionValue(filterOption);
+    dispatch(logActions.setQueryMinTemperature(minTemperature));
+    dispatch(logActions.setQueryMaxTemperature(maxTemperature));
+    dispatch(logActions.setQueryPage('0'));
+
+    void dispatch(fetchLogs());
   };
 
   const handleDepthFilterOptionClick = (filterOption: string) => {
     setDepthFilterValue(filterOption);
-    const minDepth = filterOption.split('-')[0];
-    const minDepthOptionValue = filterOption === '전체' ? '' : minDepth;
-    const maxDepth = filterOption.split('-')[1];
-    const maxDepthOptionValue = filterOption === '전체' ? '' : maxDepth;
-    dispatch(logActions.setQueryMinDepth(minDepthOptionValue));
-    dispatch(logActions.setQueryMaxDepth(maxDepthOptionValue));
+    const [minDepth, maxDepth] = splitFilterOptionValue(filterOption);
+    dispatch(logActions.setQueryMinDepth(minDepth));
+    dispatch(logActions.setQueryMaxDepth(maxDepth));
+    dispatch(logActions.setQueryPage('0'));
+
+    void dispatch(fetchLogs());
   };
 
-  useEffect(() => {
-    void fetchLogsWithQuery();
-
-    return () => {
-      dispatch(logActions.clearState());
-    };
-  }, [dispatch, fetchLogsWithQuery]);
-
-  const fetchMoreLogButtonDisabled =
-    data === null || error !== null || isLoading || data.last;
-
-  const fetchMoreLog = () => {
-    const queryWithNextPage = {
-      ...query,
-      page: String(parseInt(query.page) + 1),
-    };
-
-    void dispatch(fetchLogs(queryWithNextPage));
+  const handleFetchMoreLogsButtonClick = () => {
     dispatch(logActions.setQueryPage(String(parseInt(query.page) + 1)));
+    void dispatch(fetchMoreLogs());
   };
-
-  const handleFetchMoreLogButtonClick = () => {
-    fetchMoreLog();
-  };
-
-  // const observerRef = useRef<HTMLDivElement | null>(null);
-
-  // const handleIntersect = () => {
-  //   fetchMoreLog();
-  // };
-
-  // useInfiniteScroll(observerRef.current, handleIntersect);
 
   return (
     <Layout>
-      <Stack spacing={2} p={2}>
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Link to="/write">
-            <Button>로그 작성</Button>
-          </Link>
-        </div>
-        <SearchInput
-          value={searchInputValue}
-          onChange={handleSearchInputChange}
-          onClearButtonClick={handleSearchInputClearButtonClick}
-        />
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <label>다이브 종류</label>
-            <Dropdown.Button label={diveTypeFilterValue}>
-              <Dropdown.Menu>
-                <Dropdown.MenuItem
-                  label="전체"
-                  onClick={() => handleDiveTypeFilterOptionClick('전체')}
-                />
-                {DIVE_TYPE.map((option, index) => (
-                  <Dropdown.MenuItem
-                    key={index}
-                    label={option}
-                    onClick={() => handleDiveTypeFilterOptionClick(option)}
+      <Card>
+        <FabContainer>
+          <Fab size="small" shape="rounded" onClick={scrollToTop}>
+            <MdKeyboardArrowUp size="1.5rem" />
+          </Fab>
+          <Fab onClick={() => navigate('/write')}>
+            <MdCreate size="1.5rem" />
+          </Fab>
+        </FabContainer>
+        <Stack spacing={2} p={2}>
+          <Flexbox justify="between">
+            <Title>다이빙 기록</Title>
+            <Link to="/write">
+              <Button>로그 작성</Button>
+            </Link>
+          </Flexbox>
+          <Flexbox justify="between" style={{ position: 'relative' }}>
+            <SearchInput
+              value={searchInputValue}
+              onChange={handleSearchInputChange}
+              onClearButtonClick={() => setSearchInputValue('')}
+            />
+            <Modal
+              isOpen={isFilterModalOpen}
+              onClose={() => setIsFilterModalOpen(false)}
+              style={{ transform: 'translate(1rem, 4rem)' }}
+            >
+              <Flexbox
+                flex="col"
+                items="start"
+                gap="1rem"
+                padding="1rem"
+                flexWrap
+              >
+                <Flexbox width="100%" justify="between">
+                  <p style={{ fontSize: '1.25rem', fontWeight: 600 }}>필터</p>
+                  <MdClose
+                    size="1.5rem"
+                    cursor="pointer"
+                    onClick={() => setIsFilterModalOpen(false)}
                   />
-                ))}
-              </Dropdown.Menu>
-            </Dropdown.Button>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <label>위치</label>
-            <Dropdown.Button label={locationFilterValue}>
-              <Dropdown.Menu>
-                <Dropdown.MenuItem
-                  label="전체"
-                  onClick={() => handleLocationFilterOptionClick('전체')}
+                </Flexbox>
+                <SearchFilter
+                  name="다이브 종류"
+                  label={diveTypeFilterButtonLabel}
+                  onClick={handleDiveTypeFilterOptionClick}
+                  options={DIVE_TYPE}
                 />
-                {DIVE_TYPE.map((option, index) => (
-                  <Dropdown.MenuItem
-                    key={index}
-                    label={option}
-                    onClick={() => handleLocationFilterOptionClick(option)}
-                  />
-                ))}
-              </Dropdown.Menu>
-            </Dropdown.Button>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <label>수온</label>
-            <Dropdown.Button label={temperatureFilterValue}>
-              <Dropdown.Menu>
-                <Dropdown.MenuItem
-                  label="전체"
-                  onClick={() => handleTemperatureFilterOptionClick('전체')}
+                <SearchFilter
+                  name="위치"
+                  label={locationFilterButtonLabel}
+                  onClick={handleLocationFilterOptionClick}
+                  options={DIVE_LOCATION}
                 />
-                {DIVE_TYPE.map((option, index) => (
-                  <Dropdown.MenuItem
-                    key={index}
-                    label={option}
-                    onClick={() => handleTemperatureFilterOptionClick(option)}
-                  />
-                ))}
-              </Dropdown.Menu>
-            </Dropdown.Button>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <label>깊이</label>
-            <Dropdown.Button label={depthFilterValue}>
-              <Dropdown.Menu>
-                <Dropdown.MenuItem
-                  label="전체"
-                  onClick={() => handleDepthFilterOptionClick('전체')}
+                <SearchFilter
+                  name="수온"
+                  label={temperatureFilterButtonLabel}
+                  onClick={handleTemperatureFilterOptionClick}
+                  options={DIVE_TEMPERATURE}
                 />
-                {DIVE_TYPE.map((option, index) => (
-                  <Dropdown.MenuItem
-                    key={index}
-                    label={option}
-                    onClick={() => handleDepthFilterOptionClick(option)}
-                  />
-                ))}
-              </Dropdown.Menu>
-            </Dropdown.Button>
-          </div>
-        </div>
-        <LogList />
-        {/* <div
-          style={{ height: '2rem', border: '1px solid red' }}
-          ref={observerRef}
-        >
-          옵저버
-        </div> */}
-        <button
-          onClick={handleFetchMoreLogButtonClick}
-          disabled={fetchMoreLogButtonDisabled}
-        >
-          더보기
-        </button>
-      </Stack>
+                <SearchFilter
+                  name="깊이"
+                  label={depthFilterButtonLabel}
+                  onClick={handleDepthFilterOptionClick}
+                  options={DIVE_DEPTH}
+                />
+              </Flexbox>
+            </Modal>
+          </Flexbox>
+          <Flexbox justify="start" gap="1rem" flexWrap>
+            {diveTypeFilterValue !== '' && (
+              <Chip
+                label={`타입: ${diveTypeFilterValue}`}
+                onDelete={() => handleDiveTypeFilterOptionClick('')}
+              />
+            )}
+            {locationFilterValue !== '' && (
+              <Chip
+                label={`위치: ${locationFilterValue}`}
+                onDelete={() => handleLocationFilterOptionClick('')}
+              />
+            )}
+            {temperatureFilterValue !== '' && (
+              <Chip
+                label={`수온: ${temperatureFilterValue}`}
+                onDelete={() => handleTemperatureFilterOptionClick('')}
+              />
+            )}
+            {depthFilterValue !== '' && (
+              <Chip
+                label={`깊이: ${depthFilterValue}`}
+                onDelete={() => handleDepthFilterOptionClick('')}
+              />
+            )}
+          </Flexbox>
+          <Flexbox justify="between">
+            <Flexbox>
+              <SortToggleButton
+                active={sortToggleButtonValue === '최신순'}
+                position="left"
+                onClick={() => setSortToggleButtonValue('최신순')}
+              >
+                최신순
+              </SortToggleButton>
+              <SortToggleButton
+                active={sortToggleButtonValue === '등록순'}
+                position="right"
+                onClick={() => setSortToggleButtonValue('등록순')}
+              >
+                등록순
+              </SortToggleButton>
+            </Flexbox>
+            <Flexbox gap="1rem">
+              <IconButton onClick={() => setIsFilterModalOpen((prev) => !prev)}>
+                <MdFilterAlt size="1.5rem" />
+              </IconButton>
+            </Flexbox>
+          </Flexbox>
+        </Stack>
+      </Card>
+
+      <ul>
+        {logListData.map((log, index) => (
+          <LogListItem
+            key={index}
+            logId={String(log.id)}
+            location={log.location}
+            date={log.date}
+            isFavorite={log.isFavorite}
+          />
+        ))}
+      </ul>
+      {isLoading && (
+        <>
+          <Spacer />
+          <Flexbox flex="col" gap="1rem" width="100%">
+            {Array(10)
+              .fill(0)
+              .map((_, index) => (
+                <Card key={index}>
+                  <Flexbox
+                    flex="col"
+                    gap="0.5rem"
+                    padding="1rem"
+                    width="100%"
+                    items="start"
+                  >
+                    <Skeleton variant="rounded" width="40%" height="0.8rem" />
+                    <Skeleton variant="rounded" width="100%" height="2.5rem" />
+                  </Flexbox>
+                </Card>
+              ))}
+          </Flexbox>
+        </>
+      )}
+      {!fetchMoreLogButtonDisabled && (
+        <Card margin="1rem 0">
+          <Flexbox padding="1rem">
+            <IconButton
+              variant="outlined"
+              onClick={handleFetchMoreLogsButtonClick}
+            >
+              <MdOutlineKeyboardArrowDown size="2rem" />
+            </IconButton>
+          </Flexbox>
+        </Card>
+      )}
     </Layout>
   );
 };
