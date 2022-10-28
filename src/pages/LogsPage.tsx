@@ -107,6 +107,7 @@ const LogsPage: React.FC = () => {
 
   useEffect(() => {
     dispatch(logActions.setQueryKeyword(debouncedSearchInputValue));
+    dispatch(logActions.setQueryPage('0'));
     void dispatch(fetchLogs());
   }, [debouncedSearchInputValue, dispatch]);
 
@@ -116,18 +117,24 @@ const LogsPage: React.FC = () => {
     if (sortToggleButtonValue === '최신순')
       dispatch(logActions.setQuerySort('id,desc'));
 
+    dispatch(logActions.setQueryPage('0'));
+
     void dispatch(fetchLogs());
   }, [sortToggleButtonValue, dispatch]);
 
   const handleDiveTypeFilterOptionClick = (filterOption: string) => {
     setDiveTypeFilterValue(filterOption);
     dispatch(logActions.setQueryDiveType(filterOption));
+    dispatch(logActions.setQueryPage('0'));
+
     void dispatch(fetchLogs());
   };
 
   const handleLocationFilterOptionClick = (filterOption: string) => {
     setLocationFilterValue(filterOption);
     dispatch(logActions.setQueryLocation(filterOption));
+    dispatch(logActions.setQueryPage('0'));
+
     void dispatch(fetchLogs());
   };
 
@@ -144,6 +151,8 @@ const LogsPage: React.FC = () => {
       splitFilterOptionValue(filterOption);
     dispatch(logActions.setQueryMinTemperature(minTemperature));
     dispatch(logActions.setQueryMaxTemperature(maxTemperature));
+    dispatch(logActions.setQueryPage('0'));
+
     void dispatch(fetchLogs());
   };
 
@@ -152,6 +161,8 @@ const LogsPage: React.FC = () => {
     const [minDepth, maxDepth] = splitFilterOptionValue(filterOption);
     dispatch(logActions.setQueryMinDepth(minDepth));
     dispatch(logActions.setQueryMaxDepth(maxDepth));
+    dispatch(logActions.setQueryPage('0'));
+
     void dispatch(fetchLogs());
   };
 
