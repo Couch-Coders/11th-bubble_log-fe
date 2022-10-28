@@ -24,7 +24,7 @@ const Container = styled.div<ContainerProps>`
   height: ${({ height }) => height};
 `;
 
-interface Props {
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   width?: string;
   height?: string;
@@ -38,6 +38,7 @@ const Modal: React.FC<Props> = ({
   width,
   height,
   onClose,
+  ...props
 }) => {
   const modalRef = useRef<HTMLDivElement | null>(null);
 
@@ -46,7 +47,7 @@ const Modal: React.FC<Props> = ({
   return (
     <>
       {isOpen && (
-        <Container width={width} height={height} ref={modalRef}>
+        <Container width={width} height={height} ref={modalRef} {...props}>
           {children}
         </Container>
       )}
