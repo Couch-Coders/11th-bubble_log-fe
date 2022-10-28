@@ -7,12 +7,12 @@ const Container = styled.h2`
   font-weight: 600;
 `;
 
-interface Props {
+interface Props extends React.HTMLAttributes<HTMLElement> {
   children: React.ReactNode;
 }
 
-const Subtitle: React.FC<Props> = ({ children }) => {
-  return <Container>{children}</Container>;
+const Subtitle: React.FC<Props> = ({ children, ...props }) => {
+  return <Container {...props}>{children}</Container>;
 };
 
 export default React.memo(Subtitle);

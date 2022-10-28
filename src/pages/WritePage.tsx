@@ -15,7 +15,6 @@ import Dropdown from '@components/common/dropdown';
 import FileInput from '@components/common/FileInput';
 import Flexbox from '@components/common/Flexbox';
 import Snackbar from '@components/common/Snackbar';
-import Spacer from '@components/common/Spacer';
 import Subtitle from '@components/common/Subtitle';
 import Textarea from '@components/common/Textarea';
 import Title from '@components/common/Title';
@@ -356,16 +355,14 @@ const WritePage: React.FC = () => {
               />
             </Flexbox>
           </GridContainer>
-          <Spacer />
-          <Subtitle>메모</Subtitle>
+          <Subtitle style={{ marginTop: '1rem' }}>메모</Subtitle>
           <Textarea
             value={content}
             height="8rem"
             onChange={(e) => setContent(e.target.value)}
             placeholder="여기에 메모를 입력하세요."
           />
-          <Spacer />
-          <Subtitle>이미지 추가</Subtitle>
+          <Subtitle style={{ marginTop: '1rem' }}>이미지 추가</Subtitle>
           <FileInput
             onChange={(event) => {
               void handleImageFileChange(event);
@@ -375,8 +372,7 @@ const WritePage: React.FC = () => {
             imageFileUrlList={imageFileUrlList}
             onRemoveButtonClick={removeImageFileUrl}
           />
-          <Spacer />
-          <Subtitle>위치</Subtitle>
+          <Subtitle style={{ marginTop: '1rem' }}>위치</Subtitle>
         </Flexbox>
         <KakaoMap position={position} setPosition={setPosition} />
         <Flexbox padding="1rem" width="100%" justify="between">

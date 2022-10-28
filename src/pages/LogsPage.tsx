@@ -22,7 +22,6 @@ import Flexbox from '@components/common/Flexbox';
 import IconButton from '@components/common/IconButton';
 import Modal from '@components/common/Modal';
 import Skeleton from '@components/common/Skeleton';
-import Spacer from '@components/common/Spacer';
 import Stack from '@components/common/Stack';
 import Title from '@components/common/Title';
 import Layout from '@components/Layout';
@@ -306,27 +305,24 @@ const LogsPage: React.FC = () => {
         ))}
       </ul>
       {isLoading && (
-        <>
-          <Spacer />
-          <Flexbox flex="col" gap="1rem" width="100%">
-            {Array(10)
-              .fill(0)
-              .map((_, index) => (
-                <Card key={index}>
-                  <Flexbox
-                    flex="col"
-                    gap="0.5rem"
-                    padding="1rem"
-                    width="100%"
-                    items="start"
-                  >
-                    <Skeleton variant="rounded" width="40%" height="0.8rem" />
-                    <Skeleton variant="rounded" width="100%" height="2.5rem" />
-                  </Flexbox>
-                </Card>
-              ))}
-          </Flexbox>
-        </>
+        <Flexbox flex="col" gap="1rem" width="100%" padding="1rem 0 0 0">
+          {Array(10)
+            .fill(0)
+            .map((_, index) => (
+              <Card key={index}>
+                <Flexbox
+                  flex="col"
+                  gap="0.5rem"
+                  padding="1rem"
+                  width="100%"
+                  items="start"
+                >
+                  <Skeleton variant="rounded" width="40%" height="0.8rem" />
+                  <Skeleton variant="rounded" width="100%" height="2.5rem" />
+                </Flexbox>
+              </Card>
+            ))}
+        </Flexbox>
       )}
       {!fetchMoreLogButtonDisabled && (
         <Card margin="1rem 0">
