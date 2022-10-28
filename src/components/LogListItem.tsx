@@ -5,10 +5,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+import Card from '@components/common/Card';
 import Flexbox from '@components/common/Flexbox';
 import FavoriteToggleButton from '@components/FavoriteToggleButton';
-
-import Card from './common/Card';
 
 const Container = styled.li`
   margin-top: 1rem;
@@ -52,7 +51,7 @@ const LogListItem: React.FC<Props> = ({
           <Flexbox flex="col" gap="1rem" items="start" padding="1rem">
             <Flexbox gap="1rem">
               <p className="log-id">
-                <span style={{ color: theme.primary }}>#</span> {logId}
+                <span style={{ color: theme.primary }}>#</span> {logId}번째 로그
               </p>
               <FavoriteToggleButton isFavorite={isFavorite} />
             </Flexbox>
