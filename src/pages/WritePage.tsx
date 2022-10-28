@@ -57,7 +57,7 @@ const GridContainer = styled.div`
 `;
 
 const WritePage: React.FC = () => {
-  const [date, setDate] = useState<Date | null>(null);
+  const [date, setDate] = useState<Date | null>(new Date());
   const [diveType, setDiveType] = useState<DiveType>('FREE');
   const [temperature, setTemperature] = useState('');
   const [maxDepth, setMaxDepth] = useState('');
