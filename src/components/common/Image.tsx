@@ -7,10 +7,10 @@ type ImageShape = 'squared' | 'boxier';
 const imageShapeStyle = {
   squared: css``,
   boxier: css`
-    border-radius: 1rem;
+    border-radius: 0.5rem;
 
     .image {
-      border-radius: 1rem;
+      border-radius: 0.5rem;
     }
   `,
 };

@@ -160,14 +160,6 @@ const LogsPage: React.FC = () => {
     void dispatch(fetchMoreLogs());
   };
 
-  // const observerRef = useRef<HTMLDivElement | null>(null);
-
-  // const handleIntersect = () => {
-  //   fetchMoreLog();
-  // };
-
-  // useInfiniteScroll(observerRef.current, handleIntersect);
-
   return (
     <Layout>
       <Card>
@@ -195,6 +187,7 @@ const LogsPage: React.FC = () => {
             <Modal
               isOpen={isFilterModalOpen}
               onClose={() => setIsFilterModalOpen(false)}
+              style={{ transform: 'translate(1rem, 4rem)' }}
             >
               <Flexbox
                 flex="col"
@@ -324,12 +317,6 @@ const LogsPage: React.FC = () => {
           </Flexbox>
         </>
       )}
-      {/* <div
-          style={{ height: '2rem', border: '1px solid red' }}
-          ref={observerRef}
-          >
-          옵저버
-        </div> */}
       {!fetchMoreLogButtonDisabled && (
         <Card margin="1rem 0">
           <Flexbox padding="1rem">

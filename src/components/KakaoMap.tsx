@@ -6,8 +6,12 @@ interface Props {
     lat: number;
     lng: number;
   };
-  setPosition: any;
-  // setPosition: (event: kakao.maps.event.MouseEvent) => void;
+  setPosition: React.Dispatch<
+    React.SetStateAction<{
+      lat: number;
+      lng: number;
+    }>
+  >;
 }
 
 const KakaoMap: React.FC<Props> = ({ position, setPosition }) => {
@@ -16,7 +20,12 @@ const KakaoMap: React.FC<Props> = ({ position, setPosition }) => {
       center={{ lat: 33.5563, lng: 126.79581 }}
       style={{ width: '100%', height: '360px' }}
       // @ts-expect-error
-      onClick={(_, event) => setPosition(event)}
+      onClick={(_, mouseEvent) =>
+        setPosition({
+          lat: mouseEvent.latLng.getLat(),
+          lng: mouseEvent.latLng.getLng(),
+        })
+      }
     >
       {<MapMarker position={position} />}
     </Map>
