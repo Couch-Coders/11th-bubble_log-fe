@@ -80,16 +80,16 @@ const WritePage: React.FC = () => {
   const [isTempSaveSuccess, setIsTempSaveSuccess] = useState(false);
 
   const isMaxOxygenInputValid =
-    maxOxygen === '' || (Number(maxOxygen) >= 0 && Number(maxOxygen) <= 30);
+    maxOxygen === '' || (Number(maxOxygen) >= 0 && Number(maxOxygen) <= 100);
   const isMinOxygenInputValid =
-    minOxygen === '' || (Number(minOxygen) >= 0 && Number(minOxygen) <= 30);
+    minOxygen === '' || (Number(minOxygen) >= 0 && Number(minOxygen) <= 100);
   const isTemperatureInputValid =
     temperature === '' ||
     (Number(temperature) >= 0 && Number(temperature) <= 30);
   const isMaxDepthInputValid =
-    maxDepth === '' || (Number(maxDepth) >= 0 && Number(maxDepth) <= 30);
+    maxDepth === '' || (Number(maxDepth) >= 0 && Number(maxDepth) <= 100);
   const isSightInputValid =
-    sight === '' || (Number(sight) >= 0 && Number(sight) <= 30);
+    sight === '' || (Number(sight) >= 0 && Number(sight) <= 100);
 
   const isLoading = useSelector((state) => state.postLog.isLoading);
 
