@@ -54,7 +54,7 @@ const initialState: LogState = {
     keyword: '',
     page: '0',
     size: '',
-    orderBy: '',
+    sort: '',
   },
 };
 
@@ -89,8 +89,8 @@ export const logSlice = createSlice({
     setQueryMaxDepth: (state, action: PayloadAction<string>) => {
       state.query.maxDepth = action.payload;
     },
-    setQueryOrderBy: (state, action: PayloadAction<string>) => {
-      state.query.orderBy = action.payload;
+    setQuerySort: (state, action: PayloadAction<string>) => {
+      state.query.sort = action.payload;
     },
     setQueryPage: (state, action: PayloadAction<string>) => {
       state.query.page = action.payload;
@@ -112,7 +112,7 @@ export const logSlice = createSlice({
         keyword: '',
         page: '0',
         size: '',
-        orderBy: '',
+        sort: 'id,desc',
       };
     },
   },

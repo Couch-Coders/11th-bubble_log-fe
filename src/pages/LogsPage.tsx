@@ -20,15 +20,16 @@ import Chip from '@components/common/Chip';
 import Fab from '@components/common/Fab';
 import Flexbox from '@components/common/Flexbox';
 import IconButton from '@components/common/IconButton';
-import LoadingSpinner from '@components/common/LoadingSpinner';
 import Modal from '@components/common/Modal';
+import Skeleton from '@components/common/Skeleton';
+import Spacer from '@components/common/Spacer';
 import Stack from '@components/common/Stack';
 import Title from '@components/common/Title';
-import FavoriteToggleButton from '@components/FavoriteToggleButton';
 import Layout from '@components/Layout';
 import LogListItem from '@components/LogListItem';
 import SearchFilter from '@components/SearchFilter';
 import SearchInput from '@components/SearchInput';
+import SortToggleButton from '@components/SortToggleButton';
 import {
   DIVE_DEPTH,
   DIVE_LOCATION,
@@ -53,8 +54,10 @@ const LogsPage: React.FC = () => {
   const [temperatureFilterValue, setTemperatureFilterValue] = useState('');
   const [depthFilterValue, setDepthFilterValue] = useState('');
   const [searchInputValue, setSearchInputValue] = useState('');
-
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [sortToggleButtonValue, setSortToggleButtonValue] = useState<
+    '등록순' | '최신순'
+  >('최신순');
 
   const {
     response,
@@ -106,6 +109,15 @@ const LogsPage: React.FC = () => {
     dispatch(logActions.setQueryKeyword(debouncedSearchInputValue));
     void dispatch(fetchLogs());
   }, [debouncedSearchInputValue, dispatch]);
+
+  useEffect(() => {
+    if (sortToggleButtonValue === '등록순')
+      dispatch(logActions.setQuerySort('id,asc'));
+    if (sortToggleButtonValue === '최신순')
+      dispatch(logActions.setQuerySort('id,desc'));
+
+    void dispatch(fetchLogs());
+  }, [sortToggleButtonValue, dispatch]);
 
   const handleDiveTypeFilterOptionClick = (filterOption: string) => {
     setDiveTypeFilterValue(filterOption);
@@ -180,12 +192,6 @@ const LogsPage: React.FC = () => {
               onChange={handleSearchInputChange}
               onClearButtonClick={() => setSearchInputValue('')}
             />
-            <Flexbox gap="1rem">
-              <FavoriteToggleButton isFavorite={false} onClick={() => {}} />
-              <IconButton onClick={() => setIsFilterModalOpen((prev) => !prev)}>
-                <MdFilterAlt size="1.5rem" />
-              </IconButton>
-            </Flexbox>
             <Modal
               isOpen={isFilterModalOpen}
               onClose={() => setIsFilterModalOpen(false)}
@@ -232,34 +238,100 @@ const LogsPage: React.FC = () => {
               </Flexbox>
             </Modal>
           </Flexbox>
-          <Flexbox justify="start" gap="1rem">
-            <Chip label="수온: 15-20" />
+          <Flexbox justify="start" gap="1rem" flexWrap>
+            {diveTypeFilterValue !== '' && (
+              <Chip
+                label={`타입: ${diveTypeFilterValue}`}
+                onDelete={() => handleDiveTypeFilterOptionClick('')}
+              />
+            )}
+            {locationFilterValue !== '' && (
+              <Chip
+                label={`위치: ${locationFilterValue}`}
+                onDelete={() => handleLocationFilterOptionClick('')}
+              />
+            )}
+            {temperatureFilterValue !== '' && (
+              <Chip
+                label={`수온: ${temperatureFilterValue}`}
+                onDelete={() => handleTemperatureFilterOptionClick('')}
+              />
+            )}
+            {depthFilterValue !== '' && (
+              <Chip
+                label={`깊이: ${depthFilterValue}`}
+                onDelete={() => handleDepthFilterOptionClick('')}
+              />
+            )}
+          </Flexbox>
+          <Flexbox justify="between">
+            <Flexbox>
+              <SortToggleButton
+                active={sortToggleButtonValue === '최신순'}
+                position="left"
+                onClick={() => setSortToggleButtonValue('최신순')}
+              >
+                최신순
+              </SortToggleButton>
+              <SortToggleButton
+                active={sortToggleButtonValue === '등록순'}
+                position="right"
+                onClick={() => setSortToggleButtonValue('등록순')}
+              >
+                등록순
+              </SortToggleButton>
+            </Flexbox>
+            <Flexbox gap="1rem">
+              <IconButton onClick={() => setIsFilterModalOpen((prev) => !prev)}>
+                <MdFilterAlt size="1.5rem" />
+              </IconButton>
+            </Flexbox>
           </Flexbox>
         </Stack>
       </Card>
-      <Card margin="1rem 0">
-        <ul>
-          {logListData.map((log, index) => (
-            <LogListItem
-              key={index}
-              logId={String(log.id)}
-              location={log.location}
-              date={log.date}
-            />
-          ))}
-        </ul>
-        {isLoading && (
-          <Flexbox height="32rem">
-            <LoadingSpinner />
+
+      <ul>
+        {logListData.map((log, index) => (
+          <LogListItem
+            key={index}
+            logId={String(log.id)}
+            location={log.location}
+            date={log.date}
+            isFavorite={log.isFavorite}
+          />
+        ))}
+      </ul>
+      {isLoading && (
+        <>
+          <Spacer />
+          <Flexbox flex="col" gap="1rem" width="100%">
+            {Array(10)
+              .fill(0)
+              .map((_, index) => (
+                <Card key={index}>
+                  <Flexbox
+                    flex="col"
+                    gap="0.5rem"
+                    padding="1rem"
+                    width="100%"
+                    items="start"
+                  >
+                    <Skeleton variant="rounded" width="40%" height="0.8rem" />
+                    <Skeleton variant="rounded" width="100%" height="2.5rem" />
+                  </Flexbox>
+                </Card>
+              ))}
           </Flexbox>
-        )}
-        {/* <div
+        </>
+      )}
+      {/* <div
           style={{ height: '2rem', border: '1px solid red' }}
           ref={observerRef}
           >
           옵저버
         </div> */}
-        {!fetchMoreLogButtonDisabled && (
+      {!fetchMoreLogButtonDisabled && (
+        <Card margin="1rem 0">
           <Flexbox padding="1rem">
             <IconButton
               variant="outlined"
@@ -268,8 +340,8 @@ const LogsPage: React.FC = () => {
               <MdOutlineKeyboardArrowDown size="2rem" />
             </IconButton>
           </Flexbox>
-        )}
-      </Card>
+        </Card>
+      )}
     </Layout>
   );
 };

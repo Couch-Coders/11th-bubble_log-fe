@@ -6,6 +6,8 @@ interface ContainerProps {
 }
 
 const Container = styled.div<ContainerProps>`
+  width: 100%;
+
   border-radius: 0.5rem;
   background-color: white;
 

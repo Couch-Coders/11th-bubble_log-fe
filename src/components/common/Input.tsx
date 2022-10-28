@@ -1,4 +1,5 @@
 import { gray } from '@lib/styles/palette';
+import { theme } from '@lib/styles/theme';
 import React from 'react';
 import styled, { css } from 'styled-components';
 
@@ -8,6 +9,7 @@ interface ContainerProps {
   width?: string;
   height?: string;
   fullWidth: boolean;
+  isValid: boolean;
 }
 
 const Container = styled.input<ContainerProps>`
@@ -43,6 +45,12 @@ const Container = styled.input<ContainerProps>`
     css`
       width: 100%;
     `}
+
+  ${({ isValid }) =>
+    !isValid &&
+    css`
+      border: 1px solid ${theme.error};
+    `}
 `;
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -51,6 +59,7 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   fullWidth?: boolean;
   width?: string;
   height?: string;
+  isValid?: boolean;
 }
 
 const Input: React.FC<Props> = ({
@@ -59,15 +68,17 @@ const Input: React.FC<Props> = ({
   fullWidth = false,
   width,
   height,
+  isValid = true,
   ...props
 }) => {
   return (
     <Container
       startIcon={startIcon}
       endIcon={endIcon}
+      fullWidth={fullWidth}
       width={width}
       height={height}
-      fullWidth={fullWidth}
+      isValid={isValid}
       {...props}
     />
   );

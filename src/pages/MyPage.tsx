@@ -1,3 +1,4 @@
+import useAuth from '@hooks/useAuth';
 import { authAPI } from '@lib/apis/auth';
 import { gray } from '@lib/styles/palette';
 import { useSelector } from '@store/index';
@@ -8,6 +9,7 @@ import styled from 'styled-components';
 import Avatar from '@components/common/Avatar';
 import Card from '@components/common/Card';
 import Flexbox from '@components/common/Flexbox';
+import Subtitle from '@components/common/Subtitle';
 import Title from '@components/common/Title';
 import Layout from '@components/Layout';
 import UnregisterButton from '@components/UnregisterButton';
@@ -33,10 +35,6 @@ const Base = styled.div`
   }
 `;
 
-const SubTitle = styled.h2`
-  font-size: 1.25rem;
-`;
-
 const Box = styled.div`
   border: 1px solid ${gray[300]};
   width: 100%;
@@ -51,6 +49,7 @@ const Description = styled.p`
 
 const MyPage: React.FC = () => {
   const { data } = useSelector((state) => state.user);
+  const { logOut } = useAuth();
   console.log(data);
 
   const navigate = useNavigate();
@@ -58,6 +57,8 @@ const MyPage: React.FC = () => {
   const handleUnregisterButtonClick = async () => {
     try {
       await authAPI.unregister();
+      await logOut();
+
       navigate('/', {
         replace: true,
       });
@@ -73,7 +74,7 @@ const MyPage: React.FC = () => {
           <Flexbox flex="col" items="start" padding="1rem" gap="3rem">
             <Title>마이페이지</Title>
             <Flexbox flex="col" gap="1rem" width="100%" items="start">
-              <SubTitle>프로필 사진</SubTitle>
+              <Subtitle>프로필 사진</Subtitle>
               <Box>
                 <Flexbox justify="start" gap="2rem">
                   <Avatar
@@ -97,7 +98,7 @@ const MyPage: React.FC = () => {
               </Box>
             </Flexbox>
             <Flexbox flex="col" gap="1rem" width="100%" items="start">
-              <h2 className="subtitle">프로필 정보</h2>
+              <Subtitle>프로필 정보</Subtitle>
               <Box>
                 <Flexbox items="stretch" justify="between">
                   <p style={{ padding: '0.75rem 0' }}>닉네임</p>

@@ -1,8 +1,10 @@
+import useAuth from '@hooks/useAuth';
 import { logAPI } from '@lib/apis/log';
 import { gray } from '@lib/styles/palette';
 import { theme } from '@lib/styles/theme';
 import { useDispatch, useSelector } from '@store/index';
 import { fetchLogDetail, logDetailActions } from '@store/slices/logDetail';
+import { format } from 'date-fns';
 import React, { useEffect, useState } from 'react';
 import { MdKeyboardArrowLeft } from 'react-icons/md';
 import { StaticMap } from 'react-kakao-maps-sdk';
@@ -33,6 +35,8 @@ const GridContainer = styled.div`
 `;
 
 const LogDetailPage: React.FC = () => {
+  const { isLoggedIn } = useAuth();
+
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -70,13 +74,15 @@ const LogDetailPage: React.FC = () => {
   };
 
   useEffect(() => {
+    if (!isLoggedIn) return;
+
     const promise = dispatch(fetchLogDetail(logId as string));
 
     return () => {
       promise.abort();
       dispatch(logDetailActions.clearState());
     };
-  }, [logId, dispatch]);
+  }, [logId, dispatch, isLoggedIn]);
 
   if (isLoading || data === null) {
     return (
@@ -120,7 +126,7 @@ const LogDetailPage: React.FC = () => {
             />
           </Flexbox>
           <p style={{ fontWeight: 600, fontSize: '1.25rem' }}>
-            {data.location}
+            {format(new Date(data.date), 'yyyy년 MM월 dd일')}, {data.location}
           </p>
           <Flexbox justify="end" width="100%">
             <Flexbox gap="1rem">
@@ -180,7 +186,12 @@ const LogDetailPage: React.FC = () => {
       </Card>
       <Card margin="1rem 0">
         <Flexbox flex="col" gap="1rem" padding="1rem" items="start">
-          <Subtitle>위치</Subtitle>
+          <Flexbox justify="between" width="100%">
+            <Subtitle>위치</Subtitle>
+            <p style={{ fontSize: '0.75rem', color: gray[400] }}>
+              지도를 클릭하면 카카오 지도 페이지로 이동합니다.
+            </p>
+          </Flexbox>
           <StaticMap
             center={{
               lat: data.latitude,
