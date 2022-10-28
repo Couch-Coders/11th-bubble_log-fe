@@ -42,16 +42,10 @@ const LogDetailPage: React.FC = () => {
   const navigate = useNavigate();
 
   const { data, isLoading } = useSelector((state) => state.logDetail);
-  console.log('@isLoading', isLoading);
 
-  const [isFavorite, setIsFavorite] = useState(
-    data === null ? false : data.isFavorite,
-  );
+  const [isFavorite, setIsFavorite] = useState(false);
 
   const { logId } = useParams();
-
-  console.log(logId);
-  console.log('@data', data);
 
   const handleFavoriteToggleButtonClick = async () => {
     if (data === null) return;
@@ -83,6 +77,10 @@ const LogDetailPage: React.FC = () => {
       dispatch(logDetailActions.clearState());
     };
   }, [logId, dispatch, isLoggedIn]);
+
+  useEffect(() => {
+    if (data !== null) setIsFavorite(data.isFavorite);
+  }, [data]);
 
   if (isLoading || data === null) {
     return (
